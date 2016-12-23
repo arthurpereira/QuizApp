@@ -1,0 +1,322 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Busca de Pergunta | QuizAPP</title>
+        <h:outputStylesheet library="css" name="style-adm.css" />
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/font-awesome.min.css" />
+        <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
+    </h:head>
+
+    <h:body>
+        <div id="interface">
+            <table id="table-header" cellpadding="0" cellspacing="0">
+                <!-- TOPO -->
+                <tr>
+                    <td><ui:include src="/template/header.xhtml" /></td>
+                </tr>
+
+                <!--  MENU -->
+                <tr>
+                    <td><ui:include src="/admin/menu.xhtml" /></td>
+                </tr>
+            </table>
+
+            <h1>BUSCA DE PERGUNTA</h1>
+            <h2>
+                <font class="campoObrigatorio">* Campo Obrigatório!</font>
+            </h2>
+
+            <h:form id="form-growl">
+                <p:growl for="sucesso" id="sucesso" life="4000" showDetail="true" autoUpdate="true" />
+                <p:growl for="atencao" id="atencao" life="4000" showDetail="true" autoUpdate="true" />
+                <p:growl for="vazia" id="vazia" life="4000" showDetail="true" autoUpdate="true" />
+            </h:form>
+            
+            <h:form id="formBuscaPergunta" style="padding-bottom:10px">                
+                <p:panelGrid style="width:100%">
+                    <p:row>
+                        <p:column style="text-align:right">
+                            <p:outputLabel for="pergunta" value="Pergunta:" />
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <p:inputText id="pergunta" value="#{perguntaBean.busca}"
+                                         label="Pergunta" size="65" />
+                        </p:column>
+                    </p:row>
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:center">
+                                <p:commandButton ajax="true" action="#{perguntaBean.buscar()}"
+                                                 value="Buscar Pergunta"
+                                                 update="form-growl formBusca"/>
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+            
+            <div align="center" style="margin:0px 29px 0px 29px">
+                <h:form id="formBusca">
+                    <p:panelGrid style="margin:30px 0px 30px 0px;width:100%"
+                                 rendered="#{perguntaBean.perguntasBuscadas.size() > 0}">
+                        <f:facet name="header">
+                            <p:row>
+                                <p:column styleClass = "ui-widget-header">
+                                    Resultados da Busca
+                                </p:column>
+                            </p:row>
+                        </f:facet>
+                        <p:row>
+                            <p:column>
+                                <p:dataTable id="tabelaPerguntas" var="pergunta"
+                                             value="#{perguntaBean.perguntasBuscadas}"
+                                             paginator="true" rows="10" emptyMessage="" paginatorAlwaysVisible="false"
+                                             paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                             currentPageReportTemplate="{currentPage} de {totalPages}"
+                                             rowsPerPageTemplate="5,10,15" lazy="true">
+                                    <p:column>
+                                        <f:facet name="header">
+                                            <h:outputText value="Pergunta" />
+                                        </f:facet>
+                                        <h:outputText value="#{pergunta.texto}" />
+                                    </p:column>
+                                    <p:column headerText="Opções" width="170"
+                                              exportable="false"
+                                              style="text-align:center">
+                                        <p:commandLink title="Visualizar" immediate="true"
+                                                       oncomplete="PF('dialogVisualizarPergunta').show()"
+                                                       update=":formVisualizarPergunta">
+                                            <i class="fa fa-eye"></i>
+                                            <f:setPropertyActionListener target="#{perguntaBean.pergunta}"
+                                                                         value="#{pergunta}" />
+                                        </p:commandLink>
+                                        <h:outputText value="　 " />
+                                        <p:commandLink title="Editar" immediate="true"
+                                                       oncomplete="PF('dialogEditarPergunta').show()" 
+                                                       update=":formEditarPergunta">
+                                            <i class="fa fa-pencil"></i>
+                                            <f:setPropertyActionListener target="#{perguntaBean.pergunta}"
+                                                                         value="#{pergunta}" />
+                                        </p:commandLink>
+                                    </p:column>
+                                </p:dataTable>
+                            </p:column>
+                        </p:row>
+                    </p:panelGrid>
+                </h:form>
+            </div>
+
+            <!-- RODAPE -->
+            <table id="table-footer">
+                <ui:include src="/template/footer.xhtml" />
+            </table>
+        </div>
+        
+        <h:form id="formVisualizarPergunta">
+            <p:dialog header="Visualizar Pergunta" widgetVar="dialogVisualizarPergunta"
+                      modal="true" id="dialogVisualizar" resizable="false" draggable="false">
+                <p:panelGrid id="panelVisualizar" style="width: 600px">
+                    <p:row>
+                        <p:column style="text-align:right">
+                            <p:outputLabel for="pergunta" value="Pergunta:" />
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <h:outputText id="pergunta" value="#{perguntaBean.pergunta.texto}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="text-align:right;width:30%">
+                            <h:outputText value="Alternativas:" />
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <p:outputPanel id="customPanel" style="margin-bottom:10px">
+                                <p:selectOneRadio id="customRadio" layout="custom" disabled="true"
+                                                  value="#{perguntaBean.pergunta.alternativa_certa}">
+                                    <f:selectItem itemLabel="Alternativa A" itemValue="0" />
+                                    <f:selectItem itemLabel="Alternativa B" itemValue="1" />
+                                    <f:selectItem itemLabel="Alternativa C" itemValue="2" />
+                                    <f:selectItem itemLabel="Alternativa D" itemValue="3" />
+                                </p:selectOneRadio>
+
+                                <p:panelGrid>
+                                    <f:facet name="header">
+                                        <p:row>
+                                            <p:column styleClass="ui-widget-header">
+                                                Alternativa Certa
+                                            </p:column>
+                                            <p:column styleClass="ui-widget-header">
+                                                Alternativas
+                                            </p:column>
+                                        </p:row>
+                                    </f:facet>
+                                    <p:row>
+                                        <p:column>
+                                                <p:radioButton id="opt1" for="customRadio"
+                                                               itemIndex="0" disabled="true" />
+                                                <h:outputLabel for="opt1" value="Alternativa A" />
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{perguntaBean.pergunta.alternativa.get(0).texto}" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton id="opt2" for="customRadio"
+                                                           itemIndex="1" disabled="true" />
+                                            <h:outputLabel for="opt2" value="Alternativa B" />
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{perguntaBean.pergunta.alternativa.get(1).texto}" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton id="opt3" for="customRadio"
+                                                           itemIndex="2" disabled="true" />
+                                            <h:outputLabel for="opt3" value="Alternativa C" />
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{perguntaBean.pergunta.alternativa.get(2).texto}" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton id="opt4" for="customRadio"
+                                                           itemIndex="3" disabled="true" />
+                                            <h:outputLabel for="opt4" value="Alternativa D" />
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{perguntaBean.pergunta.alternativa.get(3).texto}" />
+                                        </p:column>
+                                    </p:row>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:column>
+                    </p:row>
+                    
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:center">
+                                <p:commandButton value="Fechar" id="fechar"
+                                                 oncomplete="PF('dialogVisualizarPergunta').hide()" />
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+        
+        <h:form id="formEditarPergunta">
+            <p:dialog header="Editar Pergunta" widgetVar="dialogEditarPergunta"
+                      modal="true" id="dialogEditar" resizable="false" draggable="false">
+                <p:panelGrid id="panelEditar" style="width: 600px">
+                    <p:row>
+                        <p:column style="text-align:right;">
+                            <p:outputLabel for="pergunta" value="Pergunta:" />
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <p:inputTextarea id="pergunta" required="true"
+                                             requiredMessage="Campo Pergunta Obrigatório!"
+                                             value="#{perguntaBean.pergunta.texto}" />
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column style="text-align:right;width:30%">
+                            <h:outputText value="Alternativas: *" />
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <p:outputPanel id="customPanel" style="margin-bottom:10px">
+                                <p:selectOneRadio id="customRadio" layout="custom" required="true"
+                                                  value="#{perguntaBean.pergunta.alternativa_certa}"
+                                                  requiredMessage="Campo Alternativa Certa Obrigatório!">
+                                    <f:selectItem itemLabel="Alternativa A" itemValue="0" />
+                                    <f:selectItem itemLabel="Alternativa B" itemValue="1" />
+                                    <f:selectItem itemLabel="Alternativa C" itemValue="2" />
+                                    <f:selectItem itemLabel="Alternativa D" itemValue="3" />
+                                </p:selectOneRadio>
+
+                                <p:panelGrid>
+                                    <f:facet name="header">
+                                        <p:row>
+                                            <p:column styleClass="ui-widget-header">
+                                                Alternativa Certa
+                                            </p:column>
+                                            <p:column styleClass="ui-widget-header">
+                                                Alternativas
+                                            </p:column>
+                                        </p:row>
+                                    </f:facet>
+                                    <p:row>
+                                        <p:column>
+                                                <p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+                                                <h:outputLabel for="opt1" value="Alternativa A" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText size="42" required="true"
+                                                         value="#{perguntaBean.pergunta.alternativa.get(0).texto}"
+                                                         requiredMessage="Campo Alternativa A Obrigatório!" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+                                            <h:outputLabel for="opt2" value="Alternativa B" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText size="42" required="true"
+                                                         value="#{perguntaBean.pergunta.alternativa.get(1).texto}"
+                                                         requiredMessage="Campo Alternativa B Obrigatório!" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+                                            <h:outputLabel for="opt3" value="Alternativa C" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText size="42" required="true"
+                                                         value="#{perguntaBean.pergunta.alternativa.get(2).texto}"
+                                                         requiredMessage="Campo Alternativa C Obrigatório!" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton id="opt4" for="customRadio" itemIndex="3" />
+                                            <h:outputLabel for="opt4" value="Alternativa D" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText size="42" required="true"
+                                                         value="#{perguntaBean.pergunta.alternativa.get(3).texto}"
+                                                         requiredMessage="Campo Alternativa D Obrigatório!" />
+                                        </p:column>
+                                    </p:row>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                            
+                        </p:column>
+                    </p:row>
+                    
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:center">
+                                <p:commandButton value="Salvar" id="salvar"
+                                                 actionListener="#{perguntaBean.atualizar()}"
+                                                 update="form-growl formBusca"
+                                                 oncomplete="PF('dialogEditarPergunta').hide()"/>
+                                &nbsp;&nbsp;
+                                <p:commandButton value="Cancelar"
+                                                 oncomplete="PF('dialogEditarPergunta').hide()"/>
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </p:dialog>
+        </h:form>
+
+    </h:body>
+</html>

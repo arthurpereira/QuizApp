@@ -1,0 +1,53 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:fb="http://www.facebook.com/2008/fbml">
+
+    <h:head>
+        <title>QuizAPP</title>
+        <meta name="viewport" content="width=device-width, user-scalable=no"/>
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+        <meta http-equiv="Pragma" content="no-cache" />
+        <meta http-equiv="Expires" content="0" />
+        <h:outputStylesheet library="css" name="style-responsive.css" />
+        <h:outputStylesheet library="css" name="style-celular.css" />
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/font-awesome.min.css" />
+        <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
+    </h:head>
+
+    <h:body>
+        <h:outputScript library="js" name="facebook-login.js"/>
+
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="logo">
+                        <img src="../resources/img/quiz-app-logo.png" alt="Logo"/>
+                        <h1>QuizAPP</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="head-login">
+                        <p class="info">Para jogar, você deve entrar com a sua conta do Facebook.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <section class="login">
+                        <article class="facebook">
+                            <fb:login-button scope="public_profile,email"
+                                             onlogin="checkLoginState();"
+                                             size="xlarge"/>
+                        </article>
+                    </section>
+                </div>
+            </div>
+        </div>
+
+    </h:body>
+</html>

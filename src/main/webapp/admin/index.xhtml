@@ -1,0 +1,68 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Administração | QuizAPP</title>
+        <h:outputStylesheet library="css" name="style-adm.css" />
+        <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
+    </h:head>
+
+    <h:body>
+        <h:form>
+            <p:poll interval="10" update="@this" />
+        </h:form>
+
+        <div id="interface">
+            <table id="table-header" cellpadding="0" cellspacing="0">
+                <!-- TOPO -->
+                <tr>
+                    <td><ui:include src="/template/header.xhtml"/></td>
+                </tr>
+
+                <!--  MENU -->
+                <tr>
+                    <td><ui:include src="/admin/menu.xhtml" /></td>
+                </tr>
+            </table>
+
+            <!-- PAGINA INICIAL -->
+            <article id="inicio"> <section id="atalhos">
+                    <h:form id="form_atalhos">
+                        <p:growl for="sucesso" id="sucesso" life="4000" showDetail="true" autoUpdate="true" />
+                        <section id="buscar_codigo">
+                            <p:commandLink action="/admin/cadastrar/pergunta.xhtml?faces-redirect=true"
+                                           actionListener="#{usuarioBean.limpaUsuario()}"
+                                           immediate="true" ajax="false">
+                                <h:graphicImage library="img" name="add-icon.svg" width="100" height="100" />
+                            </p:commandLink>
+                            <p:commandLink action="/admin/cadastrar/pergunta.xhtml?faces-redirect=true"
+                                           actionListener="#{usuarioBean.limpaUsuario()}"
+                                           immediate="true" ajax="false">
+                                <p>Cadastrar Pergunta</p>
+                            </p:commandLink>
+                        </section>
+                        <section id="buscar_data_dia">
+                            <p:commandLink action="/admin/buscar/pergunta.xhtml?faces-redirect=true"
+                                           actionListener="#{usuarioBean.limpaUsuario()}"
+                                           immediate="true" ajax="false">
+                                <h:graphicImage library="img" name="search-icon.svg" width="100" height="100" />
+                            </p:commandLink>
+                            <p:commandLink action="/admin/buscar/pergunta.xhtml?faces-redirect=true"
+                                           actionListener="#{usuarioBean.limpaUsuario()}"
+                                           immediate="true" ajax="false">
+                                <p>Buscar Pergunta</p>
+                            </p:commandLink>
+                        </section>
+                    </h:form>
+                </section></article>
+
+            <!-- RODAPE -->
+            <table id="table-footer">
+                <ui:include src="/template/footer.xhtml"/>
+            </table>
+        </div>
+    </h:body>
+</html>

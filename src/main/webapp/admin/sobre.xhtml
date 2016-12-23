@@ -1,0 +1,59 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Sobre - QuizAPP</title>
+        <h:outputStylesheet library="css" name="style.css" />
+        <link rel="stylesheet" href="#{request.contextPath}/resources/css/font-awesome.min.css" />
+        <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
+    </h:head>
+
+    <h:body>
+        <div id="interface">
+            <table id="table-header" cellpadding="0" cellspacing="0">
+                <!-- TOPO -->
+                <tr>
+                    <td><ui:include src="../template/header.xhtml" /></td>
+                </tr>
+
+                <!--  MENU -->
+                <tr>
+                    <td><ui:include src="/admin/menu.xhtml" /></td>
+                </tr>
+            </table>
+            
+            <table class="sobreTitulo" border="0"
+                   style="font-family: Verdana, Geneva, sans-serif" width="900"
+                   cellpadding="1" cellspacing="0" bgcolor="#FFFFFF" align="center">
+                <tr>
+                    <td>
+                        <h3>Sistema de Almoxarifado</h3>
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>Desenvolvido por:</strong></td>
+                </tr>
+            </table>
+            <table border="0" align="center" bgcolor="#FFFFFF" width="900"
+                   style="font-family: Verdana, Geneva, sans-serif">
+                <tr>
+                    <td align="center" class="logo">
+                        <p:graphicImage library="img" name="logo-fabrica.png" />
+                    </td>
+                </tr>
+                <tr>
+                    <td align="center" class="email">fabsoft.cuncast@gmail.com</td>
+                </tr>
+            </table>
+            
+            <!-- RODAPE -->
+            <table id="table-footer">
+                <ui:include src="../template/footer.xhtml" />
+            </table>
+        </div>
+        
+    </h:body>
+</html>

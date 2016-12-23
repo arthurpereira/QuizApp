@@ -1,0 +1,304 @@
+@media (min-width: 641px) and (max-width: 991px) {
+    .logo{
+        position: relative;
+        text-align: center;
+    }
+    .logo img{
+        width: 30%;
+    }
+    .head-login{
+        position: relative;
+        text-align: center;
+    }
+    .head-login h1{
+        font-size: 4em;
+    }
+    .login{
+        position: relative;
+        text-align: center;
+        top: 40px;
+    }
+    .logo2{
+        position: relative;
+        text-align: center;
+    }
+    .logo2 img{
+        width: 15%;
+        margin: 10px 0 10px 0px;
+    }
+    .facebooklogout{
+        position: relative;
+        text-align: right;
+        margin: 30px 0px 0 0;
+    }
+    .listausuarios{
+        position: relative;
+        text-align: left;
+    }
+    .listausuarios textarea{
+        border-radius: 10px;
+        width: 100%;
+        height: 200px;
+        font-weight: bold;
+        font-size: 1.3em;
+        font-family: Arial, sans-serif;
+        color: #cc33ff;
+    }
+    .mensagens{
+        position: relative;
+    }
+    .mensagens textarea{
+        font-weight: bold;
+        font-size: 1.3em;
+        font-family: Arial, sans-serif;
+        color: #666;
+        border-radius: 8px;
+        width: 100%;
+        height: 500px;
+    }
+    .novamensagemtext{
+        position: relative;
+        text-align: right;
+        margin: 0px 0px 15px 8px;
+    }
+    .novamensagemtext input{
+        width: 100%;
+        height: 40px;
+        border-radius: 8px;
+        font-size: 1.3em;
+    }
+    .novamensagembtn{
+        position: relative;
+    }
+    .novamensagembtn input{
+        width: 100%;
+        height: 40px;
+        border-radius: 20px;
+        font-weight: bold;
+        background-color: #990099;
+        border-style: none;
+        color: #FFF;
+    }
+    .facebookinfo{
+        position: relative;
+        margin: 0 0 0 8px;
+    }
+    
+}
+
+@media only screen 
+  and (min-device-width: 320px) 
+  and (max-device-width: 640px) {
+    .logo{
+        position: relative;
+        text-align: center;
+    }
+    .logo img{
+        width: 50%;
+    }
+    .head-login{
+        position: relative;
+        text-align: center;
+    }
+    .head-login h1{
+        font-size: 2em;
+    }
+    .login{
+        position: relative;
+        text-align: center;
+        top: 40px;
+    }
+    .logo2{
+        position: relative;
+        text-align: center;
+    }
+    .logo2 img{
+        width: 25%;
+        margin: 10px 0 10px 8px;
+    }
+    .facebooklogout{
+        position: relative;
+        text-align: right;
+        margin: 10px 13px 10px 0;
+    }
+    .listausuarios{
+        position: relative;
+        text-align: center;
+    }
+    .listausuarios textarea{
+        border-radius: 8px;
+        width: 95%;
+        height: 100px;
+        font-weight: bold;
+        font-size: 1.2em;
+        font-family: Arial, sans-serif;
+        color: #cc33ff;
+    }
+    .mensagens{
+        position: relative;
+        text-align: center;
+    }
+    .mensagens textarea{
+        border-radius: 8px;
+        width: 95%;
+        height: 250px;
+        font-weight: bold;
+        font-size: 1.2em;
+        font-family: Arial, sans-serif;
+        color: #666;
+        
+    }
+    .novamensagemtext{
+        position: relative;
+        margin: 0px 0px 15px 8px;
+    }
+    .novamensagemtext input{
+        width: 100%;
+        height: 40px;
+        border-radius: 8px;
+        font-size: 1.2em;
+    }
+    .novamensagembtn{
+        position: relative;
+        margin: 0px 10px 10px 0px;
+    }
+    .novamensagembtn input{
+        width: 100%;
+        height: 40px;
+        border-radius: 20px;
+        font-weight: bold;
+        background-color: #990099;
+        border-style: none;
+        color: #FFF;
+    }
+    .facebookinfo{
+        position: relative;
+        margin: 0 0 0 8px;
+    }
+}
+
+@media (min-width: 992px) {
+    
+    .logo{
+        position: relative;
+        text-align: center;
+    }
+    .logo img{
+        width: 30%;
+    }
+    .head-login{
+        position: relative;
+        text-align: center;
+    }
+    .head-login h1{
+        font-size: 4em;
+    }
+    .login{
+        position: relative;
+        text-align: center;
+        top: 40px;
+    }
+    .logo2{
+        position: relative;
+        text-align: center;
+    }
+    .logo2 img{
+        width: 15%;
+        margin: 10px 0 10px 0px;
+    }
+    .facebooklogout{
+        position: relative;
+        text-align: right;
+        margin: 30px 0px 10px 0;
+    }
+    .listausuarios{
+        position: relative;
+        text-align: left;
+    }
+    .listausuarios textarea{
+        border-radius: 10px;
+        width: 100%;
+        height: 500px;
+        font-weight: bold;
+        font-size: 1.3em;
+        font-family: Arial, sans-serif;
+        color: #cc33ff;
+    }
+    .mensagens{
+        position: relative;
+    }
+    .mensagens textarea{
+        font-weight: bold;
+        font-size: 1.3em;
+        font-family: Arial, sans-serif;
+        color: #666;
+        border-radius: 8px;
+        width: 100%;
+        height: 500px;
+    }
+    .novamensagemtext{
+        position: relative;
+        text-align: right;
+        margin: 0px 0px 15px 8px;
+    }
+    .novamensagemtext input{
+        width: 59%;
+        height: 40px;
+        border-radius: 8px;
+        font-size: 1.3em;
+    }
+    .novamensagembtn{
+        position: relative;
+    }
+    .novamensagembtn input{
+        width: 100%;
+        height: 40px;
+        border-radius: 20px;
+        font-weight: bold;
+        background-color: #990099;
+        border-style: none;
+        color: #FFF;
+    }
+    .facebookinfo{
+        position: relative;
+        margin: 0 0 0 8px;
+    }
+    
+}
+
+@media (max-width:320px) {
+}
+
+@media (max-width: 900px) {
+    /*Slider Sequence*/
+    #sequence-theme .info {
+        top:80px !important;
+        width:60% !important;
+        margin-right:50px;
+    }
+
+    /*Slider Parallax*/
+    .da-slide .da-img {
+        display:none;
+    }
+}
+
+@media (max-width: 450px) {
+    /*Slider Sequence*/
+    #sequence-theme .info {
+        top:70px !important;
+        width:70% !important;
+        margin-right:25px;
+    }
+    #sequence-theme h2 {
+        font-size:30px !important;
+    }
+    #sequence-theme .info p {
+        font-size:18px !important;
+    }
+
+    /*Slider Parallax*/
+    .da-slide p {
+        display:none;
+    }
+}

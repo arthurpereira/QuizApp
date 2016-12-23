@@ -1,0 +1,760 @@
+@charset "utf-8";
+
+body {
+    margin-top: 0px;
+    background-color: #c5e5fc;
+    font-family: Arial, sans-serif !important;
+}
+
+.ui-widget,.ui-widget-header,.ui-widget-content,.ui-widget-header .ui-widget-header,.ui-widget-content .ui-widget-content,.ui-widget input,.ui-widget select,.ui-widget textarea,.ui-widget button {
+    font-size: 98% !important;
+}
+
+.ui-tabs-nav, .ui-menu .ui-menuitem-text {
+    font-size: 94% !important;
+}
+
+.ui-menubar {
+    background: none !important;
+    border: 1px solid #4297d7 !important;
+    border-left: none !important;
+    border-right: none !important;
+    background-color: #0139B9 !important;
+    margin: -4px 0px 0px 0px;
+    border-radius: 0px !important;
+    border: none !important;
+    padding: 10px !important;
+}
+
+.ui-menuitem .ui-menuitem-link.ui-corner-all.ui-state-hover {
+    background: #0139B9 !important;
+    border: 1px solid #0b2d7b !important;
+    box-shadow: none !important;
+    color: #fff !important;
+}
+
+.ui-menu .ui-menu-child {
+    background: none !important;
+    background-color: #fff !important;
+}
+
+.ui-inputfield.ui-inputtext.ui-widget.ui-state-default.ui-corner-all {
+    box-shadow: none !important;
+    border-radius: 20px !important; 
+    color: #000 !important;
+    padding: 8px;
+    font-weight: bold;
+}
+
+.ui-password {
+    box-shadow: none !important;
+    border-radius: 20px !important; 
+    color: #000 !important;
+    padding: 8px;
+    font-weight: normal;
+    width: 315px;
+    height: 26px;
+    font-family: Verdana;
+}
+
+.ui-autocomplete-input {
+    box-shadow: none !important;
+    border-radius: 20px !important;
+    color: #000 !important;
+    padding: 8px !important;
+    font-weight: normal;
+}
+
+.ui-inputmask {
+    box-shadow: none !important;
+    border-radius: 20px !important;
+    color: #000 !important;
+    padding: 8px !important;
+    font-weight: normal;
+}
+
+.ui-autocomplete-itemtip {
+    background: none !important;
+    background-color: rgba(15,15,15,0.8) !important;
+}
+
+.ui-tabs-nav.ui-helper-reset.ui-helper-clearfix.ui-widget-header.ui-corner-all {
+    background: #a2d2ff !important;
+    color: #FFFFFF !important;
+    padding: 5px !important;
+}
+
+.ui-panelgrid-cell.ui-widget-header {
+    background: #a2d2ff !important;
+    padding: 5px !important;
+    text-shadow: none !important;
+}
+
+.ui-state-default.ui-corner-top {
+    border: none !important;
+    background: #e3dbd8 !important;
+    box-shadow: none !important;
+    padding: 5px !important;
+    border-radius: 0px !important; 
+}
+
+.ui-state-default.ui-corner-top.ui-state-hover {
+    background: #f1edeb !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all {
+    padding: 7px !important;
+    background: #0139b9 !important;
+    border: none !important;
+    box-shadow: none !important;
+    border-radius: 22px !important; 
+    color: #fff !important;
+    font-size: 16px !important;
+    text-shadow: none !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-state-hover {
+    background: #2757c3 !important;
+}
+
+.ui-inputfield.ui-inputtextarea.ui-widget.ui-state-default.ui-corner-all.ui-inputtextarea-resizable {
+    box-shadow: none !important;
+    width: 465px;
+    border-radius: 20px;
+    color: #000 !important;
+    font-weight: normal;
+}
+
+.ui-spinner-input.ui-inputfield.ui-state-default.ui-corner-all {
+    box-shadow: none !important;
+    color: #000 !important;
+    font-weight: normal;
+}
+
+.ui-growl-item {
+    background-color: rgba(0,0,0,0.8) !important;
+    box-shadow: 0px 1px 0px rgba(255, 255, 255, 0.2) inset !important;
+}
+
+.ui-growl-icon-close .ui-icon {
+    background-image: url(/quiz-app/javax.faces.resource/img/ui-icons_ds82jd_256x240.png.xhtml) !important;
+}
+
+.ui-menu .ui-menuitem-link {
+    color: #FFF !important;
+}
+
+.ui-menubar > .ui-menu-list > .ui-menuitem-active > .ui-menuitem-link {
+    color: #FFF !important;
+    background-color: #2757c3 !important;
+    border: 1px solid #0b2d7b !important;
+}
+
+div.ui-radiobutton + label {
+    padding-left: 10px !important;
+}
+
+/*.ui-widget .ui-widget-content a {
+    color: #000 !important;
+}*/
+
+.ui-tabs .ui-tabs-nav li.ui-tabs-selected a {
+    color: #000 !important;
+}
+
+.ui-tabs .ui-state-default a, .ui-tabs .ui-state-default a:link {
+    color: #1b425e !important;
+}
+
+.ui-menu .ui-widget-content a {
+    color: #000 !important;
+}
+
+/*.ui-state-hover, .ui-widget-content .ui-state-hover, .ui-widget-header .ui-state-hover, .ui-state-focus, .ui-widget-content .ui-state-focus, .ui-widget-header .ui-state-focus {
+    color: #FFFFFF !important;
+}*/
+
+.ui-selectonemenu-list-item:hover { 
+    background: none !important;
+    color: #333 !important;
+    background-color: #f7b5bf !important;
+    box-shadow: none !important;
+    border: 1px solid #C9848E !important;
+    text-shadow: none !important;
+    font-weight: bold !important;
+}
+
+.ui-widget-content .ui-state-highlight { 
+    background: none !important;
+    color: #FFF !important;
+    background-color: #468ed2 !important;
+    box-shadow: none !important;
+    border: 1px solid #316393 !important;
+    text-shadow: none !important;
+    font-weight: bold !important;
+}
+
+.ui-datepicker .ui-datepicker-calendar .ui-state-default {
+    color: #316393 !important;
+}
+
+.ui-datepicker .ui-datepicker-calendar .ui-state-highlight {
+    color: #FFF !important;
+    background-color: #C9848E !important;
+    border: none !important;
+}
+
+.ui-datepicker .ui-datepicker-calendar .ui-state-hover {
+    color: #316393 !important;
+    background-color: #c2dff9 !important;
+    text-shadow: none !important;
+}
+
+.ui-datepicker .ui-datepicker-current-day .ui-state-default {
+    background-color: #316393 !important;
+}
+
+.ui-datepicker .ui-datepicker-header {
+    background: none !important;
+    background-color: #316393 !important;
+    color: #FFF !important;
+    text-shadow: none !important;
+}
+
+.ui-datepicker .ui-datepicker-next {
+    margin: 1px 1px 0px 0px !important;
+}
+
+.ui-datepicker .ui-datepicker-prev {
+    margin: 1px 0px 0px 1px !important;
+}
+
+.ui-datepicker .ui-datepicker-next .ui-icon {
+    background-image: url(/quiz-app/javax.faces.resource/img/ui-icons_ds82jd_256x240.png.xhtml) !important;
+}
+
+.ui-datepicker .ui-datepicker-prev .ui-icon {
+    background-image: url(/quiz-app/javax.faces.resource/img/ui-icons_ds82jd_256x240.png.xhtml) !important;
+}
+
+.ui-datepicker .ui-datepicker-next:hover {
+    box-shadow: none !important;
+    background-color: #468ed2 !important;
+}
+
+.ui-datepicker .ui-datepicker-next:pressed {
+    box-shadow: none !important;
+    background-color: rgba(0,0,0,0) !important;
+}
+
+.ui-datepicker .ui-datepicker-prev:hover {
+    box-shadow: none !important;
+    background-color: #468ed2 !important;
+}
+
+.ui-datepicker .ui-datepicker-prev:pressed {
+    box-shadow: none !important;
+    background-color: rgba(0,0,0,0) !important;
+}
+
+.ui-button {
+    border: 1px solid #79b7e7 !important;
+}
+
+.ui-button:hover {
+    border: 1px solid #4297d7 !important;
+}
+
+.ui-datatable tbody td {
+    text-align: center;
+    font-size: 11pt !important;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.ui-datatable-odd {
+    background: none !important;
+    background-color: #c2dff9 !important;
+}
+
+.ui-datatable .ui-paginator {
+    background: none !important;
+    background-color: #316393 !important;
+    color: #FFF !important;
+    text-shadow: none !important;
+}
+
+.ui-datatable .ui-paginator .ui-state-default .ui-icon {
+    background-image: url(/quiz-app/javax.faces.resource/img/ui-icons_d87r5s_256x240.png.xhtml) !important;
+}
+
+.ui-state-active .ui-icon {
+    opacity:1;
+    -webkit-print-color-adjust: exact;
+    background-image: url(/quiz-app/javax.faces.resource/img/ui-icons_f9bd01_256x240.png.xhtml) !important;
+}
+
+.ui-menubar > .ui-menu-list > .ui-menuitem > .ui-menuitem-link span.ui-icon-triangle-1-s {
+    background-image: url(/quiz-app/javax.faces.resource/img/ui-icons_ds82jd_256x240.png.xhtml) !important;
+}
+
+.ui-menubar > .ui-menu-list > .ui-menuitem > .ui-menuitem-link .ui-icon {
+    background-image: url(/quiz-app/javax.faces.resource/img/ui-icons_ds82jd_256x240.png.xhtml) !important;
+}
+
+.ui-row-editor  {
+    margin-left: 23px;
+    float: left !important;
+}
+
+.ui-datatable .ui-row-editor span {
+    float: left !important;
+}
+
+.ui-icon-trash {
+    display: inline !important;
+    float: right !important;
+    /* margin-right: 23px; */
+}
+
+.ui-dialog {
+    -moz-box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.5) !important;
+}
+
+.ui-dialog .ui-widget-header {
+    text-shadow: none !important;
+}
+
+.ui-dialog-title {
+    font-size: 18px !important;
+    height: 9px !important;
+}
+
+.ui-panelgrid-cell .ui-widget-header  {
+    border: none !important;
+}
+
+.ui-dialog .ui-dialog-title {
+    color: #FFF !important;
+    box-shadow: none !important;
+    width: 100% !important;    
+    text-align: center !important;
+    font-weight: bold !important;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    background: none !important;
+    background-color: #316393 !important;
+}
+
+.ui-dialog-titlebar-close .ui-icon {
+    background-image: url(/quiz-app/javax.faces.resource/img/ui-icons_ds82jd_256x240.png.xhtml) !important;
+}
+
+a.ui-dialog-titlebar-close:hover {
+    border: 1px solid rgba(0,0,0,0) !important;
+    box-shadow: none !important;
+    background: none !important;
+    background-color: #468ed2 !important;
+}
+
+.ui-widget-overlay {
+    background: none !important;
+    background-color: #000 !important;
+    opacity: 0.35 !important;
+}
+
+.ui-datatable th {
+    background: none !important;
+    background-color: #468ed2 !important;
+    text-shadow: none !important;
+    border: 1px solid #316393 !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    color: #fff !important;
+}
+
+.ui-panel .ui-widget-header {
+    background: none !important;
+    background-color: #316393 !important;
+    color: #FFF !important;
+    text-shadow: none !important;
+    border: none !important;
+}
+
+.ui-panel .ui-panel-title {
+    margin: 0.1em 0px 0.2em 0px !important;
+}
+
+.ui-sortable-column-icon, .ui-datatable .ui-state-active .ui-icon {
+    background-image: url(/quiz-app/javax.faces.resource/img/ui-icons_ds82jd_256x240.png.xhtml) !important;
+}
+
+div#interface {
+    width: 1024px;
+    background-color: #ffffff;
+    text-align: center;
+    margin: 0px auto 0px auto;
+    -moz-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+    -webkit-box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+}
+
+p#sitename {
+    position: absolute;
+    top: 30px;
+    left: 315px;
+    font-family: Arial, sans-serif;
+    font-size: 15pt;
+    font-weight: bold;
+    color: #FFF;
+    text-shadow: 0px 0px 15px rgba(0, 0, 0, 0.5);
+    text-align: left;
+}
+
+#inicio {
+    margin-top: 40px;
+    margin-bottom: -60px;
+    height: 350px;
+    margin-left: 100px;
+}
+
+#inicio a {
+    text-decoration: none;
+    color: #000000;
+}
+
+#inicio a:hover {
+    color: #006699;
+}
+
+#atalhos {
+    float: none;
+    font-weight: bold;
+}
+
+#cadastrar {
+    position: absolute;
+    margin-left: 309px;
+    margin-top: 100px;
+    font-family: Tahoma;
+    width: 180px;
+}
+
+#buscar {
+    position: absolute;
+    margin-left: 545px;
+    margin-top: 100px;
+    font-family: Tahoma;
+    width: 160px;
+}
+
+#buscar_codigo {
+    position: absolute;
+    margin-left: 232px;
+    margin-top: 100px;
+    font-family: Tahoma;
+    width: 160px;
+}
+
+#buscar_data_dia {
+    position: absolute;
+    margin-left: 432px;
+    margin-top: 100px;
+    font-family: Tahoma;
+    width: 160px;
+}
+
+#buscar_data_mes {
+    position: absolute;
+    margin-left: 632px;
+    margin-top: 100px;
+    font-family: Tahoma;
+    width: 160px;
+}
+
+#table-menu table, #table-footer table {
+    width: 100%;
+    border: 0;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #FFFFFF;
+}
+
+#table-header {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+}
+
+table.footer1 {
+    background-color: #0139B9;
+}
+
+td.footer1 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 12px;
+    color: #FFF;
+    line-height: 19px;
+    padding: 4px 0px 4px 0px;
+    border-bottom: 1px #FFF solid;
+}
+
+table.footer2 {
+    background-color: #809cdc;
+}
+
+td.footer2 {
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 10px;
+    color: #000;
+    height: 20px;
+    padding: 0px 10px 0px 10px;
+}
+
+.ui-selectoneradio label {
+    padding-right: 10px;
+}
+
+.ui-selectoneradio td {
+    padding:0px 5px 0px 0px !important;
+}
+
+.campoObrigatorio {
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    font-weight: bold;
+    color: #666;
+}
+
+h1 {
+    font-family: Arial, sans-serif;
+    font-size: 26px;
+    padding-top: 20px;
+    line-height: 0px;
+}
+
+h2 {
+    font-family: Arial, sans-serif;
+    font-size: 22px;
+}
+
+.ui-state-disabled,.ui-widget-content .ui-state-disabled,.ui-widget-header .ui-state-disabled {
+    opacity: 1 !important;
+    box-shadow: none !important;
+    border:none !important;
+    background-color: RGBA(0, 0, 0, 0) !important;
+    color: #222 !important;
+    padding: 0 !important;
+}
+
+.busca .ui-state-disabled, .visualizaData .ui-state-disabled, .visualizaNumero .ui-state-disabled {
+    opacity: 1 !important;
+    box-shadow: none !important;
+    border:none !important;
+    background-color: RGBA(0, 0, 0, 0) !important;
+    font-weight: normal !important;
+    padding: 0 !important;
+    text-align: center;
+}
+
+div#conteudo {
+    margin-left: 80px;
+    width: 880px;
+    position: relative;
+    min-height: 240px;
+}
+
+div#login {
+    width: 40%;
+    height: 198px;
+    margin: 40px auto 0 auto;
+    background-color: #a2d2ff;
+    border-radius: 10px;
+}
+
+.painel_login h2 {
+    margin: 2px 0 8px 0 !important;
+}
+
+.painel_login table, .painel_login tr, .painel_login td, .painel_login .ui-panelgrid-cell {
+    text-align: center;
+    border: none !important;
+    background-color: #a2d2ff !important;
+    color: #000;
+}
+
+.ui-icon-trash {
+    margin-right: 22% !important; 
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.adicionar {
+    background: #669966 !important;
+    width: 110px;
+    height: 30px;
+    border-radius: 0px !important; 
+    left: 20px;
+    top: 2px;
+    padding: 0px !important;
+}
+
+.ui-button.ui-widget.ui-state-default.ui-corner-all.ui-button-text-only.adicionar.ui-state-hover {
+    background: #5b895b !important;
+}
+
+#tabelaMateriais {
+    background: #888381;
+    border-collapse: collapse; 
+    border-spacing: 0;
+    margin: 0 auto;
+    font-size: 16px;
+    margin-bottom: 15px;
+    margin-top: 10px;
+}
+
+#tabelaMateriais tbody tr th { 
+    font-weight: normal;
+    color: #ffffff;
+    padding: 5px 10px;
+    border-right: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+}
+
+.newElement tr th {
+    background: #e5dedb;
+    color: #000 !important;
+}
+
+.newElement input {
+    width: 100px;
+    height: 25px;
+    border-radius: 10px;
+    box-shadow: none;
+    border: none;
+    font-size: 16px;
+}
+
+.ui-inputfield.ui-widget.ui-state-default.ui-corner-all.hasDatepicker {
+    box-shadow: none;
+    border-radius: 50px;
+    padding: 8px;
+    font-weight: normal;
+}
+
+.ui-password {
+    padding: 4px 8px 4px 8px !important;
+}
+
+.ui-selectonemenu-label.ui-inputfield.ui-corner-all {
+    box-shadow: none;
+    padding: 5px;
+}
+
+.botoesRequisicao {
+    margin: 0px 0px;
+}
+
+.campoEntregue{
+    position: relative;
+    clear: both;
+    display: inline;
+    left: 50px;
+}
+
+.fa {
+    font-size: 20px !important;
+    color: #003362 !important;
+}
+
+.quantidadeDisponivel {
+    color: #ab8440;
+    font-weight: bold;
+    background-color: #fff6c4;
+    border: 1px solid #efddbb;
+    border-radius: 4px;
+    padding: 6px 10px;
+}
+
+.alertbox {
+    border: 1px solid #316393;
+    border-radius: 5px;
+    width: 400px;
+    position: relative;
+    height: 60px;
+    display: inline-block;
+    text-align: center;
+    left: -50px;
+    right: 0px;
+    bottom: -10px;
+    
+}
+.alertheader {
+    position: relative;
+    top: -12px;
+    border-bottom: 1px solid #316393;
+    color: #FFF;
+    background-color: #0139B9;
+    border-radius: 3px 3px 0px 0px;
+    height: 30px;
+}
+
+.alertheader h1 {
+    font-size: 15px;
+    font-family: Arial;
+}
+
+.linkalert {
+    position: relative;
+    top: -20px;
+}
+
+.linkalert p {
+    color: #006699;
+}
+
+.linkalert:hover p {
+    color: #4297d7;
+}
+
+div.dialog-exclusao-usuario {
+    padding: 50px 30px;
+    font-weight: bold;
+    font-family: Helvetica, Arial, sans-serif;
+    font-size: 14pt;
+    text-align: center;
+    line-height: 20pt;
+}
+
+.link-atividade {
+    color: #FFF !important;
+    background-color: #0139B9;
+    padding: 1px 5px 2px 5px;
+    border-radius: 4px;
+    text-shadow: none !important;
+    text-decoration: none;
+}
+
+.minhaConta {
+    font-size: 17px;
+}
+
+table.minhaConta {
+    padding-top: 20px;
+}
+
+table.sobreTitulo {
+    padding-top: 10px;
+    text-align: center;
+}
+
+td.logo {
+    padding: 15px;
+}
+
+td.email {
+    color: #0139B9;
+    padding-bottom: 0px;
+}

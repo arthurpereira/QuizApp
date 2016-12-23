@@ -1,0 +1,150 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:head>
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        <title>Cadastro de Pergunta | QuizAPP</title>
+        <h:outputStylesheet library="css" name="style-adm.css" />
+        <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
+    </h:head>
+
+    <h:body>
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+                  closable="false" resizable="false" showHeader="false">
+            <h:graphicImage library="img" name="ajax-loader.gif" />
+        </p:dialog>
+        
+        <div id="interface">
+            <table id="table-header" cellpadding="0" cellspacing="0">
+                <!-- TOPO -->
+                <tr>
+                    <td><ui:include src="/template/header.xhtml" /></td>
+                </tr>
+
+                <!--  MENU -->
+                <tr>
+                    <td><ui:include src="/admin/menu.xhtml" /></td>
+                </tr>
+            </table>
+
+            <h1>CADASTRO DE PERGUNTA</h1>
+            <h2>
+                <font class="campoObrigatorio">* Campo Obrigatório!</font>
+            </h2>
+
+            <h:form id="form1" style="padding-bottom:10px">
+
+                <p:growl id="campoObrigatorio" life="4000" showDetail="false"
+                         rendered="#{facesContext.validationFailed == true}" />
+                <p:growl for="sucesso" id="sucesso" life="4000" showDetail="true" />
+                <p:growl for="atencao" id="atencao" life="4000" showDetail="true" />
+                <p:panelGrid style="width:100%;margin-bottom: 20px !important">
+                    <p:row>
+                        <p:column style="text-align:right;width:30%">
+                            <p:outputLabel for="pergunta" value="Pergunta:" />
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <p:inputTextarea id="pergunta" required="true"
+                                             requiredMessage="Campo Pergunta Obrigatório!"
+                                             value="#{perguntaBean.pergunta.texto}" />
+                        </p:column>
+                    </p:row>
+                
+                    <p:row>
+                        <p:column style="text-align:right;width:30%">
+                            <h:outputText value="Alternativas: *" />
+                        </p:column>
+                        <p:column style="text-align:left">
+                            <p:outputPanel id="customPanel" style="margin-bottom:10px">
+                                <p:selectOneRadio id="customRadio" layout="custom" required="true"
+                                                  value="#{perguntaBean.pergunta.alternativa_certa}"
+                                                  requiredMessage="Campo Alternativa Certa Obrigatório!">
+                                    <f:selectItem itemLabel="Alternativa A" itemValue="0" />
+                                    <f:selectItem itemLabel="Alternativa B" itemValue="1" />
+                                    <f:selectItem itemLabel="Alternativa C" itemValue="2" />
+                                    <f:selectItem itemLabel="Alternativa D" itemValue="3" />
+                                </p:selectOneRadio>
+
+                                <p:panelGrid>
+                                    <f:facet name="header">
+                                        <p:row>
+                                            <p:column styleClass="ui-widget-header">
+                                                Alternativa Certa
+                                            </p:column>
+                                            <p:column styleClass="ui-widget-header">
+                                                Alternativas
+                                            </p:column>
+                                        </p:row>
+                                    </f:facet>
+                                    <p:row>
+                                        <p:column>
+                                                <p:radioButton id="opt1" for="customRadio" itemIndex="0" />
+                                                <h:outputLabel for="opt1" value="Alternativa A" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText size="42" required="true"
+                                                         value="#{perguntaBean.alt1.texto}"
+                                                         requiredMessage="Campo Alternativa A Obrigatório!" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton id="opt2" for="customRadio" itemIndex="1" />
+                                            <h:outputLabel for="opt2" value="Alternativa B" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText size="42" required="true"
+                                                         value="#{perguntaBean.alt2.texto}"
+                                                         requiredMessage="Campo Alternativa B Obrigatório!" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton id="opt3" for="customRadio" itemIndex="2" />
+                                            <h:outputLabel for="opt3" value="Alternativa C" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText size="42" required="true"
+                                                         value="#{perguntaBean.alt3.texto}"
+                                                         requiredMessage="Campo Alternativa C Obrigatório!" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton id="opt4" for="customRadio" itemIndex="3" />
+                                            <h:outputLabel for="opt4" value="Alternativa D" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText size="42" required="true"
+                                                         value="#{perguntaBean.alt4.texto}"
+                                                         requiredMessage="Campo Alternativa D Obrigatório!" />
+                                        </p:column>
+                                    </p:row>
+                                </p:panelGrid>
+                            </p:outputPanel>
+                        </p:column>
+                    </p:row>
+                    <f:facet name="footer">
+                        <p:row>
+                            <p:column colspan="2" style="text-align:center">
+                                <p:commandButton ajax="false" value="Salvar Pergunta"
+                                                 action="#{perguntaBean.cadastrar()}"
+                                                 update=":form1 sucesso campoObrigatorio atencao"
+                                                 onclick="PF('statusDialog').show()" />
+                            </p:column>
+                        </p:row>
+                    </f:facet>
+                </p:panelGrid>
+            </h:form>
+
+            <!-- RODAPE -->
+            <table id="table-footer">
+                <ui:include src="/template/footer.xhtml" />
+            </table>
+        </div>
+
+    </h:body>
+</html>
