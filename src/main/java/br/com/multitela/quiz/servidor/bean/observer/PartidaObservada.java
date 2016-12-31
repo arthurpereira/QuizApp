@@ -18,7 +18,7 @@ public interface PartidaObservada {
     
     public void atualizarPlacar();
     
-    public void notificarPlacar(List<JogadorPartidaAssociativa> placar);
+    public void notificarPlacar(List<JogadorPartidaAssociativa> placar, List<Integer> pontuacoes);
     
     public void listarPerguntas();
     

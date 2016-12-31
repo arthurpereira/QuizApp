@@ -19,7 +19,9 @@ import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.multitela.quiz.servidor.service.UsuarioService;
+import org.apache.commons.lang3.SerializationUtils;
 import org.primefaces.component.inputtext.InputText;
+import org.springframework.util.DigestUtils;
 
 /**
  *
@@ -31,7 +33,6 @@ public class UsuarioBean extends AbstractBean {
 
     @EJB
     private UsuarioService usuarioService;
-    private UsuarioController usuarioController;
 
     private Usuario usuarioLogado, usuario;
     private String nomeDeUsuario, senha, novaSenha, confirmaSenha;
@@ -132,19 +133,10 @@ public class UsuarioBean extends AbstractBean {
         try {
             Usuario usuarioSeguro = usuarioService.find(retornaUsuarioLogado().getId());
 
-            if (senha.equals(usuarioSeguro.getSenha())) {
-                usuariosCadastrados = usuarioController.findAll();
-                
-                boolean eUsuarioUnico = true;
-                
-                for (Usuario usuarioCadastrado : usuariosCadastrados) {
-                    if (usuario.getUsuario().equalsIgnoreCase(usuarioCadastrado.getUsuario())) {
-                        eUsuarioUnico = false;
-                        break;
-                    }
-                }
-                
-                if (eUsuarioUnico) {
+            if (DigestUtils.md5DigestAsHex(senha.getBytes()).equals(usuarioSeguro.getSenha())) {
+
+                if (usuarioService.buscarPorUsername(usuario.getUsuario()) != null) {
+                    usuario.setSenha(DigestUtils.md5DigestAsHex(usuario.getSenha().getBytes()));
                     usuarioService.save(usuario);
                     closeDialog();
                     context.getExternalContext().getFlash().setKeepMessages(true);
@@ -180,26 +172,15 @@ public class UsuarioBean extends AbstractBean {
         Usuario usuarioLogadoSeguro = new Usuario(); 
         try {
             Usuario usuarioSeguro = usuarioService.find(retornaUsuarioLogado().getId());
-            usuarioLogadoSeguro = org.apache.commons.lang3.SerializationUtils.clone( usuarioSeguro );
+            usuarioLogadoSeguro = SerializationUtils.clone( usuarioSeguro );
 
-            if (senha.equals(usuarioSeguro.getSenha())) {
-                
-                usuariosCadastrados = usuarioController.findAll();
-                
-                boolean eUsuarioUnico = true;
-                
-                for (Usuario usuarioCadastrado : usuariosCadastrados) {
-                    if (usuarioLogado.getUsuario().equalsIgnoreCase(usuarioCadastrado.getUsuario())
-                            && usuarioLogado.getId() != usuarioCadastrado.getId()) {
-                        eUsuarioUnico = false;
-                        break;
-                    }
-                }
-                
-                if (eUsuarioUnico) {
+            if (DigestUtils.md5DigestAsHex(senha.getBytes()).equals(usuarioSeguro.getSenha())) {
+                Usuario usuarioCadastrado = usuarioService.buscarPorUsername(usuarioLogado.getUsuario());
+
+                if (usuarioCadastrado != null && usuarioLogado.getId() != usuarioCadastrado.getId()) {
                     usuarioSeguro.setNome(usuarioLogado.getNome());
                     usuarioSeguro.setUsuario(usuarioLogado.getUsuario());
-                    usuarioSeguro.setSenha(usuarioLogado.getSenha());
+                    usuarioSeguro.setSenha(DigestUtils.md5DigestAsHex(usuarioLogado.getSenha().getBytes()));
                     usuarioService.update(usuarioSeguro);
                     closeDialog();
                     context.getExternalContext().getFlash().setKeepMessages(true);
@@ -236,7 +217,6 @@ public class UsuarioBean extends AbstractBean {
      */
     public void limpaUsuario() {
         usuario = new Usuario();
-        usuarioController = new UsuarioController();
         nomeDeUsuario = senha = novaSenha = confirmaSenha = null;
     }
 

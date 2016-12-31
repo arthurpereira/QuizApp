@@ -13,8 +13,8 @@
             <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
             <meta http-equiv="Pragma" content="no-cache" />
             <meta http-equiv="Expires" content="0" />
-            <h:outputStylesheet library="css" name="style-responsive.css" />
             <h:outputStylesheet library="css" name="style-celular.css" />
+            <h:outputStylesheet library="css" name="bootstrap-grid.min.css" />
             <link rel="stylesheet" href="#{request.contextPath}/resources/css/font-awesome.min.css" />
             <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
         </h:head>
@@ -43,7 +43,7 @@
                                  process="@this" update="form-alternativas" />
                 <p:remoteCommand name="mudarPergunta"
                                  actionListener="#{partidaBean.mudarPergunta()}"
-                                 process="@this" update="form-pergunta form-alternativas panel-placar" />
+                                 process="@this" update="form-pergunta form-alternativas panel-placar panel-fim-do-jogo" />
                 <p:remoteCommand name="mostrarRespostaCerta"
                                  actionListener="#{partidaBean.mostrarRespostaCerta()}"
                                  process="@this" update="panel-pontuacao form-alternativas panel-placar" />
@@ -105,7 +105,14 @@
                                 <span id="span-nome-jogador">#{partidaBean.jogador.nome}</span>
                             </h:panelGroup>
                             <h:panelGroup id="panel-pontuacao" rendered="#{partidaBean.jogadorEstaLogado}">
-                                <span id="span-pontuacao-jogador">#{partidaBean.getAcertos()}</span>
+                                <div id="div-pontuacao-jogador">
+                                    <div style="float: left; min-width: 50px;">
+                                        <span class="fa fa-check"></span> #{partidaBean.getAcertos()}
+                                    </div>
+                                    <div style="float: left; margin-left: 10px;">
+                                        <span class="fa fa-times"></span> #{partidaBean.getErros()}
+                                    </div>
+                                </div>
                             </h:panelGroup>
                         </h:panelGroup>
                         <div id="facebook-info" class="facebookinfo" style="display: none;">
@@ -186,7 +193,14 @@
                                         </td>
                                         <td>
                                             <p class="p-placar-jogador">#{jogador.jogador.nome}</p>
-                                            <p class="p-placar-pontuacao">#{partidaBean.getAcertos(jogador.acertos)}</p>
+                                            <p class="p-placar-pontuacao">
+                                                <span style="float: left; min-width: 50px;">
+                                                    <span class="fa fa-check"></span> #{jogador.acertos}
+                                                </span>
+                                                <span style="margin-left: 14px">
+                                                    <span class="fa fa-times"></span> #{jogador.erros}
+                                                </span>
+                                            </p>
                                         </td>
                                     </tr>
                                 </table>
@@ -195,31 +209,51 @@
                         </h:panelGroup>
                     </div>
                 </h:panelGroup>
-                
-                <div id="div-fim-do-jogo" class="container display-none">
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="logo">
-                                <img src="resources/img/quiz-app-logo.png" alt="Logo"/>
-                                <h1>QuizAPP</h1>
+
+                <h:panelGroup id="panel-fim-do-jogo">
+                    <h:panelGroup rendered="#{partidaBean.partidaEncerrada}">
+                        <div id="div-fim-do-jogo" class="container">
+
+                            <div class="col-xs-12 row head-logo">
+                                <img src="resources/img/quiz-app-logo-2.png" alt="Logo"/>
+                            </div>
+
+                            <div class="col-xs-12 row head-perfil">
+                                <div>
+                                    <img src="http://graph.facebook.com/#{partidaBean.jogador.facebook_id}/picture?type=large" alt="Perfil" />
+                                    <p>#{partidaBean.jogador.nome}</p>
+                                </div>
+                            </div>
+
+                            <div class="row pontuacao">
+                                <div class="card-colocacao">
+                                    <p>#{partidaBean.colocacao}º</p>
+                                    <p>Lugar</p>
+                                </div>
+                                <div class="card-acertos">
+                                    <p>#{partidaBean.acertos}</p>
+                                    <p>Acertos</p>
+                                </div>
+                                <div class="card-erros">
+                                    <p>#{partidaBean.erros}</p>
+                                    <p>Erros</p>
+                                </div>
+                            </div>
+
+                            <div class="row col-xs-12 agradecimento">
+                                <div>
+                                    <div>
+                                        <p class="obrigado">Obrigado por jogar!</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-xs-12 row logo-lades">
+                                <img class="" src="resources/img/lades-logo.png" alt="Logo"/>
                             </div>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <div class="head-login">
-                                <p class="obrigado">Obrigado por jogar!</p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-xs-12">
-                            <section class="login">
-                                <img class="logo-lades" src="resources/img/lades-logo.png" alt="Logo"/>
-                            </section>
-                        </div>
-                    </div>
-                </div>
+                    </h:panelGroup>
+                </h:panelGroup>
             </div>
             
             <!-- ARQUIVOS JS COLOCADOS NO FINAL PARA UM CARREGAMENTO MAIS RÁPIDO DA PÁGINA -->

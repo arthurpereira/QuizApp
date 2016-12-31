@@ -12,4 +12,6 @@ public interface JogadorPartidaAssociativaService extends Repository<JogadorPart
 
     public List<JogadorPartidaAssociativa> consultaJogadoresPorPartida(Long partida_id);
 
+    public List<Integer> consultaPontuacoesPorPartida(Long partida_id);
+
 }

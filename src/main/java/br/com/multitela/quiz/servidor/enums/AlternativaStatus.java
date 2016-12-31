@@ -10,11 +10,21 @@ package br.com.multitela.quiz.servidor.enums;
  * @author arthurpereira
  */
 public enum AlternativaStatus {
-    
-    NAO_ESCOLHIDA,
-    ESCOLHIDA,
-    CERTA,
-    ERRADA,
-    DESABILITADA
-    
+
+    NAO_ESCOLHIDA("#3360c7"),
+    ESCOLHIDA("#16aceb"),
+    CERTA("#2eb22e"),
+    ERRADA("#d50f0f"),
+    DESABILITADA("#acacac");
+
+    private String cor;
+
+    private AlternativaStatus(String cor) {
+        this.cor = cor;
+    }
+
+    public String getCor() {
+        return cor;
+    }
+
 }

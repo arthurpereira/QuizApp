@@ -11,20 +11,20 @@ import br.com.multitela.quiz.servidor.bean.observer.PartidaObservada;
  *
  * @author arthurpereira
  */
-public class PlacarSingleton {
+public class PartidaSingleton {
     
-    private static PartidaObservada placarObservado = null;
+    private static PartidaObservada partidaObservada = null;
     
     public static PartidaObservada getPlacarSingletonInstance() {
-        return placarObservado;
+        return partidaObservada;
     }
     
     public static void setPlacarSingletonInstance(PartidaObservada obs) {
-        placarObservado = obs;
+        partidaObservada = obs;
     }
     
     public static void removePlacarSingletonInstance() {
-        placarObservado = null;
+        partidaObservada = null;
     }
     
 }

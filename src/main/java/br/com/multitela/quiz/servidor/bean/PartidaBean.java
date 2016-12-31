@@ -15,14 +15,16 @@ import br.com.multitela.quiz.servidor.entity.Partida;
 import br.com.multitela.quiz.servidor.entity.Pergunta;
 import br.com.multitela.quiz.servidor.entity.Resposta;
 import br.com.multitela.quiz.servidor.enums.AlternativaStatus;
-import br.com.multitela.quiz.servidor.enums.Constantes;
+import br.com.multitela.quiz.servidor.enums.PartidaStatus;
+import br.com.multitela.quiz.servidor.enums.PerguntaStatus;
 import br.com.multitela.quiz.servidor.service.JogadorPartidaAssociativaService;
 import br.com.multitela.quiz.servidor.service.JogadorService;
 import br.com.multitela.quiz.servidor.service.PartidaService;
 import br.com.multitela.quiz.servidor.service.PerguntaService;
 import br.com.multitela.quiz.servidor.service.RespostaService;
-import br.com.multitela.quiz.servidor.singleton.PlacarSingleton;
+import br.com.multitela.quiz.servidor.singleton.PartidaSingleton;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
@@ -30,7 +32,6 @@ import javax.enterprise.context.SessionScoped;
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import org.primefaces.context.RequestContext;
 
@@ -69,13 +70,15 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     private int posicaoAlternativaEscolhida;
     private int acertos;
     private int erros;
+    private int colocacao;
     
     //Objeto auxiliar que será usado apenas para referenciar a pergunta atual na view do usuário.
     private Pergunta perguntaAtual;
-    
-    private boolean partidaIniciada;
-    private boolean liberaResponderPergunta;
-    private boolean alternativasHabilitadas;
+
+    //Variável que indica o estado da partida
+    private PartidaStatus partidaStatus;
+    private PerguntaStatus perguntaStatus;
+
     private boolean jogadorEstaLogado;
     
     private Jogador jogador;
@@ -102,8 +105,8 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         listaDePerguntas = perguntaService.listAll();
         listaAlternativasPorPergunta = new AlternativaDataModel(listaDePerguntas.get(posicaoPergunta).getAlternativa());
         perguntaAtual = listaDePerguntas.get(posicaoPergunta);
-        partidaIniciada = false;
-        liberaResponderPergunta = false;
+        partidaStatus = PartidaStatus.NAO_INICIADA;
+        perguntaStatus = PerguntaStatus.RESPOSTA_DESABILITADA;
         jogadorEstaLogado = false;
         jogador = new Jogador();
         partidaAssociativa = new JogadorPartidaAssociativa();
@@ -112,18 +115,19 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     }
     
     public void iniciarPartida() {
-        obs = PlacarSingleton.getPlacarSingletonInstance();
+        obs = PartidaSingleton.getPlacarSingletonInstance();
         obs.addObservador(this);
 
         partida = partidaService.consultaUltimaPartida();
         cadastrarJogadorPartida();
-        partidaIniciada = true;
-        liberaResponderPergunta = true;
+        partidaStatus = PartidaStatus.INICIADA;
+        perguntaStatus = PerguntaStatus.RESPOSTA_DESABILITADA;
         limpaStatusPorAlternativa();
     }
     
     public void encerrarPartida() {
-        limparPartida();
+//        limparPartida();
+        partidaStatus = PartidaStatus.ENCERRADA;
         ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
                 .getRequest()).getSession().invalidate();
     }
@@ -133,11 +137,11 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     }
     
     public void confirmaResposta() {
-        if (liberaResponderPergunta) {
+        if (perguntaStatus != PerguntaStatus.RESPONDIDA) {
             resposta = new Resposta();
             resposta.setPergunta(perguntaAtual);
             resposta.setAlternativaEscolhida(posicaoAlternativaEscolhida);
-            liberaResponderPergunta = false;
+            perguntaStatus = PerguntaStatus.RESPONDIDA;
             listaStatusPorAlternativa.set(posicaoAlternativaEscolhida, AlternativaStatus.ESCOLHIDA);
             salvarResposta();
         }
@@ -145,7 +149,7 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     
     public void mostrarRespostaCerta() {
         RequestContext.getCurrentInstance().execute("PF('dialog-confirma-resposta').hide();");
-        if (!liberaResponderPergunta) {
+        if (perguntaStatus == PerguntaStatus.RESPONDIDA) {
             if (resposta.getAlternativaEscolhida() == perguntaAtual.getAlternativa_certa()) {
                 listaStatusPorAlternativa.set(resposta.getAlternativaEscolhida(), AlternativaStatus.CERTA);
                 FacesContext.getCurrentInstance().addMessage("default", new FacesMessage("Você Acertou!", "Essa é a resposta certa."));
@@ -153,11 +157,18 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
                 listaStatusPorAlternativa.set(perguntaAtual.getAlternativa_certa(), AlternativaStatus.CERTA);
                 listaStatusPorAlternativa.set(resposta.getAlternativaEscolhida(), AlternativaStatus.ERRADA);
                 FacesContext.getCurrentInstance().addMessage("default", new FacesMessage("Você Errou", "Que pena..."));
-                liberaResponderPergunta = false;
             }
         } else {
             listaStatusPorAlternativa.set(perguntaAtual.getAlternativa_certa(), AlternativaStatus.CERTA);
             FacesContext.getCurrentInstance().addMessage("default", new FacesMessage("Você Errou", "Que pena..."));
+            perguntaStatus = PerguntaStatus.RESPONDIDA;
+            erros++;
+            try {
+                partidaAssociativa.setErros(erros);
+                partidaAssociativaService.update(partidaAssociativa);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
     
@@ -194,20 +205,18 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     }
     
     @Override
-    public void atualizarPlacar(List<JogadorPartidaAssociativa> placar) {
+    public void atualizarPlacar(List<JogadorPartidaAssociativa> placar, List<Integer> pontuacoes) {
         jogadoresPorPartida = placar;
         listaColocacaoPlacar = new ArrayList<>();
-        int pontuacaoAnterior, colocacao = 1;
+
         if (!jogadoresPorPartida.isEmpty()) {
-            pontuacaoAnterior = jogadoresPorPartida.get(0).getAcertos();
             for (JogadorPartidaAssociativa jogadorPartida : jogadoresPorPartida) {
-                if (pontuacaoAnterior != jogadorPartida.getAcertos())
-                    colocacao++;
-                pontuacaoAnterior = jogadorPartida.getAcertos();
+                colocacao = pontuacoes.indexOf(jogadorPartida.getAcertos()) + 1;
                 listaColocacaoPlacar.add(colocacao);
             }
         }
         listaJogadoresPorPartida = new JogadorPartidaDataModel(jogadoresPorPartida);
+        this.colocacao = pontuacoes.indexOf(acertos) + 1;
     }
     
     @Override
@@ -234,22 +243,8 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         return String.valueOf( (char) ( indice + 65 ) );
     }
     
-    public String getAcertos() {
-        if (acertos == 1)
-            return "1 Acerto";
-        else
-            return acertos + " Acertos";
-    }
-    
-    public String getAcertos(int acertos) {
-        if (acertos == 1)
-            return "1 Acerto";
-        else
-            return acertos + " Acertos";
-    }
-    
     public void habilitarAlternativas() {
-        alternativasHabilitadas = true;
+        perguntaStatus = PerguntaStatus.RESPOSTA_HABILITADA;
         limpaStatusPorAlternativa();
     }
     
@@ -259,18 +254,17 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
             listaAlternativasPorPergunta = new AlternativaDataModel(listaDePerguntas.get(posicaoPergunta).getAlternativa());
             RequestContext.getCurrentInstance().execute("jogo();");
         } else {
-            encerrarPartida();
             RequestContext.getCurrentInstance().execute("fimdojogo();");
+            encerrarPartida();
         }
-        alternativasHabilitadas = false;
+        perguntaStatus = PerguntaStatus.RESPOSTA_DESABILITADA;
         limpaStatusPorAlternativa();
-        liberaResponderPergunta = true;
     }
     
     private void limpaStatusPorAlternativa() {
         listaStatusPorAlternativa = new ArrayList<>();
         for (int i = 0; i < perguntaAtual.getAlternativa().size(); i++) {
-            if (alternativasHabilitadas)
+            if (perguntaStatus != PerguntaStatus.RESPOSTA_DESABILITADA)
                 listaStatusPorAlternativa.add(i, AlternativaStatus.NAO_ESCOLHIDA);
             else
                 listaStatusPorAlternativa.add(i, AlternativaStatus.DESABILITADA);
@@ -278,38 +272,25 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     }
     
     public String retornaBackgroundColorAlternativa(int posicao) {
-        switch (listaStatusPorAlternativa.get(posicao)) {
-            case NAO_ESCOLHIDA:
-                return "background-color: " + Constantes.NAO_ESCOLHIDA;
-            case ESCOLHIDA:
-                return "background-color: " + Constantes.ESCOLHIDA;
-            case CERTA:
-                return "background-color: " + Constantes.CERTA;
-            case ERRADA:
-                return "background-color: " + Constantes.ERRADA;
-            default:
-                return "background-color: " + Constantes.DESABILITADA;
-        }
+        return "background-color: " + listaStatusPorAlternativa.get(posicao).getCor() + ";";
     }
     
     public void logarComFacebook() {
         if (!jogadorEstaLogado) {
-            System.out.println(FacesContext.getCurrentInstance()
-                    .getExternalContext().getRequestParameterMap().get("id"));
-            System.out.println(FacesContext.getCurrentInstance()
-                    .getExternalContext().getRequestParameterMap().get("nome"));
-            jogador.setNome(FacesContext.getCurrentInstance().getExternalContext()
-                    .getRequestParameterMap().get("nome"));
-            jogador.setFacebook_id(Long.parseLong(FacesContext.getCurrentInstance()
-                    .getExternalContext().getRequestParameterMap().get("id")));
-            System.out.println("\nUSUÁRIO LOGADO: " + jogador.getNome() +
-                    "\nID: " + jogador.getFacebook_id());
-
             try {
-                Jogador novoJogador = jogadorService.findByFacebookId(jogador.getFacebook_id());
-                if (novoJogador != null) {
+                jogador.setNome(FacesContext.getCurrentInstance().getExternalContext()
+                        .getRequestParameterMap().get("nome"));
+                jogador.setFacebook_id(Long.parseLong(FacesContext.getCurrentInstance()
+                        .getExternalContext().getRequestParameterMap().get("id")));
+                System.out.println("\nUSUÁRIO LOGADO: " + jogador.getNome() +
+                        "\nID: " + jogador.getFacebook_id());
+
+                if (jogadorService.findByFacebookId(jogador.getFacebook_id()) != null) {
                     System.out.println("JOGADOR FOI RECUPERADO DO BANCO DE DADOS");
+                    jogador.setDataUltimoLogin(new Date());
+                    jogadorService.update(jogador);
                 } else {
+                    jogador.setDataCriacao(new Date());
                     jogadorService.save(jogador);
                 }
 
@@ -317,6 +298,8 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
                         new FacesMessage("Login", "O login foi realizado com sucesso."));
                 jogadorEstaLogado = true;
                 partidaAssociativa.setJogador(jogador);
+            } catch (NumberFormatException ex) {
+                RequestContext.getCurrentInstance().execute("registerWithServer();");
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -353,6 +336,18 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         return posicaoPergunta;
     }
 
+    public int getAcertos() {
+        return acertos;
+    }
+
+    public int getErros() {
+        return erros;
+    }
+
+    public int getColocacao() {
+        return colocacao;
+    }
+
     public Pergunta getPerguntaAtual() {
         return perguntaAtual;
     }
@@ -362,15 +357,19 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     }
 
     public boolean isPartidaIniciada() {
-        return partidaIniciada;
+        return partidaStatus == PartidaStatus.INICIADA;
+    }
+
+    public boolean isPartidaEncerrada() {
+        return partidaStatus == PartidaStatus.ENCERRADA;
     }
 
     public boolean isLiberaResponderPergunta() {
-        return liberaResponderPergunta;
+        return perguntaStatus != PerguntaStatus.RESPONDIDA;
     }
 
     public boolean isAlternativasHabilitadas() {
-        return alternativasHabilitadas;
+        return perguntaStatus == PerguntaStatus.RESPOSTA_HABILITADA;
     }
 
     public boolean isJogadorEstaLogado() {

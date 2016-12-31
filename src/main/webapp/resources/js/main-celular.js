@@ -66,9 +66,6 @@ function fimdojogo() {
     $("#div-aguardando-jogo").hide();
     $("#div-pergunta").hide();
     $("#div-placar").hide();
-    $("#div-fim-do-jogo").removeClass("display-none");
-    $("#div-fim-do-jogo").show();
-    logoutFromServer();
     location.hash = "";
 }
 

@@ -6,6 +6,7 @@ import br.com.multitela.quiz.servidor.service.UsuarioService;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.util.DigestUtils;
 
 import javax.ejb.Stateless;
 
@@ -45,7 +46,7 @@ public class UsuarioImpl extends RepositoryImpl<Usuario> implements UsuarioServi
     public Usuario validarUsuarioESenha(String username, String senha) {
         Usuario usuario = this.buscarPorUsername(username);
 
-        if (username == null || !usuario.getSenha().equals(senha))
+        if (usuario == null || username == null || !usuario.getSenha().equals(DigestUtils.md5DigestAsHex(senha.getBytes())))
             return null;
         else
             return usuario;

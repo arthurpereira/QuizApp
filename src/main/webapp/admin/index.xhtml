@@ -3,36 +3,18 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Administração | QuizAPP</title>
-        <h:outputStylesheet library="css" name="style-adm.css" />
-        <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
-    </h:head>
+<ui:composition template="../template/template.xhtml">
 
-    <h:body>
-        <h:form>
-            <p:poll interval="10" update="@this" />
-        </h:form>
+    <ui:define name="conteudo">
 
-        <div id="interface">
-            <table id="table-header" cellpadding="0" cellspacing="0">
-                <!-- TOPO -->
-                <tr>
-                    <td><ui:include src="/template/header.xhtml"/></td>
-                </tr>
-
-                <!--  MENU -->
-                <tr>
-                    <td><ui:include src="/admin/menu.xhtml" /></td>
-                </tr>
-            </table>
-
-            <!-- PAGINA INICIAL -->
-            <article id="inicio"> <section id="atalhos">
-                    <h:form id="form_atalhos">
-                        <p:growl for="sucesso" id="sucesso" life="4000" showDetail="true" autoUpdate="true" />
-                        <section id="buscar_codigo">
+        <!-- PAGINA INICIAL -->
+        <div id="col-sm-12 inicio">
+            <div class="col-sm-2 col-lg-3"></div>
+            <div id="atalhos" class="col-sm-8 col-lg-6">
+                <h:form id="form_atalhos">
+                    <p:growl for="sucesso" id="sucesso" life="4000" showDetail="true" autoUpdate="true" />
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="atalho">
                             <p:commandLink action="/admin/cadastrar/pergunta.xhtml?faces-redirect=true"
                                            actionListener="#{usuarioBean.limpaUsuario()}"
                                            immediate="true" ajax="false">
@@ -43,8 +25,10 @@
                                            immediate="true" ajax="false">
                                 <p>Cadastrar Pergunta</p>
                             </p:commandLink>
-                        </section>
-                        <section id="buscar_data_dia">
+                        </div>
+                    </div>
+                    <div class="col-xs-12 col-sm-6">
+                        <div class="atalho">
                             <p:commandLink action="/admin/buscar/pergunta.xhtml?faces-redirect=true"
                                            actionListener="#{usuarioBean.limpaUsuario()}"
                                            immediate="true" ajax="false">
@@ -55,14 +39,14 @@
                                            immediate="true" ajax="false">
                                 <p>Buscar Pergunta</p>
                             </p:commandLink>
-                        </section>
-                    </h:form>
-                </section></article>
-
-            <!-- RODAPE -->
-            <table id="table-footer">
-                <ui:include src="/template/footer.xhtml"/>
-            </table>
+                        </div>
+                    </div>
+                </h:form>
+            </div>
+            <div class="col-sm-2 col-lg-3"></div>
         </div>
-    </h:body>
+
+    </ui:define>
+
+</ui:composition>
 </html>

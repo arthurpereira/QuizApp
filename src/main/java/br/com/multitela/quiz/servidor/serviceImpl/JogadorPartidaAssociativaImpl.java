@@ -5,6 +5,7 @@ import br.com.multitela.quiz.servidor.repository.RepositoryImpl;
 import br.com.multitela.quiz.servidor.service.JogadorPartidaAssociativaService;
 
 import javax.ejb.Stateless;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
@@ -22,6 +23,17 @@ public class JogadorPartidaAssociativaImpl extends RepositoryImpl<JogadorPartida
                 + " ORDER BY jogador_partida.acertos DESC", JogadorPartidaAssociativa.class);
         query.setParameter("partida_id", partida_id);
         query.setMaxResults(10);
+
+        return query.getResultList();
+    }
+
+    @Override
+    public List<Integer> consultaPontuacoesPorPartida(Long partida_id) {
+        Query query = getEntityManager().createQuery(
+                "SELECT DISTINCT jogador_partida.acertos FROM " + JogadorPartidaAssociativa.class.getName()
+                + " AS jogador_partida WHERE jogador_partida.partida.id = :partida_id"
+                + " ORDER BY jogador_partida.acertos DESC");
+        query.setParameter("partida_id", partida_id);
 
         return query.getResultList();
     }

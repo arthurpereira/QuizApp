@@ -32,7 +32,7 @@ public class JogadorPartidaAssociativa implements Serializable {
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -46,6 +46,8 @@ public class JogadorPartidaAssociativa implements Serializable {
     private int acertos;
 
     private int erros;
+
+    private int colocacao;
 
     @OneToMany(cascade = CascadeType.MERGE)
     @LazyCollection(LazyCollectionOption.FALSE)
@@ -89,6 +91,14 @@ public class JogadorPartidaAssociativa implements Serializable {
 
     public void setErros(int erros) {
         this.erros = erros;
+    }
+
+    public int getColocacao() {
+        return colocacao;
+    }
+
+    public void setColocacao(int colocacao) {
+        this.colocacao = colocacao;
     }
 
     public List<Resposta> getRespostas() {

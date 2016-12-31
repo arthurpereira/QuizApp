@@ -10,10 +10,12 @@ import br.com.multitela.quiz.servidor.bean.observer.PartidaObservador;
 import br.com.multitela.quiz.servidor.entity.JogadorPartidaAssociativa;
 import br.com.multitela.quiz.servidor.entity.Partida;
 import br.com.multitela.quiz.servidor.entity.Pergunta;
+import br.com.multitela.quiz.servidor.enums.PartidaStatus;
+import br.com.multitela.quiz.servidor.enums.PerguntaStatus;
 import br.com.multitela.quiz.servidor.service.JogadorPartidaAssociativaService;
 import br.com.multitela.quiz.servidor.service.PartidaService;
 import br.com.multitela.quiz.servidor.service.PerguntaService;
-import br.com.multitela.quiz.servidor.singleton.PlacarSingleton;
+import br.com.multitela.quiz.servidor.singleton.PartidaSingleton;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -57,30 +59,29 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     
     //Objeto auxiliar que será usado apenas para referenciar a pergunta atual na view do usuário.
     private Pergunta perguntaAtual;
-    
-    private boolean partidaIniciada;
-    private boolean liberaResponderPergunta;
-    private boolean alternativasHabilitadas;
+
+    //Variável que indica o estado da partida
+    private PartidaStatus partidaStatus;
+    private PerguntaStatus perguntaStatus;
     
     public ControladorPartidaBean() {
-        partidaIniciada = false;
-        liberaResponderPergunta = false;
-        alternativasHabilitadas = false;
+        partidaStatus = PartidaStatus.NAO_INICIADA;
+        perguntaStatus = PerguntaStatus.RESPOSTA_DESABILITADA;
     }
     
     public void iniciarPartida() {
-        PlacarSingleton.setPlacarSingletonInstance(this);
+        PartidaSingleton.setPlacarSingletonInstance(this);
         try {
             partida = new Partida();
             partida.setData(new Date());
             partidaService.save(partida);
             EventBus eventBus = EventBusFactory.getDefault().eventBus();
             eventBus.publish("/partida", new FacesMessage("iniciando partida"));
-            partidaIniciada = true;
+            partidaStatus = PartidaStatus.INICIADA;
             posicaoPergunta = 0;
             perguntaAtual = listaDePerguntas.get(posicaoPergunta);
             mensagemSucesso("A partida foi iniciada.");
-            liberaResponderPergunta = true;
+            perguntaStatus = PerguntaStatus.RESPOSTA_DESABILITADA;
             try {
                 Thread.sleep(500);
                 atualizarPlacar();
@@ -93,8 +94,8 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     }
     
     public void encerraPartida() {
-        PlacarSingleton.removePlacarSingletonInstance();
-        partidaIniciada = false;
+        PartidaSingleton.removePlacarSingletonInstance();
+        partidaStatus = PartidaStatus.ENCERRADA;
         mensagemSucesso("A partida foi encerrada.");
     }
     
@@ -104,7 +105,7 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     public void mudarPergunta() {
         if (posicaoPergunta < listaDePerguntas.size() - 1) {
             perguntaAtual = listaDePerguntas.get(++posicaoPergunta);
-            alternativasHabilitadas = false;
+            perguntaStatus = PerguntaStatus.RESPOSTA_DESABILITADA;
             EventBus eventBus = EventBusFactory.getDefault().eventBus();
             eventBus.publish("/pergunta", new FacesMessage("mudando pergunta"));
         } else {
@@ -112,17 +113,16 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
             eventBus.publish("/pergunta", new FacesMessage("mudando pergunta"));
             encerraPartida();
         }
-        liberaResponderPergunta = true;
     }
     
     /**
      * Método utilizado para mostrar a resposta certa da pergunta atual.
      */
     public void habilitarAlternativas() {
-        if (liberaResponderPergunta && !alternativasHabilitadas) {
+        if (perguntaStatus == PerguntaStatus.RESPOSTA_DESABILITADA || perguntaStatus != PerguntaStatus.RESPONDIDA) {
             EventBus eventBus = EventBusFactory.getDefault().eventBus();
             eventBus.publish("/alternativa", new FacesMessage("habilitar alternativas"));
-            alternativasHabilitadas = true;
+            perguntaStatus = PerguntaStatus.RESPOSTA_HABILITADA;
             mensagemSucesso("As alternativas foram habilitadas.");
         } else {
             mensagemAtencao("As alternativas já foram habilitadas.");
@@ -133,11 +133,11 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
      * Método utilizado para mostrar a resposta certa da pergunta atual.
      */
     public void mostrarRespostaCerta() {
-        if (alternativasHabilitadas) {
-            if (liberaResponderPergunta) {
+        if (perguntaStatus != PerguntaStatus.RESPOSTA_DESABILITADA) {
+            if (perguntaStatus == PerguntaStatus.RESPOSTA_HABILITADA) {
                 EventBus eventBus = EventBusFactory.getDefault().eventBus();
                 eventBus.publish("/resposta", new FacesMessage("mostra resposta certa"));
-                liberaResponderPergunta = false;
+                perguntaStatus = PerguntaStatus.RESPONDIDA;
                 mensagemSucesso("A resposta certa foi mostrada.");
                 atualizarPlacar();
             } else {
@@ -150,18 +150,24 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     
     @Override
     public void atualizarPlacar() {
+        List<Integer> pontuacoes;
+        try {
+            pontuacoes = partidaAssociativaService.consultaPontuacoesPorPartida(partida.getId());
+        } catch (NoResultException ex) {
+            pontuacoes = new ArrayList<>();
+        }
         try {
             jogadoresPorPartida = partidaAssociativaService.consultaJogadoresPorPartida(partida.getId());
         } catch (NoResultException ex) {
             jogadoresPorPartida = new ArrayList<>();
         }
-        notificarPlacar(jogadoresPorPartida);
+        notificarPlacar(jogadoresPorPartida, pontuacoes);
     }
 
     @Override
-    public void notificarPlacar(List<JogadorPartidaAssociativa> placar) {
+    public void notificarPlacar(List<JogadorPartidaAssociativa> placar, List<Integer> pontuacoes) {
         for(PartidaObservador o : obs) {
-            o.atualizarPlacar(jogadoresPorPartida);
+            o.atualizarPlacar(jogadoresPorPartida, pontuacoes);
         }
     }
 
@@ -211,15 +217,19 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     }
 
     public boolean isPartidaIniciada() {
-        return partidaIniciada;
+        return partidaStatus == PartidaStatus.INICIADA;
+    }
+
+    public boolean isPartidaEncerrada() {
+        return partidaStatus == PartidaStatus.ENCERRADA;
     }
 
     public boolean isLiberaResponderPergunta() {
-        return liberaResponderPergunta;
+        return perguntaStatus != PerguntaStatus.RESPONDIDA;
     }
 
     public boolean isAlternativasHabilitadas() {
-        return alternativasHabilitadas;
+        return perguntaStatus == PerguntaStatus.RESPOSTA_HABILITADA;
     }
     
 }

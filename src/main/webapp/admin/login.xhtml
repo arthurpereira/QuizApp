@@ -3,68 +3,57 @@
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets">
-    <h:head>
-        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-        <title>Login | QuizApp</title>
-        <h:outputStylesheet library="css" name="style-adm.css" />
-        <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
-    </h:head>
+<ui:composition template="../template/template.xhtml">
 
-    <h:body>
+    <ui:define name="titulo">Login</ui:define>
+
+    <ui:define name="conteudo">
         <p:dialog widgetVar="statusDialog" modal="true" draggable="false"
                   closable="false" resizable="false" showHeader="false">
             <h:graphicImage library="img" name="ajax-loader.gif" />
         </p:dialog>
 
-        <div id="interface">
-            <table id="table-header" cellpadding="0" cellspacing="0">
-                <!-- TOPO -->
-                <tr>
-                    <td><ui:include src="/template/header.xhtml" /></td>
-                </tr>
-            </table>            
+        <div id="login" align="center">
+            <div style="top: 10px; position: relative">
+                <h:form id="form1">
 
-            <div id="conteudo">
+                    <p:growl id="campoObrigatorio" life="4000" showDetail="false"
+                             rendered="#{facesContext.validationFailed == true}" />
+                    <p:growl for="atencao" id="atencao" life="4000" showDetail="true" />
+                    <p:growl for="erro" id="erro" life="4000" showDetail="true" />
+                    <p:growl for="sucesso" id="sucesso" life="4000" showDetail="true" autoUpdate="true" />
 
-                <div id="login" align="center">
-                    <div style="top: 10px; position: relative">
-                        <h:form id="form1">
-
-                            <p:growl id="campoObrigatorio" life="4000" showDetail="false"
-                                     rendered="#{facesContext.validationFailed == true}" />
-                            <p:growl for="atencao" id="atencao" life="4000" showDetail="true" />
-                            <p:growl for="erro" id="erro" life="4000" showDetail="true" />
-                            <p:growl for="sucesso" id="sucesso" life="4000" showDetail="true" autoUpdate="true" />
-
-                            <p:panelGrid styleClass="painel_login" columns="1">
-                                <h2>Login</h2>
-                                <p:inputText id="usuario" value="#{usuarioBean.nomeDeUsuario}"
-                                             required="true" style="width: 300px !important;"
-                                             requiredMessage="Campo Usuário Obrigatório!"
-                                             validator="#{usuarioBean.validaUsuario}">
-                                    <p:watermark for="usuario" value="Usuário" />
-                                    <p:focus for="usuario" />
-                                </p:inputText>
-                                <p:password id="senha" value="#{usuarioBean.senha}"
-                                            required="true" style="width: 300px !important;"
-                                            requiredMessage="Campo Senha Obrigatório!"
-                                            validator="#{usuarioBean.validaSenha}">
-                                    <p:watermark for="senha" value="Senha" />
-                                </p:password>
-                                <p:commandButton id="entrar" value="Entrar"
-                                                 action="#{usuarioBean.logar()}"
-                                                 update="campoObrigatorio atencao erro"
-                                                 ajax="false" onclick="PF('statusDialog').show()"/>
-                            </p:panelGrid>
-                        </h:form>
+                    <div class="col-xm-12 painel_login">
+                        <div class="col-xs-12">
+                            <h2>Login</h2>
+                        </div>
+                        <div class="col-xs-12">
+                            <p:inputText id="usuario" value="#{usuarioBean.nomeDeUsuario}"
+                                         required="true" style="width: 100% !important;"
+                                         requiredMessage="Campo Usuário Obrigatório!"
+                                         validator="#{usuarioBean.validaUsuario}">
+                                <p:watermark for="usuario" value="Usuário" />
+                                <p:focus for="usuario" />
+                            </p:inputText>
+                        </div>
+                        <div class="col-xs-12">
+                            <p:password id="senha" value="#{usuarioBean.senha}"
+                                        required="true" style="width: 100% !important;"
+                                        requiredMessage="Campo Senha Obrigatório!"
+                                        validator="#{usuarioBean.validaSenha}">
+                                <p:watermark for="senha" value="Senha" />
+                            </p:password>
+                        </div>
+                        <div class="col-xs-12">
+                            <p:commandButton id="entrar" value="Entrar"
+                                             action="#{usuarioBean.logar()}"
+                                             update="campoObrigatorio atencao erro"
+                                             ajax="false" onclick="PF('statusDialog').show()"/>
+                        </div>
                     </div>
-                </div>
+                </h:form>
             </div>
-
-            <!-- RODAPE -->
-            <table id="table-footer">
-                <ui:include src="/template/footer.xhtml" />
-            </table>
         </div>
-    </h:body>
+    </ui:define>
+</ui:composition>
 </html>

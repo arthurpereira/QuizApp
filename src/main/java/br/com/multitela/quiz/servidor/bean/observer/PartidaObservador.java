@@ -15,7 +15,7 @@ import java.util.List;
  */
 public interface PartidaObservador {
     
-    void atualizarPlacar(List<JogadorPartidaAssociativa> placar);
+    void atualizarPlacar(List<JogadorPartidaAssociativa> placar, List<Integer> pontuacoes);
     
     void atualizarPerguntas(List<Pergunta> perguntas);
     

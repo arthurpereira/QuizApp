@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui">
+<h:head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>
+        QuizApp - <ui:insert name="titulo">Administração</ui:insert>
+    </title>
+    <h:outputStylesheet library="css" name="bootstrap.min.css"/>
+    <link rel="stylesheet" href="/quiz-app/resources/css/font-awesome.min.css" />
+    <h:outputStylesheet library="css" name="style-adm.css"/>
+    <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
+    <ui:insert name="css"/>
+</h:head>
+<h:body>
+    <div id="wrapper">
+        <h:form>
+            <div class="menu row">
+                <div class="col-md-3 col-sm-4 col-xs-6 col-logo">
+                    <div class="div-logo">
+                        <p:commandLink action="/admin/index.xhtml?faces-redirect=true">
+                            <h:graphicImage library="img" name="quiz-app-logo-2.png" styleClass="logo-topo"/>
+                        </p:commandLink>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-4 hidden-xs"></div>
+                <div class="col-md-3 col-sm-4 col-xs-6 col-botao-canto alinha-direita">
+                    <p:commandLink action="#{usuarioBean.logout()}" styleClass="botao-sair" value="Sair"
+                                   rendered="#{usuarioBean.retornaUsuarioLogado() != null}"/>
+                </div>
+            </div>
+            <div class="col-sm-12 col-menu-navbar">
+                <h:panelGroup rendered="#{usuarioBean.retornaUsuarioLogado() != null}" layout="block">
+                    <div class="col-sm-12 div-menu-navbar">
+                        <div class="div-menu-container">
+                            <nav class="navbar">
+                                <div class="container-fluid">
+                                    <div class="navbar-header">
+                                        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse"
+                                                data-target="#menu-navbar-collapse" aria-expanded="false">
+                                            <span class="fa fa-bars"></span>
+                                        </button>
+                                    </div>
+
+                                    <div id="menu-navbar-collapse" class="collapse navbar-collapse">
+                                        <ul class="nav navbar-nav">
+                                            <li>
+                                                <p:commandLink action="/admin/index.xhtml?faces-redirect=true">
+                                                    <span class="fa fa-home"></span>
+                                                    <span class="menu-dropdown-titulo">Início</span>
+                                                </p:commandLink>
+                                            </li>
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <span class="fa fa-file"></span>
+                                                    <span class="menu-dropdown-titulo">Cadastrar</span>
+                                                    <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <p:commandLink value="Pergunta"
+                                                                       action="/admin/cadastrar/pergunta.xhtml?faces-redirect=true"/>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <span class="fa fa-search"></span>
+                                                    <span class="menu-dropdown-titulo">Buscar</span>
+                                                    <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <p:commandLink value="Pergunta"
+                                                                       action="/admin/buscar/pergunta.xhtml?faces-redirect=true"/>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <span class="fa fa-play"></span>
+                                                    <span class="menu-dropdown-titulo">Partida</span>
+                                                    <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <p:commandLink value="Iniciar Partida"
+                                                                       action="/admin/partida.xhtml?faces-redirect=true"/>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li>
+                                                <p:commandLink action="/admin/sobre.xhtml?faces-redirect=true">
+                                                    <span class="fa fa-question"></span>
+                                                    <span class="menu-dropdown-titulo">Sobre</span>
+                                                </p:commandLink>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </nav>
+                        </div>
+                    </div>
+                </h:panelGroup>
+            </div>
+        </h:form>
+        <div id="interface" align="center">
+            <div class="conteudo row sem-margem">
+                <div class="col-md-1"></div>
+                <div class="col-md-10 col-sm-12">
+                    <ui:insert name="conteudo"/>
+                </div>
+                <div class="col-md-1"></div>
+            </div>
+            <div id="rodape">
+                <p>QuizApp</p>
+                <p>Desenvolvido por Ricardo Arthur Pereira Magalhães.</p>
+            </div>
+        </div>
+    </div>
+
+    <h:outputScript library="js" name="bootstrap.min.js"/>
+    <ui:insert name="script"/>
+</h:body>
+</html>

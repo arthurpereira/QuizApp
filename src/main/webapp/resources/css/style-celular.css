@@ -8,6 +8,10 @@ and open the template in the editor.
     Author     : arthurpereira
 */
 
+body .ui-overlay-a {
+    background-color: white !important;
+}
+
 * {
     font-family: Helvetica, Arial, sans-serif;
     text-shadow: none !important;
@@ -15,14 +19,6 @@ and open the template in the editor.
 
 p.info {
     font-size: 20px;
-}
-
-p.obrigado {
-    padding-top: 20px; 
-    text-align: center;
-    position: absolute;
-    font-size: 20px;
-    width: 100%;
 }
 
 div#div-fundo {
@@ -233,6 +229,8 @@ img#img-foto-jogador {
     width: 46px;
     height: 46px;
     border-radius: 50%;
+    background-image: url("#{resource['img/perfil.jpg']}");
+    background-size: contain;
 }
 
 span#span-nome-jogador {
@@ -245,13 +243,21 @@ span#span-nome-jogador {
     text-transform: uppercase;
 }
 
-span#span-pontuacao-jogador {
+#div-pontuacao-jogador {
     position: fixed;
     bottom: 6px;
     left: 75px;
     font-size: 18px;
     color: #fff;
     text-transform: uppercase;
+}
+
+#div-pontuacao-jogador span.fa-check {
+    color: #07ea07;
+}
+
+#div-pontuacao-jogador span.fa-times {
+    color: #ff1717;
 }
 
 div#div-placar {
@@ -273,7 +279,7 @@ p.p-placar-jogador {
     font-weight: bold;
     font-size: 18px;
     text-transform: uppercase;
-    margin-bottom: -18px;
+    margin-bottom: -20px;
     width: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -287,12 +293,22 @@ p.p-placar-pontuacao {
     text-transform: uppercase;
 }
 
+.p-placar-pontuacao .fa-check {
+    color: #00a000;
+}
+
+.p-placar-pontuacao .fa-times {
+    color: #d50f0f;
+}
+
 img.img-placar-foto-jogador {
     display: block;
     width: 46px;
     height: 46px;
     border-radius: 50% !important;
     margin: auto;
+    background-image: url("#{resource['img/perfil.jpg']}");
+    background-size: contain;
 }
 
 p.p-placar-vazio {
@@ -302,9 +318,170 @@ p.p-placar-vazio {
     text-align: center;
 }
 
-.logo-lades {
-    
-    margin-bottom: -120px;
+#div-fim-do-jogo {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+    height: calc(100vh - 8px);
+}
+
+@media all and (orientation:portrait) {
+    .logo-lades {
+        position: fixed !important;
+        bottom: 8px;
+        width: calc(100% - 30px) !important;
+    }
+}
+
+.logo-lades > img {
     width: 164px;
     height: 44px;
+}
+
+.head-logo, .head-perfil, .logo-lades {
+    text-align: center;
+    flex: 0 1 auto;
+}
+
+.head-logo, .logo-lades {
+    display: inline-table;
+}
+
+.head-logo > img {
+    width: 160px;
+}
+
+.head-logo > h1 {
+    line-height: normal;
+}
+
+.head-perfil {
+    display: table;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.head-perfil > div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.head-perfil > div > img {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background-image: url("#{resource['img/perfil.jpg']}");
+    background-size: contain;
+}
+
+.head-perfil > div > p {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: bold;
+    text-transform: capitalize;
+    font-size: 1.6em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media (max-width: 480px) {
+    .head-logo > img {
+        width: calc(17vw + 80px);
+    }
+    .head-perfil > div > img {
+        width: calc(30vw + 30px);
+        height: calc(30vw + 30px);
+    }
+}
+
+.pontuacao {
+    position: relative;
+    padding: 0 8px !important;
+    margin-bottom: 10px;
+    flex: 0 1 auto;
+    width: 100%;
+}
+
+@media (max-width: 520px) {
+    .pontuacao {
+        width: calc(100vw - 16px) !important;
+    }
+}
+
+@media (min-width: 521px) {
+    .pontuacao {
+        max-width: 470px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
+.card-colocacao {
+    background: #3360c7;
+    width: calc(33.3333333% - 6px) !important;
+    float: left;
+    margin-right: 9px;
+    border-radius: 4px;
+}
+
+.card-acertos {
+    background: #00a000;
+    width: calc(33.3333333% - 6px) !important;
+    float: left;
+    margin-right: 9px;
+    border-radius: 4px;
+}
+
+.card-erros {
+    background: #d50f0f;
+    width: calc(33.3333333% - 6px) !important;
+    float: left;
+    border-radius: 4px;
+}
+
+.card-colocacao, .card-acertos, .card-erros {
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.card-colocacao > p:first-child, .card-acertos > p:first-child, .card-erros > p:first-child {
+    font-size: 2.5em;
+    margin-bottom: -7px;
+    margin-top: -1px;
+}
+
+.card-colocacao > p:last-child, .card-acertos > p:last-child, .card-erros > p:last-child {
+    font-size: 1em;
+    margin-top: 0;
+    margin-bottom: 4px;
+    margin-left: 6px;
+    margin-right: 6px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.agradecimento {
+    flex: 1 1 auto;
+    margin-bottom: 50px;
+}
+
+.agradecimento > div {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+.agradecimento > div > div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+p.obrigado {
+    text-align: center;
+    font-size: 20px;
+    width: 100%;
 }
