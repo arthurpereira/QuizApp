@@ -31,8 +31,12 @@ public class Resposta implements Serializable {
     @Column(name = "id")
     private long id;
     
-    @Column(name = "alternativa_escolhida")
-    private int alternativaEscolhida;
+    @Column(name = "alternativa_indice")
+    private int alternativaIndice;
+
+    @ManyToOne(cascade = {CascadeType.MERGE})
+    @JoinColumn(name = "alternativa_id")
+    private Alternativa alternativa;
     
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "pergunta_id")
@@ -42,6 +46,8 @@ public class Resposta implements Serializable {
     @JoinColumn(name = "jogador_partida_id")
     private JogadorPartidaAssociativa jogadorPartida;
 
+    // GETTERS AND SETTERS
+
     public long getId() {
         return id;
     }
@@ -50,12 +56,20 @@ public class Resposta implements Serializable {
         this.id = id;
     }
 
-    public int getAlternativaEscolhida() {
-        return alternativaEscolhida;
+    public int getAlternativaIndice() {
+        return alternativaIndice;
     }
 
-    public void setAlternativaEscolhida(int alternativaEscolhida) {
-        this.alternativaEscolhida = alternativaEscolhida;
+    public void setAlternativaIndice(int alternativaEscolhida) {
+        this.alternativaIndice = alternativaEscolhida;
+    }
+
+    public Alternativa getAlternativa() {
+        return alternativa;
+    }
+
+    public void setAlternativa(Alternativa alternativa) {
+        this.alternativa = alternativa;
     }
 
     public Pergunta getPergunta() {

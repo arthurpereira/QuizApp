@@ -10,6 +10,7 @@ import java.io.IOException;
 import javax.servlet.Filter;
 import javax.servlet.FilterChain;
 import javax.servlet.FilterConfig;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -19,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
  *
  * @author arthurpereira
  */
-public class AdminFilter extends AbstractFilter implements Filter {
+public class AdminFilter implements Filter {
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -41,6 +42,16 @@ public class AdminFilter extends AbstractFilter implements Filter {
     @Override
     public void destroy() {
 
+    }
+
+    private void doLogin(ServletRequest request, ServletResponse response, HttpServletRequest httpServletRequest) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = httpServletRequest.getRequestDispatcher("/admin/login.xhtml");
+        requestDispatcher.forward(request, response);
+    }
+
+    private void accessDenied(ServletRequest request, ServletResponse response, HttpServletRequest httpServletRequest) throws ServletException, IOException {
+        RequestDispatcher requestDispatcher = httpServletRequest.getRequestDispatcher("/admin/login.xhtml");
+        requestDispatcher.forward(request, response);
     }
 
 }

@@ -21,7 +21,7 @@
             <font class="campoObrigatorio">* Campo Obrigatório!</font>
         </h2>
 
-        <h:form id="form1" style="padding-bottom:10px">
+        <h:form id="form1" enctype="multipart/form-data" style="padding-bottom:10px">
 
             <p:growl id="campoObrigatorio" life="4000" showDetail="false"
                      rendered="#{facesContext.validationFailed == true}" />
@@ -29,10 +29,10 @@
             <p:growl for="atencao" id="atencao" life="4000" showDetail="true" />
             <p:panelGrid style="width:100%;margin-bottom: 20px !important">
                 <p:row>
-                    <p:column style="text-align:right;width:30%">
+                    <p:column class="alinha-direita" style="width:30%;">
                         <p:outputLabel for="pergunta" value="Pergunta:" />
                     </p:column>
-                    <p:column style="text-align:left">
+                    <p:column class="alinha-esquerda">
                         <p:inputTextarea id="pergunta" required="true"
                                          requiredMessage="Campo Pergunta Obrigatório!"
                                          value="#{perguntaBean.pergunta.texto}"
@@ -41,10 +41,29 @@
                 </p:row>
 
                 <p:row>
-                    <p:column style="text-align:right;width:30%">
+                    <p:column class="alinha-direita" style="width:30%;">
+                        <p:outputLabel for="imagem" value="Imagem:" />
+                    </p:column>
+                    <p:column class="alinha-esquerda">
+                        <h:inputFile id="imagem" value="#{perguntaBean.arquivo}"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column class="alinha-direita" style="width:30%;">
+                        <p:outputLabel for="descricao-imagem" value="Descrição da Imagem:" />
+                    </p:column>
+                    <p:column class="alinha-esquerda">
+                        <p:inputTextarea id="descricao-imagem"
+                                         value="#{perguntaBean.pergunta.descricaoImagem}"
+                                         style="width: 500px;"/>
+                    </p:column>
+                </p:row>
+
+                <p:row>
+                    <p:column class="alinha-direita" style="width:30%;">
                         <p:outputLabel for="customRadio" value="Alternativas:" />
                     </p:column>
-                    <p:column style="text-align:left">
+                    <p:column class="alinha-esquerda">
                         <p:outputPanel id="customPanel" style="margin-bottom:10px">
                             <p:selectOneRadio id="customRadio" layout="custom" required="true"
                                               value="#{perguntaBean.pergunta.alternativa_certa}"
@@ -53,6 +72,7 @@
                                 <f:selectItem itemLabel="Alternativa B" itemValue="1" />
                                 <f:selectItem itemLabel="Alternativa C" itemValue="2" />
                                 <f:selectItem itemLabel="Alternativa D" itemValue="3" />
+                                <f:selectItem itemLabel="Alternativa E" itemValue="4" />
                             </p:selectOneRadio>
 
                             <p:panelGrid>
@@ -110,13 +130,25 @@
                                                      requiredMessage="Campo Alternativa D Obrigatório!" />
                                     </p:column>
                                 </p:row>
+                                <p:row>
+                                    <p:column>
+                                        <p:radioButton id="opt5" for="customRadio" itemIndex="4" />
+                                        <h:outputLabel for="opt5" value="Alternativa E" />
+                                    </p:column>
+                                    <p:column>
+                                        <p:inputText size="42" required="true"
+                                                     value="#{perguntaBean.alt5.texto}"
+                                                     requiredMessage="Campo Alternativa E Obrigatório!" />
+                                    </p:column>
+                                </p:row>
                             </p:panelGrid>
                         </p:outputPanel>
                     </p:column>
                 </p:row>
+                
                 <f:facet name="footer">
                     <p:row>
-                        <p:column colspan="2" style="text-align:center">
+                        <p:column colspan="2" class="alinha-meio">
                             <p:commandButton ajax="false" value="Salvar Pergunta"
                                              action="#{perguntaBean.cadastrar()}"
                                              update=":form1 sucesso campoObrigatorio atencao"

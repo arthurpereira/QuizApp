@@ -1,53 +1,101 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pm="http://primefaces.org/mobile"
       xmlns:fb="http://www.facebook.com/2008/fbml">
+<f:view contentType="text/html" renderKitId="PRIMEFACES_MOBILE">
+<h:head>
+    <title>QuizApp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <h:outputStylesheet library="css" name="style-responsive.css" />
+    <h:outputStylesheet library="css" name="style-celular-login.css" />
+    <link rel="stylesheet" href="#{request.contextPath}/resources/css/font-awesome.min.css" />
+    <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
+</h:head>
 
-    <h:head>
-        <title>QuizApp</title>
-        <meta name="viewport" content="width=device-width, user-scalable=no"/>
-        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
-        <meta http-equiv="Pragma" content="no-cache" />
-        <meta http-equiv="Expires" content="0" />
-        <h:outputStylesheet library="css" name="style-responsive.css" />
-        <h:outputStylesheet library="css" name="style-celular.css" />
-        <link rel="stylesheet" href="#{request.contextPath}/resources/css/font-awesome.min.css" />
-        <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico" />
-    </h:head>
+<h:body>
+    <h:outputScript library="js" name="facebook-login.js"/>
 
-    <h:body>
-        <h:outputScript library="js" name="facebook-login.js"/>
+    <!-- NOTIFICAÇÃO -->
+    <h:form id="form-notificacao">
+        <p:growl id="growl" globalOnly="false" showDetail="true" autoUpdate="true" sticky="false" life="2000"/>
+    </h:form>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="logo">
-                        <img src="../resources/img/quiz-app-logo.png" alt="Logo"/>
-                        <h1>QuizApp</h1>
+    <p:dialog id="dialog-login" widgetVar="dialog-login" header="Login"
+              draggable="false" resizable="false" modal="true" showEffect="clip" hideEffect="slide">
+        <h:form>
+            <pm:field>
+                <p:outputLabel for="nome" value="Nome:"/>
+                <p:inputText id="nome" value="#{jogadorBean.nome}"
+                             required="true" requiredMessage="Campo Nome Obrigatório.">
+                </p:inputText>
+            </pm:field>
+            <pm:field>
+                <p:outputLabel for="sobrenome" value="Sobrenome:"/>
+                <p:inputText id="sobrenome" value="#{jogadorBean.sobrenome}"
+                             required="true" requiredMessage="Campo Sobrenome Obrigatório."/>
+            </pm:field>
+            <pm:field>
+                <p:outputLabel for="matricula" value="Matrícula:"/>
+                <p:inputText id="matricula" value="#{jogadorBean.matricula}"
+                             validator="#{jogadorBean.validaMatricula}" type="tel"
+                             required="true" requiredMessage="Campo Matrícula Obrigatório."/>
+            </pm:field>
+            <p:commandButton id="btn-login-sem-face" value="Entrar"
+                             action="#{jogadorBean.logar()}" ajax="false"
+                             oncomplete="PF('dialog-login').hide();"
+                             styleClass="btn-confirma-sim"/>
+        </h:form>
+    </p:dialog>
+
+    <div class="wrapper">
+        <div id="interface">
+            <div class="conteudo row sem-margem">
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="logo">
+                            <p:graphicImage library="img" name="quiz-app-logo.png" alt="Logo"/>
+                            <h1>QuizApp</h1>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <div class="head-login">
+                            <p class="info">Para jogar, você deve fazer o login.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <section class="login">
+                            <article class="facebook">
+                                <!--<fb:login-button id="fb_button" scope="public_profile,email"-->
+                                                 <!--onlogin="checkLoginState();"-->
+                                                 <!--size="xlarge">-->
+                                    <!--<span style="display: none;">Login com Facebook</span>-->
+                                <!--</fb:login-button>-->
+                            </article>
+                        </section>
+                        <section class="login">
+                            <p:commandButton value="Login" type="button" ajax="false"
+                                             onclick="PF('dialog-login').show();"
+                                             styleClass="btn-confirma-sim btn-login-sem-facebook"/>
+                        </section>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <div class="head-login">
-                        <p class="info">Para jogar, você deve entrar com a sua conta do Facebook.</p>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-xs-12">
-                    <section class="login">
-                        <article class="facebook">
-                            <fb:login-button scope="public_profile,email"
-                                             onlogin="checkLoginState();"
-                                             size="xlarge"/>
-                        </article>
-                    </section>
+            <div id="rodape">
+                <div class="logo-lades-rodape">
+                    <p:graphicImage library="img" name="lades-logo.png"/>
                 </div>
             </div>
         </div>
+    </div>
 
-    </h:body>
+</h:body>
+</f:view>
 </html>

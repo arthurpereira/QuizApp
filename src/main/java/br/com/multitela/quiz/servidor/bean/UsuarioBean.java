@@ -5,7 +5,6 @@
  */
 package br.com.multitela.quiz.servidor.bean;
 
-import br.com.multitela.quiz.servidor.controller.UsuarioController;
 import br.com.multitela.quiz.servidor.entity.Usuario;
 import java.util.ArrayList;
 import java.util.List;

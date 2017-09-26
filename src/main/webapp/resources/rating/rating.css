@@ -1,0 +1,34 @@
+.ui-rating-star, .ui-rating-cancel {
+    float: left;
+    display: block;
+    overflow: hidden;
+    text-indent: -999em;
+    cursor: pointer
+}
+
+.ui-rating-star a, .ui-rating-cancel a {
+    width: 24px;
+    height: 23px;
+    display: block;
+    background: url("#{resource['rating/rating.png']}") no-repeat 0 0
+}
+
+.ui-rating-star a {
+    background-position: 0 -48px
+}
+
+.ui-rating-star-on a {
+    background-position: 0 -72px
+}
+
+.ui-rating-star-hover a {
+    background-position: 0 -96px
+}
+
+.ui-rating-cancel-hover a {
+    background-position: 0 -24px
+}
+
+.ui-rating.ui-state-disabled .ui-rating-star, .ui-rating.ui-state-disabled .ui-rating-cancel {
+    cursor: default
+}

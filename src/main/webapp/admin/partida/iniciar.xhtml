@@ -1,0 +1,229 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+<f:view contentType="text/html" renderKitId="PRIMEFACES_MOBILE">
+<h:head>
+    <title>QuizApp - Iniciar Partida</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <h:outputStylesheet library="css" name="style-adm-partida.css"/>
+    <h:outputStylesheet library="css" name="bootstrap-grid.min.css"/>
+    <link rel="stylesheet" href="#{request.contextPath}/resources/css/font-awesome.min.css"/>
+    <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico"/>
+</h:head>
+
+<h:body class="notIE modern custom">
+
+    <!-- NOTIFICAÇÃO -->
+    <h:form id="form-notificacao">
+        <p:growl id="growl" globalOnly="false" showDetail="true" autoUpdate="true" sticky="false" life="2000"/>
+    </h:form>
+
+    <!-- NAVEGAÇÃO -->
+    <div id="div-fundo">
+
+        <header>
+            <div id="div-topo">
+                <div class="abas">
+                        <span id="span-jogo" class="fa fa-question nav-ativo jogo">
+                            <span class="span-tab-nome">Quiz</span>
+                        </span>
+                    <span id="span-placar" class="fa fa-trophy nav-inativo placar">
+                            <span class="span-tab-nome">Placar</span>
+                        </span>
+                </div>
+                <div class="titulo display-none">
+                    <div class="titulo-conteudo">
+                            <span id="titulo-jogo" class="fa fa-question">
+                                <span class="span-tab-nome">Quiz</span>
+                            </span>
+                    </div>
+                    <div class="titulo-sidebar">
+                            <span id="titulo-placar" class="fa fa-trophy">
+                                <span class="span-tab-nome">Placar</span>
+                            </span>
+                    </div>
+                </div>
+            </div>
+            <div class="logo-topo">
+                <div>
+                    <p:graphicImage library="img" name="quiz-app-logo-2-branco.png"/>
+                </div>
+            </div>
+        </header>
+
+        <div id="conteudo">
+            <h:panelGroup id="panel-conteudo" layout="block">
+                <h:panelGroup id="panel-partida-nao-iniciada" layout="block"
+                              rendered="#{controladorPartidaBean.partidaNaoIniciada}">
+                    <div id="div-aguardando-jogo">
+                        <span class="span-aguardando-jogo fa fa-play-circle"></span>
+                        <h2 class="h2-aguardando-jogo">Partida Não Iniciada</h2>
+                        <p class="p-aguardando-jogo">Clique em Iniciar Partida para começar.</p>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{controladorPartidaBean.partidaIniciada}" layout="block">
+                    <div id="div-pergunta">
+                        <h:form id="form-pergunta">
+                            <p id="p-pergunta">
+                                <h:outputText value="#{controladorPartidaBean.perguntaAtual.textoHTML}" escape="false"/>
+                            </p>
+                            <p class="alinha-meio">
+                                <h:graphicImage id="img-pergunta" styleClass="img-pergunta"
+                                                value="/imagens/#{controladorPartidaBean.perguntaAtual.imagem.nome}"
+                                                rendered="#{controladorPartidaBean.perguntaAtual.imagem != null}"/>
+                            </p>
+                            <p class="img-descricao">
+                                <h:outputText value="#{controladorPartidaBean.perguntaAtual.descricaoImagemHTML}" escape="false"
+                                              rendered="#{controladorPartidaBean.perguntaAtual.descricaoImagem != null}"/>
+                            </p>
+                        </h:form>
+                        <h:form id="form-alternativas">
+                            <p:dataGrid id="list-alternativas" columns="1" var="alternativa"
+                                        value="#{controladorPartidaBean.listaAlternativasPorPergunta}"
+                                        rowIndexVar="rowIndex" layout="grid">
+                                <h:panelGroup layout="block">
+                                    <div class="div-alternativa #{controladorPartidaBean.retornaAlternativaCSSClass(rowIndex)}">
+                                        <div class="div-indice-alternaviva">#{controladorPartidaBean.retornaLetraAlternativa(rowIndex)}</div>
+                                        <h:panelGroup layout="block" rendered="#{controladorPartidaBean.perguntaRespondida and
+                                                controladorPartidaBean.listaRespostasPorAlternativa.get(rowIndex).quantRespostas > 0}">
+                                            <div class="div-numero-respostas #{controladorPartidaBean.retornaAlternativaCSSClass(rowIndex)}">
+                                                #{controladorPartidaBean.listaRespostasPorAlternativa.get(rowIndex).quantRespostas}
+                                            </div>
+                                        </h:panelGroup>
+                                        <p class="p-alternativa">
+                                            <h:outputText value="#{alternativa.texto}" escape="false"/>
+                                        </p>
+                                    </div>
+                                </h:panelGroup>
+                            </p:dataGrid>
+                        </h:form>
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup id="panel-jogo-encerrado" rendered="#{controladorPartidaBean.partidaEncerrada}" layout="block">
+                    <div id="div-jogo-encerrado">
+                        <span class="span-aguardando-jogo fa fa-check-circle"></span>
+                        <h2 class="h2-aguardando-jogo">Partida Encerrada</h2>
+                        <p class="p-aguardando-jogo">Obrigado por jogar.</p>
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+        </div>
+
+        <div id="sidebar">
+            <h:panelGroup id="panel-placar" layout="block">
+                <div id="div-placar" class="display-none">
+                    <h:panelGroup rendered="#{controladorPartidaBean.partidaNaoIniciada}">
+                        <p class="p-placar-vazio">O jogo ainda não começou.</p>
+                    </h:panelGroup>
+                    <h:panelGroup id="panel-lista-de-jogadores">
+                        <p:dataGrid id="list-jogadores" columns="1" rows="10" var="jogador"
+                                    value="#{controladorPartidaBean.listaJogadoresPorPartida}"
+                                    rowIndexVar="rowIndex" layout="grid"
+                                    emptyMessage=""
+                                    rendered="#{controladorPartidaBean.partidaIniciada or controladorPartidaBean.partidaEncerrada}">
+                            <table style="width: 100%;margin: -10px 0 -15px 0;table-layout: fixed;">
+                                <tr>
+                                    <td style="width: 35px;text-align: center;">
+                                        <span class="span-placar-colocacao">#{controladorPartidaBean.retornaColocacao(jogador.acertos)}º</span>
+                                    </td>
+                                    <td style="width:65px;text-align: center;">
+                                        <h:panelGroup rendered="#{jogador.jogador.loginTipoFacebook}">
+                                            <img class="img-placar-foto-jogador"
+                                                 src="http://graph.facebook.com/#{jogador.jogador.facebook_id}/picture" alt="" />
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{jogador.jogador.loginTipoSemFacebook}">
+                                            <div class="img-placar-foto-jogador"></div>
+                                        </h:panelGroup>
+                                    </td>
+                                    <td>
+                                        <p class="p-placar-jogador">#{jogador.jogador.nomeCompleto}</p>
+                                        <p class="p-placar-pontuacao">
+                                                <span style="float: left; min-width: 50px;">
+                                                    <span class="fa fa-check"></span> #{jogador.acertos}
+                                                </span>
+                                            <span style="margin-left: 14px">
+                                                    <span class="fa fa-times"></span> #{jogador.erros}
+                                                </span>
+                                        </p>
+                                    </td>
+                                </tr>
+                            </table>
+                            <hr class="hr-placar" />
+                        </p:dataGrid>
+                    </h:panelGroup>
+                </div>
+            </h:panelGroup>
+        </div>
+
+        <div id="separator" class="display-none"></div>
+
+        <footer>
+            <h:panelGroup id="panel-rodape" layout="block">
+                <h:panelGroup id="panel-botoes-controle" layout="block"
+                              rendered="#{controladorPartidaBean.partidaIniciada}">
+                    <div class="div-btn-controle-1">
+                        <p:commandButton ajax="true" value="Habilitar Alternativas"
+                                         actionListener="#{controladorPartidaBean.habilitarAlternativas()}"
+                                         disabled="#{controladorPartidaBean.alternativasHabilitadas or
+                                                controladorPartidaBean.perguntaRespondida}"
+                                         update="form-alternativas panel-rodape" styleClass="btn-controle"/>
+                    </div>
+                    <div class="div-btn-controle-2">
+                        <p:commandButton ajax="true" value="Mostrar Resposta Certa"
+                                         actionListener="#{controladorPartidaBean.mostrarRespostaCerta()}"
+                                         disabled="#{!controladorPartidaBean.alternativasHabilitadas or
+                                                controladorPartidaBean.perguntaRespondida}"
+                                         update="form-alternativas panel-placar panel-rodape"
+                                         styleClass="btn-controle"/>
+                    </div>
+                    <div class="div-btn-controle-3">
+                        <p:commandButton ajax="true" value="Mudar Pergunta"
+                                         actionListener="#{controladorPartidaBean.mudarPergunta()}"
+                                         update="panel-conteudo panel-placar panel-rodape"
+                                         disabled="#{!controladorPartidaBean.perguntaRespondida}"
+                                         styleClass="btn-controle"/>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup id="panel-iniciar-partida" layout="block"
+                              rendered="#{controladorPartidaBean.partidaNaoIniciada}">
+                    <div class="div-btn-principal">
+                        <p:commandButton ajax="true" value="Iniciar Partida"
+                                         actionListener="#{controladorPartidaBean.iniciarPartida()}"
+                                         update="panel-conteudo form-alternativas panel-placar panel-rodape"
+                                         styleClass="btn-controle"/>
+                    </div>
+                </h:panelGroup>
+                <h:panelGroup id="panel-encerrar-partida" layout="block"
+                              rendered="#{controladorPartidaBean.partidaEncerrada}">
+                    <div class="div-btn-principal">
+                            <p:commandButton value="Sair" actionListener="#{controladorPartidaBean.encerraPartida()}"
+                                             styleClass="btn-controle"/>
+                    </div>
+                </h:panelGroup>
+            </h:panelGroup>
+            <!--<div class="logo-lades">-->
+                <!--<div>-->
+                    <!--<p:graphicImage library="img" name="lades-logo-branco.png"/>-->
+                <!--</div>-->
+            <!--</div>-->
+        </footer>
+    </div>
+
+    <!-- ARQUIVOS JS COLOCADOS NO FINAL PARA UM CARREGAMENTO MAIS RÁPIDO DA PÁGINA -->
+    <h:outputScript library="js" name="main-admin.js"/>
+    <h:outputScript library="js" name="viewport-units-buggyfill.hacks.js"/>
+    <h:outputScript library="js" name="viewport-units-buggyfill.js"/>
+    <script>
+        window.viewportUnitsBuggyfill.init({
+            refreshDebounceWait: 50,
+            hacks: window.viewportUnitsBuggyfillHacks
+        });
+    </script>
+</h:body>
+</f:view>
+</html>

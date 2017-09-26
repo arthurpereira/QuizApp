@@ -15,6 +15,7 @@ import br.com.multitela.quiz.servidor.entity.Partida;
 import br.com.multitela.quiz.servidor.entity.Pergunta;
 import br.com.multitela.quiz.servidor.entity.Resposta;
 import br.com.multitela.quiz.servidor.enums.AlternativaStatus;
+import br.com.multitela.quiz.servidor.enums.LoginEnum;
 import br.com.multitela.quiz.servidor.enums.PartidaStatus;
 import br.com.multitela.quiz.servidor.enums.PerguntaStatus;
 import br.com.multitela.quiz.servidor.service.JogadorPartidaAssociativaService;
@@ -23,16 +24,17 @@ import br.com.multitela.quiz.servidor.service.PartidaService;
 import br.com.multitela.quiz.servidor.service.PerguntaService;
 import br.com.multitela.quiz.servidor.service.RespostaService;
 import br.com.multitela.quiz.servidor.singleton.PartidaSingleton;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
-import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
+
 import org.primefaces.context.RequestContext;
 
 /**
@@ -88,7 +90,7 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     private List<JogadorPartidaAssociativa> jogadoresPorPartida;
     private JogadorPartidaDataModel listaJogadoresPorPartida;
     
-    private List<Integer> listaColocacaoPlacar;
+    private List<Integer> listaPontuacoesPlacar;
     
     private PartidaObservada obs;
 
@@ -103,7 +105,7 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         acertos = 0;
         erros = 0;
         listaDePerguntas = perguntaService.listAll();
-        listaAlternativasPorPergunta = new AlternativaDataModel(listaDePerguntas.get(posicaoPergunta).getAlternativa());
+        listaAlternativasPorPergunta = new AlternativaDataModel(listaDePerguntas.get(posicaoPergunta).getAlternativas());
         perguntaAtual = listaDePerguntas.get(posicaoPergunta);
         partidaStatus = PartidaStatus.NAO_INICIADA;
         perguntaStatus = PerguntaStatus.RESPOSTA_DESABILITADA;
@@ -124,12 +126,10 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         perguntaStatus = PerguntaStatus.RESPOSTA_DESABILITADA;
         limpaStatusPorAlternativa();
     }
-    
+
     public void encerrarPartida() {
 //        limparPartida();
         partidaStatus = PartidaStatus.ENCERRADA;
-        ((HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext()
-                .getRequest()).getSession().invalidate();
     }
     
     public void selecionaAlternativa(int indice) {
@@ -140,7 +140,8 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         if (perguntaStatus != PerguntaStatus.RESPONDIDA) {
             resposta = new Resposta();
             resposta.setPergunta(perguntaAtual);
-            resposta.setAlternativaEscolhida(posicaoAlternativaEscolhida);
+            resposta.setAlternativa(perguntaAtual.getAlternativas().get(posicaoAlternativaEscolhida));
+            resposta.setAlternativaIndice(posicaoAlternativaEscolhida);
             perguntaStatus = PerguntaStatus.RESPONDIDA;
             listaStatusPorAlternativa.set(posicaoAlternativaEscolhida, AlternativaStatus.ESCOLHIDA);
             salvarResposta();
@@ -150,17 +151,20 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     public void mostrarRespostaCerta() {
         RequestContext.getCurrentInstance().execute("PF('dialog-confirma-resposta').hide();");
         if (perguntaStatus == PerguntaStatus.RESPONDIDA) {
-            if (resposta.getAlternativaEscolhida() == perguntaAtual.getAlternativa_certa()) {
-                listaStatusPorAlternativa.set(resposta.getAlternativaEscolhida(), AlternativaStatus.CERTA);
-                FacesContext.getCurrentInstance().addMessage("default", new FacesMessage("Você Acertou!", "Essa é a resposta certa."));
+            if (resposta.getAlternativaIndice() == perguntaAtual.getAlternativa_certa()) {
+                listaStatusPorAlternativa.set(resposta.getAlternativaIndice(), AlternativaStatus.CERTA);
+                mensagemInfo("Você Acertou!", "A alternativa "
+                        + retornaLetraAlternativa(perguntaAtual.getAlternativa_certa()) + " é a resposta certa.");
             } else {
                 listaStatusPorAlternativa.set(perguntaAtual.getAlternativa_certa(), AlternativaStatus.CERTA);
-                listaStatusPorAlternativa.set(resposta.getAlternativaEscolhida(), AlternativaStatus.ERRADA);
-                FacesContext.getCurrentInstance().addMessage("default", new FacesMessage("Você Errou", "Que pena..."));
+                listaStatusPorAlternativa.set(resposta.getAlternativaIndice(), AlternativaStatus.ERRADA);
+                mensagemErro("Você Errou", "A resposta certa é a alternativa "
+                        + retornaLetraAlternativa(perguntaAtual.getAlternativa_certa()) + ".");
             }
         } else {
             listaStatusPorAlternativa.set(perguntaAtual.getAlternativa_certa(), AlternativaStatus.CERTA);
-            FacesContext.getCurrentInstance().addMessage("default", new FacesMessage("Você Errou", "Que pena..."));
+            mensagemInfo("Você Errou", "A resposta certa é a alternativa "
+                    + retornaLetraAlternativa(perguntaAtual.getAlternativa_certa()) + ".");
             perguntaStatus = PerguntaStatus.RESPONDIDA;
             erros++;
             try {
@@ -175,7 +179,7 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     private void salvarResposta() {
         try {
 //            partidaAssociativa.getRespostas().add(resposta);
-            if (resposta.getAlternativaEscolhida() == perguntaAtual.getAlternativa_certa())
+            if (resposta.getAlternativaIndice() == perguntaAtual.getAlternativa_certa())
                 acertos++;
             else
                 erros++;
@@ -202,30 +206,34 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         partidaAssociativa.setAcertos(0);
         partidaAssociativa.setErros(0);
         partidaAssociativaService.save(partidaAssociativa);
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest) context.getExternalContext().getRequest();
+        request.getSession().setAttribute("jogador-partida", partidaAssociativa);
     }
     
     @Override
     public void atualizarPlacar(List<JogadorPartidaAssociativa> placar, List<Integer> pontuacoes) {
         jogadoresPorPartida = placar;
-        listaColocacaoPlacar = new ArrayList<>();
+        listaPontuacoesPlacar = pontuacoes;
 
-        if (!jogadoresPorPartida.isEmpty()) {
-            for (JogadorPartidaAssociativa jogadorPartida : jogadoresPorPartida) {
-                colocacao = pontuacoes.indexOf(jogadorPartida.getAcertos()) + 1;
-                listaColocacaoPlacar.add(colocacao);
-            }
-        }
         listaJogadoresPorPartida = new JogadorPartidaDataModel(jogadoresPorPartida);
         this.colocacao = pontuacoes.indexOf(acertos) + 1;
+        partidaAssociativa.setColocacao(colocacao);
+        partidaAssociativaService.update(partidaAssociativa);
     }
     
     @Override
     public void atualizarPerguntas(List<Pergunta> perguntas) {
         listaDePerguntas = perguntas;
     }
+
+    @Override
+    public void atualizarPerguntaIndice(int indice) {
+        posicaoPergunta = indice;
+    }
     
-    public int getColocacao(int posicao) {
-        return listaColocacaoPlacar.get(posicao);
+    public int retornaColocacao(int pontuacao) {
+        return listaPontuacoesPlacar.indexOf(pontuacao) + 1;
     }
     
     public int retornaNumeroDeJogadores() {
@@ -234,7 +242,7 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     
     public String alternativaEscolhida() {
         if (perguntaAtual != null)
-            return perguntaAtual.getAlternativa().get(posicaoAlternativaEscolhida).getTexto();
+            return perguntaAtual.getAlternativas().get(posicaoAlternativaEscolhida).getTexto();
         else
             return "";
     }
@@ -251,7 +259,7 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
     public void mudarPergunta() {
         if (posicaoPergunta < listaDePerguntas.size() - 1) {
             perguntaAtual = listaDePerguntas.get(++posicaoPergunta);
-            listaAlternativasPorPergunta = new AlternativaDataModel(listaDePerguntas.get(posicaoPergunta).getAlternativa());
+            listaAlternativasPorPergunta = new AlternativaDataModel(listaDePerguntas.get(posicaoPergunta).getAlternativas());
             RequestContext.getCurrentInstance().execute("jogo();");
         } else {
             RequestContext.getCurrentInstance().execute("fimdojogo();");
@@ -260,10 +268,14 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         perguntaStatus = PerguntaStatus.RESPOSTA_DESABILITADA;
         limpaStatusPorAlternativa();
     }
+
+    public void visualizouPlacar() {
+        partidaAssociativa.setQuantidadeVisualizacoesPlacar(partidaAssociativa.getQuantidadeVisualizacoesPlacar() + 1);
+    }
     
     private void limpaStatusPorAlternativa() {
         listaStatusPorAlternativa = new ArrayList<>();
-        for (int i = 0; i < perguntaAtual.getAlternativa().size(); i++) {
+        for (int i = 0; i < perguntaAtual.getAlternativas().size(); i++) {
             if (perguntaStatus != PerguntaStatus.RESPOSTA_DESABILITADA)
                 listaStatusPorAlternativa.add(i, AlternativaStatus.NAO_ESCOLHIDA);
             else
@@ -271,11 +283,11 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         }
     }
     
-    public String retornaBackgroundColorAlternativa(int posicao) {
-        return "background-color: " + listaStatusPorAlternativa.get(posicao).getCor() + ";";
+    public String retornaAlternativaCSSClass(int posicao) {
+        return listaStatusPorAlternativa.get(posicao).getCssClass();
     }
     
-    public void logarComFacebook() {
+    public void registrarUsuario() {
         if (!jogadorEstaLogado) {
             try {
                 jogador.setNome(FacesContext.getCurrentInstance().getExternalContext()
@@ -291,19 +303,27 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
                     jogadorService.update(jogador);
                 } else {
                     jogador.setDataCriacao(new Date());
+                    jogador.setLoginTipo(LoginEnum.FACEBOOK);
                     jogadorService.save(jogador);
                 }
 
-                FacesContext.getCurrentInstance().addMessage("default",
-                        new FacesMessage("Login", "O login foi realizado com sucesso."));
+                mensagemInfo("Login", "O login foi realizado com sucesso.");
                 jogadorEstaLogado = true;
                 partidaAssociativa.setJogador(jogador);
-            } catch (NumberFormatException ex) {
-                RequestContext.getCurrentInstance().execute("registerWithServer();");
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                jogador = retornaJogadorLogado();
+                if (jogador != null) {
+                    jogadorEstaLogado = true;
+                    partidaAssociativa.setJogador(jogador);
+                }
             }
         }
+    }
+
+    public Jogador retornaJogadorLogado() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest httpServletRequest = (HttpServletRequest) context.getExternalContext().getRequest();
+        return (Jogador) httpServletRequest.getSession(true).getAttribute("jogador");
     }
     
     //GETTERS AND SETTERS
@@ -352,8 +372,8 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         return perguntaAtual;
     }
 
-    public void setPerguntaAtual(Pergunta perguntaAtual) {
-        this.perguntaAtual = perguntaAtual;
+    public boolean isPartidaNaoIniciada() {
+        return partidaStatus == PartidaStatus.NAO_INICIADA;
     }
 
     public boolean isPartidaIniciada() {

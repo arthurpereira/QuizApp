@@ -11,20 +11,20 @@ package br.com.multitela.quiz.servidor.enums;
  */
 public enum AlternativaStatus {
 
-    NAO_ESCOLHIDA("#3360c7"),
-    ESCOLHIDA("#16aceb"),
-    CERTA("#2eb22e"),
-    ERRADA("#d50f0f"),
-    DESABILITADA("#acacac");
+    NAO_ESCOLHIDA("nao-escolhida"),
+    ESCOLHIDA("escolhida"),
+    CERTA("certa"),
+    ERRADA("errada"),
+    DESABILITADA("desabilitada");
 
-    private String cor;
+    private String cssClass;
 
-    private AlternativaStatus(String cor) {
-        this.cor = cor;
+    private AlternativaStatus(String cssClass) {
+        this.cssClass = cssClass;
     }
 
-    public String getCor() {
-        return cor;
+    public String getCssClass() {
+        return cssClass;
     }
 
 }

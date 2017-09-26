@@ -25,17 +25,17 @@
         <h:form id="formBuscaPergunta" style="padding-bottom:10px">
             <p:panelGrid style="width:100%">
                 <p:row>
-                    <p:column style="text-align:right">
+                    <p:column class="alinha-direita">
                         <p:outputLabel for="busca" value="Pergunta:" />
                     </p:column>
-                    <p:column style="text-align:left">
+                    <p:column class="alinha-esquerda">
                         <p:inputText id="busca" value="#{perguntaBean.busca}"
                                      label="Pergunta" size="65" />
                     </p:column>
                 </p:row>
                 <f:facet name="footer">
                     <p:row>
-                        <p:column colspan="2" style="text-align:center">
+                        <p:column colspan="2" class="alinha-meio">
                             <p:commandButton ajax="true" action="#{perguntaBean.buscar()}"
                                              value="Buscar Pergunta"
                                              update="form-growl formBusca"/>
@@ -72,7 +72,7 @@
                                 </p:column>
                                 <p:column headerText="Opções" width="170"
                                           exportable="false"
-                                          style="text-align:center">
+                                          class="alinha-meio">
                                     <p:commandLink title="Visualizar" immediate="true"
                                                    oncomplete="PF('dialogVisualizarPergunta').show()"
                                                    update=":formVisualizarPergunta">
@@ -98,21 +98,39 @@
 
         <h:form id="formVisualizarPergunta">
             <p:dialog header="Visualizar Pergunta" widgetVar="dialogVisualizarPergunta"
-                      modal="true" id="dialogVisualizar" resizable="false" draggable="false">
+                      modal="true" id="dialogVisualizar" resizable="false" draggable="false"
+                      responsive="true" fitViewport="true" onShow="handleResizeDialog(this);">
                 <p:panelGrid id="panelVisualizar" style="width: 600px">
                     <p:row>
-                        <p:column style="text-align:right">
+                        <p:column class="alinha-direita">
                             <p:outputLabel value="Pergunta:" />
                         </p:column>
-                        <p:column style="text-align:left">
-                            <h:outputText value="#{perguntaBean.pergunta.texto}" />
+                        <p:column class="alinha-esquerda">
+                            <h:outputText value="#{perguntaBean.pergunta.textoHTML}" escape="false" />
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{perguntaBean.pergunta.imagem != null}">
+                        <p:column class="alinha-direita">
+                            <p:outputLabel value="Imagem:" />
+                        </p:column>
+                        <p:column class="alinha-esquerda">
+                            <h:graphicImage value="/imagens/#{perguntaBean.pergunta.imagem.nome}"
+                                            rendered="#{perguntaBean.pergunta.imagem != null}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row rendered="#{perguntaBean.pergunta.descricaoImagem.length() > 0}">
+                        <p:column class="alinha-direita">
+                            <p:outputLabel value="Descrição da Imagem:" />
+                        </p:column>
+                        <p:column class="alinha-esquerda">
+                            <h:outputText value="#{perguntaBean.pergunta.descricaoImagemHTML}" escape="false" />
                         </p:column>
                     </p:row>
                     <p:row>
-                        <p:column style="text-align:right;width:30%">
+                        <p:column class="alinha-direita" style="width:30%;">
                             <h:outputText value="Alternativas:" style="font-weight: bold;" />
                         </p:column>
-                        <p:column style="text-align:left">
+                        <p:column class="alinha-esquerda">
                             <p:outputPanel style="margin-bottom:10px">
                                 <p:selectOneRadio id="alternativas-v" layout="custom" disabled="true"
                                                   value="#{perguntaBean.pergunta.alternativa_certa}">
@@ -120,6 +138,7 @@
                                     <f:selectItem itemLabel="Alternativa B" itemValue="1" />
                                     <f:selectItem itemLabel="Alternativa C" itemValue="2" />
                                     <f:selectItem itemLabel="Alternativa D" itemValue="3" />
+                                    <f:selectItem itemLabel="Alternativa E" itemValue="4" />
                                 </p:selectOneRadio>
 
                                 <p:panelGrid>
@@ -140,7 +159,7 @@
                                             <h:outputLabel value="Alternativa A" />
                                         </p:column>
                                         <p:column>
-                                            <h:outputText value="#{perguntaBean.pergunta.alternativa.get(0).texto}" />
+                                            <h:outputText value="#{perguntaBean.pergunta.alternativas.get(0).texto}" />
                                         </p:column>
                                     </p:row>
                                     <p:row>
@@ -150,7 +169,7 @@
                                             <h:outputLabel value="Alternativa B" />
                                         </p:column>
                                         <p:column>
-                                            <h:outputText value="#{perguntaBean.pergunta.alternativa.get(1).texto}" />
+                                            <h:outputText value="#{perguntaBean.pergunta.alternativas.get(1).texto}" />
                                         </p:column>
                                     </p:row>
                                     <p:row>
@@ -160,7 +179,7 @@
                                             <h:outputLabel value="Alternativa C" />
                                         </p:column>
                                         <p:column>
-                                            <h:outputText value="#{perguntaBean.pergunta.alternativa.get(2).texto}" />
+                                            <h:outputText value="#{perguntaBean.pergunta.alternativas.get(2).texto}" />
                                         </p:column>
                                     </p:row>
                                     <p:row>
@@ -170,35 +189,44 @@
                                             <h:outputLabel value="Alternativa D" />
                                         </p:column>
                                         <p:column>
-                                            <h:outputText value="#{perguntaBean.pergunta.alternativa.get(3).texto}" />
+                                            <h:outputText value="#{perguntaBean.pergunta.alternativas.get(3).texto}" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton for="alternativas-v"
+                                                           itemIndex="4" disabled="true" />
+                                            <h:outputLabel value="Alternativa E" />
+                                        </p:column>
+                                        <p:column>
+                                            <h:outputText value="#{perguntaBean.pergunta.alternativas.get(4).texto}" />
                                         </p:column>
                                     </p:row>
                                 </p:panelGrid>
                             </p:outputPanel>
                         </p:column>
                     </p:row>
-
-                    <f:facet name="footer">
-                        <p:row>
-                            <p:column colspan="2" style="text-align:center">
-                                <p:commandButton value="Fechar" id="fechar"
-                                                 oncomplete="PF('dialogVisualizarPergunta').hide()" />
-                            </p:column>
-                        </p:row>
-                    </f:facet>
                 </p:panelGrid>
+
+                <f:facet name="footer">
+                    <div class="alinha-meio">
+                        <p:commandButton value="Fechar" id="fechar"
+                                         oncomplete="PF('dialogVisualizarPergunta').hide()" />
+                    </div>
+                </f:facet>
             </p:dialog>
         </h:form>
 
-        <h:form id="formEditarPergunta">
+        <h:form id="formEditarPergunta" enctype="multipart/form-data">
             <p:dialog header="Editar Pergunta" widgetVar="dialogEditarPergunta"
-                      modal="true" id="dialogEditar" resizable="false" draggable="false">
+                      modal="true" id="dialogEditar" resizable="false" draggable="false"
+                      responsive="true" fitViewport="true" onShow="handleResizeDialog(this);">
                 <p:panelGrid id="panelEditar" style="width: 800px">
                     <p:row>
                         <p:column style="text-align:right;">
                             <p:outputLabel for="pergunta" value="Pergunta:" />
                         </p:column>
-                        <p:column style="text-align:left">
+                        <p:column class="alinha-esquerda">
                             <p:inputTextarea id="pergunta" required="true"
                                              requiredMessage="Campo Pergunta Obrigatório!"
                                              value="#{perguntaBean.pergunta.texto}"
@@ -206,10 +234,28 @@
                         </p:column>
                     </p:row>
                     <p:row>
-                        <p:column style="text-align:right;width:30%">
+                        <p:column styleClass="alinha-direita" style="width:30%">
+                            <p:outputLabel for="imagem" value="Imagem:" />
+                        </p:column>
+                        <p:column styleClass="alinha-esquerda">
+                            <h:inputFile id="imagem" value="#{perguntaBean.arquivo}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="alinha-direita" style="width:30%">
+                            <p:outputLabel for="descricao-imagem" value="Descrição da Imagem:" />
+                        </p:column>
+                        <p:column styleClass="alinha-esquerda">
+                            <p:inputTextarea id="descricao-imagem"
+                                             value="#{perguntaBean.pergunta.descricaoImagem}"
+                                             style="width: 500px;"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column class="alinha-direita" style="width:30%;">
                             <h:outputLabel for="alternativas" value="Alternativas:" />
                         </p:column>
-                        <p:column style="text-align:left">
+                        <p:column class="alinha-esquerda">
                             <p:outputPanel id="customPanel" style="margin-bottom:10px">
                                 <p:selectOneRadio id="alternativas" layout="custom" required="true"
                                                   value="#{perguntaBean.pergunta.alternativa_certa}"
@@ -218,6 +264,7 @@
                                     <f:selectItem itemLabel="Alternativa B" itemValue="1" />
                                     <f:selectItem itemLabel="Alternativa C" itemValue="2" />
                                     <f:selectItem itemLabel="Alternativa D" itemValue="3" />
+                                    <f:selectItem itemLabel="Alternativa E" itemValue="4" />
                                 </p:selectOneRadio>
 
                                 <p:panelGrid>
@@ -238,7 +285,7 @@
                                         </p:column>
                                         <p:column>
                                             <p:inputText size="42" required="true"
-                                                         value="#{perguntaBean.pergunta.alternativa.get(0).texto}"
+                                                         value="#{perguntaBean.pergunta.alternativas.get(0).texto}"
                                                          requiredMessage="Campo Alternativa A Obrigatório!" />
                                         </p:column>
                                     </p:row>
@@ -249,7 +296,7 @@
                                         </p:column>
                                         <p:column>
                                             <p:inputText size="42" required="true"
-                                                         value="#{perguntaBean.pergunta.alternativa.get(1).texto}"
+                                                         value="#{perguntaBean.pergunta.alternativas.get(1).texto}"
                                                          requiredMessage="Campo Alternativa B Obrigatório!" />
                                         </p:column>
                                     </p:row>
@@ -260,7 +307,7 @@
                                         </p:column>
                                         <p:column>
                                             <p:inputText size="42" required="true"
-                                                         value="#{perguntaBean.pergunta.alternativa.get(2).texto}"
+                                                         value="#{perguntaBean.pergunta.alternativas.get(2).texto}"
                                                          requiredMessage="Campo Alternativa C Obrigatório!" />
                                         </p:column>
                                     </p:row>
@@ -271,8 +318,19 @@
                                         </p:column>
                                         <p:column>
                                             <p:inputText size="42" required="true"
-                                                         value="#{perguntaBean.pergunta.alternativa.get(3).texto}"
+                                                         value="#{perguntaBean.pergunta.alternativas.get(3).texto}"
                                                          requiredMessage="Campo Alternativa D Obrigatório!" />
+                                        </p:column>
+                                    </p:row>
+                                    <p:row>
+                                        <p:column>
+                                            <p:radioButton id="opt5" for="alternativas" itemIndex="4" />
+                                            <h:outputLabel for="opt5" value="Alternativa E" />
+                                        </p:column>
+                                        <p:column>
+                                            <p:inputText size="42" required="true"
+                                                         value="#{perguntaBean.pergunta.alternativas.get(4).texto}"
+                                                         requiredMessage="Campo Alternativa E Obrigatório!" />
                                         </p:column>
                                     </p:row>
                                 </p:panelGrid>
@@ -280,24 +338,25 @@
 
                         </p:column>
                     </p:row>
-
-                    <f:facet name="footer">
-                        <p:row>
-                            <p:column colspan="2" style="text-align:center">
-                                <p:commandButton value="Salvar" id="salvar"
-                                                 actionListener="#{perguntaBean.atualizar()}"
-                                                 update="form-growl formBusca"
-                                                 oncomplete="PF('dialogEditarPergunta').hide()"/>
-                                &nbsp;&nbsp;
-                                <p:commandButton value="Cancelar"
-                                                 oncomplete="PF('dialogEditarPergunta').hide()"/>
-                            </p:column>
-                        </p:row>
-                    </f:facet>
                 </p:panelGrid>
+
+                <f:facet name="footer">
+                    <div class="alinha-meio">
+                        <p:commandButton value="Salvar" id="salvar" ajax="false"
+                                         actionListener="#{perguntaBean.atualizar()}"
+                                         update="form-growl formBusca"
+                                         oncomplete="PF('dialogEditarPergunta').hide()"/>
+                        &nbsp;&nbsp;
+                        <p:commandButton value="Cancelar"
+                                         oncomplete="PF('dialogEditarPergunta').hide()"/>
+                    </div>
+                </f:facet>
             </p:dialog>
         </h:form>
 
+    </ui:define>
+    <ui:define name="script">
+        <h:outputScript library="js" name="dialog-fit-viewport.js"/>
     </ui:define>
 </ui:composition>
 </html>

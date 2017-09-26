@@ -28,7 +28,7 @@ function statusChangeCallback(response) {
     // for FB.getLoginStatus().
     if (response.status === 'connected') {
         // Logged into your app and Facebook.
-        registerWithServer();
+        // registerWithServer();
     } else if (response.status === 'not_authorized') {
         // The person is logged into Facebook, but not your app.
         logout();
@@ -40,15 +40,16 @@ function statusChangeCallback(response) {
 }
 
 function registerWithServer() {
-    FB.getLoginStatus(function (response) {
-        if (response.status === 'connected') {
-            FB.api('/me', function (response) {
-                logarComFacebook([{name:'nome',value:response.name},{name:'id', value:response.id}]);
-            });
-        } else {
-            window.location.replace("http://"+window.location.host+"/quiz-app/login/");
-        }
-    });
+    // FB.getLoginStatus(function (response) {
+    //     if (response.status === 'connected') {
+    //         FB.api('/me', function (response) {
+    //             // registrarUsuario([{name:'nome',value:response.name},{name:'id', value:response.id}]);
+    //         });
+    //     } else {
+    //
+    //     }
+    // });
+    registrarUsuario();
 }
 
 function logoutFromServer() {

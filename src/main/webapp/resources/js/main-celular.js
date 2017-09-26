@@ -10,10 +10,21 @@ window.onbeforeunload = function () {
 
 // Lógica botões de navegação
 $(document).on('click', '.jogo', function () {
+    if (location.hash.split("#")[1] === "jogo") {
+        $("html, body").animate({scrollTop: 0}, 500);
+    } else if (location.hash.split("#")[1] === "placar") {
+        $("html, body").scrollTop(0);
+    }
     location.hash = "#jogo";
 });
 
 $(document).on('click', '.placar', function () {
+    if (location.hash.split("#")[1] === "jogo") {
+        $("html, body").scrollTop(0);
+        visualizouPlacar();
+    } else if (location.hash.split("#")[1] === "placar") {
+        $("html, body").animate({scrollTop: 0}, 500);
+    }
     location.hash = "#placar";
 });
 
@@ -33,6 +44,7 @@ function habilitarAlternativasJS() {
 
 function mudarPerguntaJS() {
     mudarPergunta();
+    $("html, body").animate({scrollTop: 0}, 500);
 }
 
 function mostrarRespostaCertaJS() {
@@ -62,11 +74,25 @@ function placar() {
 }
 
 function fimdojogo() {
-    $("#div-fixo").hide();
+    $("#div-topo").hide();
+    $("#div-rodape").hide();
     $("#div-aguardando-jogo").hide();
     $("#div-pergunta").hide();
     $("#div-placar").hide();
+    $(".logo-topo").addClass("fim-do-jogo");
+    $(".logo-lades").addClass("fim-do-jogo");
     location.hash = "";
+}
+
+function responderQuestionario() {
+    $("#div-fim-do-jogo").hide();
+    $("#div-questionario").show();
+}
+
+function agradecimento() {
+    $("#div-questionario").hide();
+    $("#div-fundo").hide();
+    $("#div-agradecimento").removeClass("display-none");
 }
 
 window.onload = function () {

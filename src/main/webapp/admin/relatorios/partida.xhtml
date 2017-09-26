@@ -1,0 +1,173 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/template/template.xhtml">
+
+    <ui:define name="titulo">Relatório de Partidas</ui:define>
+
+    <ui:define name="conteudo">
+
+        <h1>Buscar Partidas</h1>
+        <h2>
+            <span class="campoObrigatorio">* Campo Obrigatório!</span>
+        </h2>
+
+        <h:form id="form-growl">
+            <p:growl for="sucesso" id="sucesso" life="4000" showDetail="true" autoUpdate="true" />
+            <p:growl for="atencao" id="atencao" life="4000" showDetail="true" autoUpdate="true" />
+            <p:growl for="vazia" id="vazia" life="4000" showDetail="true" autoUpdate="true" />
+        </h:form>
+
+        <h:form id="formBuscaPartida" style="padding-bottom:10px">
+            <p:panelGrid layout="grid" columns="2" style="width: 100%">
+                <p:row>
+                    <p:column style="width: 40%;">
+                        <p:outputLabel for="data1" value="Data Inicial:"/>
+                    </p:column>
+                    <p:column>
+                        <p:calendar id="data1" value="#{relatorioPartidaBean.data1}"
+                                    pattern="dd/MM/yyyy" locale="pt"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="width: 40%;">
+                        <p:outputLabel for="data2" value="Data Final:"/>
+                    </p:column>
+                    <p:column>
+                        <p:calendar id="data2" value="#{relatorioPartidaBean.data2}"
+                                    pattern="dd/MM/yyyy" locale="pt"/>
+                    </p:column>
+                </p:row>
+                <f:facet name="footer">
+                    <p:row>
+                        <p:column colspan="2" styleClass="alinha-meio">
+                            <p:commandButton value="Buscar"
+                                             action="#{relatorioPartidaBean.buscar}" ajax="true"
+                                             update="form-resultado"/>
+                        </p:column>
+                    </p:row>
+                </f:facet>
+            </p:panelGrid>
+        </h:form>
+
+        <div>
+            <h:form id="form-resultado">
+                <p:panelGrid rendered="#{relatorioPartidaBean.partidasBuscadas.size() > 0}">
+                    <p:row>
+                        <p:column headerText="Resultados da Busca">
+                            <p:dataTable id="table-partidas" var="partida"
+                                         value="#{relatorioPartidaBean.partidasBuscadas}"
+                                         paginator="true" rows="10" rowsPerPageTemplate="5,10,15" paginatorAlwaysVisible="false"
+                                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                         currentPageReportTemplate="{currentPage} de {totalPages}">
+
+                                <p:column headerText="Data da Partida" exportable="false">
+                                    <h:outputText value="#{partida.data}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Belem" />
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Data da Partida:" styleClass="display-none">
+                                    <h:outputText value="#{partida.data}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Belem"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Nº de Jogadores" exportable="false">
+                                    <h:outputText value="#{partida.jogadores.size()}"/>
+                                </p:column>
+
+                                <p:column headerText="Nº de Jogadores:" styleClass="display-none">
+                                    <h:outputText value="#{partida.jogadores.size()}"/>
+                                </p:column>
+
+                                <p:column headerText="Opções" exportable="false">
+                                    <p:commandLink title="Visualizar" immediate="true"
+                                                   oncomplete="PF('dialogVisualizarPartida').show();"
+                                                   update=":formVisualizarPartida">
+                                        <i class="fa fa-eye"></i>
+                                        <f:setPropertyActionListener target="#{relatorioPartidaBean.partida}"
+                                                                     value="#{partida}"/>
+                                    </p:commandLink>
+                                </p:column>
+
+                            </p:dataTable>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </div>
+
+        <h:form id="formVisualizarPartida">
+            <p:dialog header="Visualizar Partida" widgetVar="dialogVisualizarPartida"
+                      modal="true" id="dialogVisualizar" resizable="false" draggable="false"
+                      responsive="true" fitViewport="true" onShow="handleResizeDialog(this);">
+                <p:panelGrid id="panelVisualizar" style="max-width: 1000px; width: 100%;">
+                    <p:row>
+                        <p:column styleClass="alinha-direita">
+                            <p:outputLabel value="Data da Partida:"/>
+                        </p:column>
+                        <p:column styleClass="alinha-esquerda">
+                            <h:outputText value="#{relatorioPartidaBean.partida.data}">
+                                <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Belem"/>
+                            </h:outputText>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column styleClass="alinha-direita">
+                            <p:outputLabel value="Número de Jogadores"/>
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{relatorioPartidaBean.partida.jogadores.size()}"/>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column colspan="2" headerText="Resultado da Partida">
+
+                            <p:dataTable id="table-jogadores" value="#{relatorioPartidaBean.partida.jogadores}"
+                                         var="jogadorPorPartida" emptyMessage="Nenhum Jogador." style="padding: 23px 0;">
+                                <p:column headerText="Colocação"
+                                          sortBy="#{jogadorPorPartida.colocacao}">
+                                    <h:outputText value="#{jogadorPorPartida.colocacao}º"/>
+                                </p:column>
+                                <p:column headerText="Nº de Matrícula" styleClass="display-none">
+                                    <h:outputText value="#{jogadorPorPartida.jogador.matricula}"/>
+                                </p:column>
+                                <p:column headerText="Nome Completo"
+                                          sortBy="#{jogadorPorPartida.jogador.nomeCompleto}">
+                                    <h:outputText value="#{jogadorPorPartida.jogador.nomeCompleto}"/>
+                                </p:column>
+                                <p:column headerText="Nº de Acertos"
+                                          sortBy="#{jogadorPorPartida.acertos}">
+                                    <h:outputText value="#{jogadorPorPartida.acertos}"/>
+                                </p:column>
+                                <p:column headerText="Nº de Erros"
+                                          sortBy="#{jogadorPorPartida.erros}">
+                                    <h:outputText value="#{jogadorPorPartida.erros}"/>
+                                </p:column>
+                            </p:dataTable>
+
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+                <f:facet name="footer">
+                    <h:commandLink>
+                        <p:graphicImage library="img" name="xls.png" width="36"/>
+                        <p:dataExporter target="table-jogadores" type="xlsx"
+                                        fileName="Resultado da Partida #{relatorioPartidaBean.partida.data}"
+                                        postProcessor="#{relatorioPartidaBean.postProcessorXLSX}"/>
+                    </h:commandLink>
+                </f:facet>
+            </p:dialog>
+        </h:form>
+
+    </ui:define>
+    <ui:define name="script">
+        <h:outputScript library="js" name="dialog-fit-viewport.js"/>
+    </ui:define>
+</ui:composition>
+</html>

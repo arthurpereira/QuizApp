@@ -1,0 +1,118 @@
+* {
+    font-family: Helvetica, Arial, sans-serif;
+    text-shadow: none !important;
+}
+
+html, body.ui-mobile-viewport.ui-overlay-a {
+    background-color: white !important;
+}
+
+.ui-mobile .ui-page-active, .ui-mobile.ui-loading .ui-page-active {
+    display: block;
+    overflow: visible;
+}
+
+.ui-mobile [data-role=page], .ui-page {
+    background: white;
+}
+
+.ui-mobile .ui-page-active {
+    height: 100%;
+}
+
+.wrapper {
+    min-height: 100%;
+    position: relative;
+}
+
+#interface {
+    margin: 0 auto;
+    width: 100%;
+    padding-bottom: 60px; /* Height of the footer element */
+}
+
+#interface .conteudo {
+    padding-top: 8px;
+    width: calc(100vw - 16px);
+    margin-left: 8px;
+}
+
+#rodape {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: white;
+    color: #859298;
+    padding: 10px 0 5px 0;
+    font-size: 0.85em;
+    line-height: 1.3em;
+    text-align: center;
+}
+
+#rodape p:first-child {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.logo > h1 {
+    margin-top: 5px;
+}
+
+p.info {
+    font-size: 20px;
+}
+
+.ui-page-theme-a .ui-bar-inherit {
+    background-color: #C49F08 !important;
+    color: #FFF !important;
+    text-shadow: none !important;
+    border: none !important;
+}
+
+.ui-popup.ui-body-inherit, .ui-popup.ui-body-inherit .ui-page-theme-a .ui-bar-inherit {
+    border: none !important;
+}
+
+.ui-header .ui-title {
+    margin: 0 20px !important;
+}
+
+button.ui-shadow {
+    box-shadow: none !important;
+}
+
+button.ui-shadow {
+    box-shadow: none !important;
+}
+
+.ui-popup .ui-content {
+    overflow: auto;
+    padding: 0 8px !important;
+}
+
+.ui-popup-screen {
+    position: fixed !important;
+}
+
+.btn-confirma-sim {
+    background-color: #C49F08 !important;
+    color: #FFF !important;
+    text-shadow: none !important;
+    border: none !important;
+}
+
+.btn-login-sem-facebook {
+    max-width: 291px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.facebook {
+    min-height: 39px;
+}
+
+.logo-lades-rodape > img {
+    width: 164px;
+    height: 44px;
+}

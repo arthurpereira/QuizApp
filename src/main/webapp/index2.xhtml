@@ -1,0 +1,236 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:pm="http://primefaces.org/mobile">
+
+<f:view contentType="text/html" renderKitId="PRIMEFACES_MOBILE">
+<h:head>
+    <title>QuizApp</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate"/>
+    <meta http-equiv="Pragma" content="no-cache"/>
+    <meta http-equiv="Expires" content="0"/>
+    <h:outputStylesheet library="css" name="style-celular.css"/>
+    <h:outputStylesheet library="css" name="bootstrap-grid.min.css"/>
+    <h:outputStylesheet library="css" name="font-awesome.min.css"/>
+    <link rel="icon" href="#{request.contextPath}/resources/img/favicon.ico" type="image/ico"/>
+    <h:outputStylesheet library="rating" name="rating.css"/>
+</h:head>
+
+<h:body class="notIE modern custom">
+
+    <!-- NOTIFICAÇÃO -->
+    <h:form id="form-notificacao">
+        <p:growl id="growl" globalOnly="false" showDetail="true" autoUpdate="true" sticky="false" life="2000"/>
+    </h:form>
+
+    <!-- NAVEGAÇÃO -->
+    <div id="div-fundo">
+        <header>
+            <div class="logo-topo fim-do-jogo">
+                <div>
+                    <p:graphicImage library="img" name="quiz-app-logo-2-branco.png"/>
+                </div>
+            </div>
+        </header>
+
+        <div id="conteudo" class="fim-do-jogo">
+
+            <div id="div-fim-do-jogo" class="container">
+
+                <div class="col-xs-12 row head-perfil">
+                    <div>
+                        <p:graphicImage library="img" name="perfil.jpg" styleClass="img-hero-jogador"/>
+                        <p>Jogador 1</p>
+                    </div>
+                </div>
+
+                <div class="row pontuacao">
+                    <div class="card-colocacao">
+                        <p>1º</p>
+                        <p>Lugar</p>
+                    </div>
+                    <div class="card-acertos">
+                        <p>10</p>
+                        <p>Acertos</p>
+                    </div>
+                    <div class="card-erros">
+                        <p>2</p>
+                        <p>Erros</p>
+                    </div>
+                </div>
+
+                <div class="row col-xs-12 agradecimento">
+                    <div>
+                        <div>
+                            <p:commandButton value="Responder Questionário" type="button" ajax="false"
+                                             onclick="responderQuestionario();"
+                                             styleClass="btn-confirma-sim"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-margin"></div>
+
+            </div>
+
+            <div id="div-questionario" class="container" style="display: none;">
+                <div class="col-xs-12 row">
+                    <h:form id="form-questionario">
+                        <pm:field>
+                            <p:outputLabel for="sexo" value="Sexo:"/>
+                            <p:selectOneRadio id="sexo" value="#{questionarioBean.questionario.sexo}"
+                                              required="true" requiredMessage="Campo “Sexo” Obrigatório.">
+                                <f:selectItem itemLabel="Masculino." itemValue="Masculino"/>
+                                <f:selectItem itemLabel="Feminino." itemValue="Feminino"/>
+                            </p:selectOneRadio>
+                        </pm:field>
+                        <pm:field>
+                            <p:outputLabel for="idade" value="Idade:"/>
+                            <p:selectOneRadio id="idade" value="#{questionarioBean.questionario.idade}"
+                                              required="true" requiredMessage="Campo “Idade” Obrigatório.">
+                                <f:selectItem itemValue="De 5 anos ou menos." itemLabel="De 5 anos ou menos"/>
+                                <f:selectItem itemValue="De 6 a 8 anos." itemLabel="De 6 a 8 anos"/>
+                                <f:selectItem itemValue="De 9 a 11 anos." itemLabel="De 9 a 11 anos"/>
+                                <f:selectItem itemValue="De 12 a 14 anos." itemLabel="De 12 a 14 anos"/>
+                                <f:selectItem itemValue="De 15 a 17 anos." itemLabel="De 15 a 17 anos"/>
+                                <f:selectItem itemValue="De 18 anos ou mais." itemLabel="De 18 anos ou mais"/>
+                            </p:selectOneRadio>
+                        </pm:field>
+                        <pm:field>
+                            <p:outputLabel for="escolaridade" value="Escolaridade:"/>
+                            <p:selectOneRadio id="escolaridade" value="#{questionarioBean.questionario.escolaridade}"
+                                              required="true" requiredMessage="Campo “Escolaridade” Obrigatório.">
+                                <f:selectItem itemLabel="Ensino Fundamental: do 1º ao 5º ano." itemValue="Ensino Fundamental: do 1º ao 5º ano"/>
+                                <f:selectItem itemLabel="Ensino Fundamental: do 6º ao 9º ano." itemValue="Ensino Fundamental: do 6º ao 9º ano"/>
+                                <f:selectItem itemLabel="Ensino Médio." itemValue="Ensino Médio"/>
+                                <f:selectItem itemLabel="Ensino Superior." itemValue="Ensino Superior"/>
+                                <f:selectItem itemLabel="Nenhuma escolaridade." itemValue="Nenhuma escolaridade"/>
+                            </p:selectOneRadio>
+                        </pm:field>
+                        <pm:field>
+                            <p:outputLabel for="mora-atualmente" value="Com quem você mora atualmente?"/>
+                            <p:selectOneRadio id="mora-atualmente" value="#{questionarioBean.questionario.moraAtualmente}"
+                                              required="true" requiredMessage="Campo “Com quem você mora atualmente” Obrigatório.">
+                                <f:selectItem itemLabel="Com os pais ou parentes." itemValue="Com os pais ou parentes"/>
+                                <f:selectItem itemLabel="Com esposo(a) e/ou filhos(as)." itemValue="Com esposo(a) e/ou filhos(as)"/>
+                                <f:selectItem itemLabel="Com amigos dividindo as despesas." itemValue="Com amigos dividindo as despesas"/>
+                                <f:selectItem itemLabel="Com colegas em alojamento universitário." itemValue="Com colegas em alojamento universitário"/>
+                                <f:selectItem itemLabel="Sozinho(a)." itemValue="Sozinho(a)"/>
+                            </p:selectOneRadio>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel for="situacao-descreve" value="Situação que lhe descreve melhor:"/>
+                            <p:selectOneRadio id="situacao-descreve" value="#{questionarioBean.questionario.situacaoDescreve}"
+                                              required="true" requiredMessage="Campo “Obrigatório.">
+                                <f:selectItem itemLabel="Não trabalho e meus gastos são financiados pela minha família." itemValue="Não trabalho e meus gastos são financiados pela minha família"/>
+                                <f:selectItem itemLabel="Trabalho e recebo ajuda da família." itemValue="Trabalho e recebo ajuda da família"/>
+                                <f:selectItem itemLabel="Trabalho e me sustento." itemValue="Trabalho e me sustento"/>
+                                <f:selectItem itemLabel="Trabalho e contribuo com o sustento da família." itemValue="Trabalho e contribuo com o sustento da família"/>
+                                <f:selectItem itemLabel="Trabalho e sou o principal responsável pelo sustento da família." itemValue="Trabalho e sou o principal responsável pelo sustento da família"/>
+                            </p:selectOneRadio>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel for="fonte-pesquisa" value="Qual sua principal fonte de pesquisa?"/>
+                            <p:selectOneRadio id="fonte-pesquisa" value="#{questionarioBean.questionario.fontePesquisa}"
+                                              required="true" requiredMessage="Campo “Qual sua principal fonte de pesquisa” Obrigatório.">
+                                <f:selectItem itemLabel="Biblioteca/sala de leitura da minha escola." itemValue="Biblioteca/sala de leitura da minha escola"/>
+                                <f:selectItem itemLabel="Biblioteca/sala de leitura de outras instituições." itemValue="Biblioteca/sala de leitura de outras instituições"/>
+                                <f:selectItem itemLabel="Livros, revistas e jornais." itemValue="Livros, revistas e jornais"/>
+                                <f:selectItem itemLabel="Internet." itemValue="Internet"/>
+                                <f:selectItem itemLabel="Outra." itemValue="Outra"/>
+                            </p:selectOneRadio>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel for="utiliza-celular" value="Você utiliza o celular para estudar?"/>
+                            <p:selectOneRadio id="utiliza-celular" value="#{questionarioBean.questionario.utilizaCelular}"
+                                              required="true" requiredMessage="Campo “Você utiliza o celular para estudar” Obrigatório.">
+                                <f:selectItem itemLabel="Nunca utilizo." itemValue="Nunca utilizo"/>
+                                <f:selectItem itemLabel="Utilizo raramente." itemValue="Utilizo raramente"/>
+                                <f:selectItem itemLabel="Utilizo com razoável frequência." itemValue="Utilizo com razoável frequência"/>
+                                <f:selectItem itemLabel="Utilizo muito frequentemente." itemValue="Utilizo muito frequentemente"/>
+                            </p:selectOneRadio>
+                        </pm:field>
+
+                        <h3>Avaliação da Aplicação</h3>
+                        <pm:field>
+                            <p:outputLabel for="satisfacao" value="Qual seu nível de satisfacão ao utilizar o QuizApp?"/>
+                            <p:rating id="satisfacao" value="#{questionarioBean.avaliacao1}" cancel="false"
+                                      required="true" requiredMessage="Campo “Qual seu nível de satisfacão ao utilizar o QuizApp” Obrigatório.">
+                                <p:ajax event="rate" listener="#{questionarioBean.onRateAvaliacao1}" update="panel-avaliacao1"/>
+                            </p:rating>
+                            <h:panelGroup id="panel-avaliacao1">
+                                <h:outputText value="#{questionarioBean.questionario.quizSatisfacao}"/>
+                            </h:panelGroup>
+                        </pm:field>
+                        <pm:field>
+                            <p:outputLabel for="experiencia" value="Utilizar o QuizApp foi uma experiência?"/>
+                            <p:rating id="experiencia" value="#{questionarioBean.avaliacao2}" cancel="false"
+                                      required="true" requiredMessage="Campo “Utilizar o QuizApp foi uma experiência” Obrigatório.">
+                                <p:ajax event="rate" listener="#{questionarioBean.onRateAvaliacao2}" update="panel-avaliacao2"/>
+                            </p:rating>
+                            <h:panelGroup id="panel-avaliacao2">
+                                <h:outputText value="#{questionarioBean.questionario.quizExperiencia}"/>
+                            </h:panelGroup>
+                        </pm:field>
+                        <pm:field>
+                            <p:outputLabel for="avalia-interface" value="Como você avalia a interface (telas) da aplicação?"/>
+                            <p:rating id="avalia-interface" value="#{questionarioBean.avaliacao3}" cancel="false"
+                                      required="true" requiredMessage="Campo “Como você avalia a interface (telas) da aplicação” Obrigatório.">
+                                <p:ajax event="rate" listener="#{questionarioBean.onRateAvaliacao3}" update="panel-avaliacao3"/>
+                            </p:rating>
+                            <h:panelGroup id="panel-avaliacao3">
+                                <h:outputText value="#{questionarioBean.questionario.quizInterface}"/>
+                            </h:panelGroup>
+                        </pm:field>
+
+                        <pm:field>
+                            <p:outputLabel for="ajudou-ensino" value="Utilizar o QuizApp ajudou você a compreender o conteúdo da aula?"/>
+                            <p:rating id="ajudou-ensino" value="#{questionarioBean.avaliacao4}" cancel="false"
+                                      required="true" requiredMessage="Campo “Utilizar o QuizApp ajudou você a compreender o conteúdo da aula” Obrigatório.">
+                                <p:ajax event="rate" listener="#{questionarioBean.onRateAvaliacao4}" update="panel-avaliacao4"/>
+                            </p:rating>
+                            <h:panelGroup id="panel-avaliacao4">
+                                <h:outputText value="#{questionarioBean.questionario.quizAjudouEnsino}"/>
+                            </h:panelGroup>
+                        </pm:field>
+                        <p:commandButton id="btn-salvar-questionario" value="Salvar Questionário"
+                                         action="#{questionarioBean.cadastrar()}" ajax="true"
+                                         styleClass="btn-confirma-sim" update=":form-questionario"/>
+                    </h:form>
+                </div>
+            </div>
+
+        </div>
+
+        <footer>
+            <div class="logo-lades fim-do-jogo">
+                <div>
+                    <p:graphicImage library="img" name="lades-logo-branco.png"/>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- ARQUIVOS JS COLOCADOS NO FINAL PARA UM CARREGAMENTO MAIS RÁPIDO DA PÁGINA -->
+    <script src="resources/js/main-celular.js"></script>
+    <h:outputScript library="js" name="viewport-units-buggyfill.hacks.js"/>
+    <h:outputScript library="js" name="viewport-units-buggyfill.js"/>
+    <h:outputScript library="rating" name="rating.js"/>
+    <script>
+        window.viewportUnitsBuggyfill.init({
+            refreshDebounceWait: 50,
+            hacks: window.viewportUnitsBuggyfillHacks
+        });
+    </script>
+</h:body>
+</f:view>
+</html>
+

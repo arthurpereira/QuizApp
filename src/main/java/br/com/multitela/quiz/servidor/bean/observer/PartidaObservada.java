@@ -15,15 +15,15 @@ import java.util.List;
  * @author arthurpereira
  */
 public interface PartidaObservada {
+
+    void addObservador(PartidaObservador o);
     
-    public void atualizarPlacar();
+    void atualizarPlacar();
     
-    public void notificarPlacar(List<JogadorPartidaAssociativa> placar, List<Integer> pontuacoes);
-    
-    public void listarPerguntas();
-    
-    public void notificarPerguntas(List<Pergunta> perguntas);
-    
-    public void addObservador(PartidaObservador o);
+    void notificarPlacar(List<JogadorPartidaAssociativa> placar, List<Integer> pontuacoes);
+
+    void notificarPerguntas(List<Pergunta> perguntas);
+
+    void notificarPerguntaAtual(int indice);
     
 }

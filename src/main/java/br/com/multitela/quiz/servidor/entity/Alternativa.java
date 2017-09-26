@@ -11,6 +11,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 /**
@@ -28,8 +30,20 @@ public class Alternativa implements Serializable {
     @Column(name = "id")
     private long id;
     
-    @Column(name = "texto")
+    @Column(name = "texto", length = 511)
     private String texto;
+
+    @ManyToOne
+    @JoinColumn(name = "pergunta_id")
+    private Pergunta pergunta;
+
+    public Alternativa(Pergunta pergunta) {
+        this.pergunta = pergunta;
+    }
+
+    public Alternativa() {
+
+    }
     
     @Override
     public int hashCode() {
@@ -76,5 +90,12 @@ public class Alternativa implements Serializable {
     public void setTexto(String texto) {
         this.texto = texto;
     }
-    
+
+    public Pergunta getPergunta() {
+        return pergunta;
+    }
+
+    public void setPergunta(Pergunta pergunta) {
+        this.pergunta = pergunta;
+    }
 }

@@ -91,7 +91,25 @@
                                                 <ul class="dropdown-menu">
                                                     <li>
                                                         <p:commandLink value="Iniciar Partida"
-                                                                       action="/admin/partida.xhtml?faces-redirect=true"/>
+                                                                       action="/admin/partida/iniciar.xhtml?faces-redirect=true"/>
+                                                    </li>
+                                                </ul>
+                                            </li>
+                                            <li class="dropdown">
+                                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button"
+                                                   aria-haspopup="true" aria-expanded="false">
+                                                    <span class="fa fa-bar-chart"></span>
+                                                    <span class="menu-dropdown-titulo">Relatórios</span>
+                                                    <span class="caret"></span>
+                                                </a>
+                                                <ul class="dropdown-menu">
+                                                    <li>
+                                                        <p:commandLink value="Partidas"
+                                                                       action="/admin/relatorios/partida.xhtml?faces-redirect=true"/>
+                                                    </li>
+                                                    <li>
+                                                        <p:commandLink value="Questionários"
+                                                                       action="/admin/relatorios/questionario.xhtml?faces-redirect=true"/>
                                                     </li>
                                                 </ul>
                                             </li>

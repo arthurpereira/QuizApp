@@ -1,0 +1,230 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<ui:composition template="/template/template.xhtml">
+
+    <ui:define name="titulo">Relatório de Questionários</ui:define>
+
+    <ui:define name="conteudo">
+
+        <h1>Buscar Questionários</h1>
+        <h2>
+            <span class="campoObrigatorio">* Campo Obrigatório!</span>
+        </h2>
+
+        <h:form id="form-growl">
+            <p:growl for="sucesso" id="sucesso" life="4000" showDetail="true" autoUpdate="true" />
+            <p:growl for="atencao" id="atencao" life="4000" showDetail="true" autoUpdate="true" />
+            <p:growl for="vazia" id="vazia" life="4000" showDetail="true" autoUpdate="true" />
+        </h:form>
+
+        <h:form id="formBuscaQuestionario" style="padding-bottom:10px">
+            <p:panelGrid layout="grid" columns="2" style="width: 100%">
+                <p:row>
+                    <p:column style="width: 40%;">
+                        <p:outputLabel for="data1" value="Data Inicial:"/>
+                    </p:column>
+                    <p:column>
+                        <p:calendar id="data1" value="#{questionarioBean.data1}"
+                                    pattern="dd/MM/yyyy" locale="pt"/>
+                    </p:column>
+                </p:row>
+                <p:row>
+                    <p:column style="width: 40%;">
+                        <p:outputLabel for="data2" value="Data Final:"/>
+                    </p:column>
+                    <p:column>
+                        <p:calendar id="data2" value="#{questionarioBean.data2}"
+                                    pattern="dd/MM/yyyy" locale="pt"/>
+                    </p:column>
+                </p:row>
+                <f:facet name="footer">
+                    <p:row>
+                        <p:column colspan="2" styleClass="alinha-meio">
+                            <p:commandButton value="Buscar"
+                                             action="#{questionarioBean.buscar}" ajax="true"
+                                             update="form-resultado"/>
+                        </p:column>
+                    </p:row>
+                </f:facet>
+            </p:panelGrid>
+        </h:form>
+
+        <div>
+            <h:form id="form-resultado">
+                <p:panelGrid rendered="#{questionarioBean.questionariosBuscados.size() > 0}">
+                    <p:row>
+                        <p:column headerText="Resultados da Busca">
+                            <p:dataTable id="table-questionarios" var="questionario"
+                                         value="#{questionarioBean.questionariosBuscados}"
+                                         paginator="true" rows="10" rowsPerPageTemplate="5,10,15" paginatorAlwaysVisible="false"
+                                         paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
+                                         currentPageReportTemplate="{currentPage} de {totalPages}">
+
+                                <p:column headerText="Nome do Jogador" exportable="false">
+                                    <h:outputText value="#{questionario.jogadorPartida.jogador.nomeCompleto}"/>
+                                </p:column>
+
+                                <p:column headerText="Nome do Jogador:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.jogadorPartida.jogador.nomeCompleto}"/>
+                                </p:column>
+
+                                <p:column headerText="Data da Partida:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.jogadorPartida.partida.data}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Belem"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Nº de Acertos:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.jogadorPartida.acertos}"/>
+                                </p:column>
+
+                                <p:column headerText="Nº de Erros:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.jogadorPartida.erros}"/>
+                                </p:column>
+
+                                <p:column headerText="Colocação:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.jogadorPartida.colocacao}"/>
+                                </p:column>
+
+                                <p:column headerText="Data" exportable="false">
+                                    <h:outputText value="#{questionario.data}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Data do Questionário:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.data}">
+                                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Belem"/>
+                                    </h:outputText>
+                                </p:column>
+
+                                <p:column headerText="Idade:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.idade}"/>
+                                </p:column>
+
+                                <p:column headerText="Sexo:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.sexo}"/>
+                                </p:column>
+
+                                <p:column headerText="Estado Civil:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.estadoCivil}"/>
+                                </p:column>
+
+                                <p:column headerText="Escolaridade:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.escolaridade}"/>
+                                </p:column>
+
+                                <p:column headerText="Com quem mora atualmente:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.moraAtualmente}"/>
+                                </p:column>
+
+                                <p:column headerText="Renda Mensal Familiar:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.rendaMensal}"/>
+                                </p:column>
+
+                                <p:column headerText="Mora com quantas pessoas:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.quantasPessoas}"/>
+                                </p:column>
+
+                                <p:column headerText="Situação que melhor lhe descreve:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.situacaoDescreve}"/>
+                                </p:column>
+
+                                <p:column headerText="Meio de ingresso à Graduação:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.ingressoGraduacao}"/>
+                                </p:column>
+
+                                <p:column headerText="Escolaridade do Pai:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.escolaridadePai}"/>
+                                </p:column>
+
+                                <p:column headerText="Escolaridade da Mãe:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.escolaridadeMae}"/>
+                                </p:column>
+
+                                <p:column headerText="Tipo de escola que concluiu o Ensino Médio:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.tipoEscola}"/>
+                                </p:column>
+
+                                <p:column headerText="Frequenta a biblioteca com que frequencia:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.frequenciaBiblioteca}"/>
+                                </p:column>
+
+                                <p:column headerText="Principal fonte de pesquisas:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.fontePesquisa}"/>
+                                </p:column>
+
+                                <p:column headerText="Exerce que tipo de atividade acadêmica:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.atividadeAcademica}"/>
+                                </p:column>
+
+                                <p:column headerText="Utilizar o QuizApp foi uma experiência fácil?:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.quizExperienciaFacil}"/>
+                                </p:column>
+
+                                <p:column headerText="Os elementos da tela são percebidos claramente?:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.quizInterface}"/>
+                                </p:column>
+
+                                <p:column headerText="A memorização é fácil?:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.quizMemorizacao}"/>
+                                </p:column>
+
+                                <p:column headerText="Se ficar um tempo sem usar e depois voltar, vai ser fácil?:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.quizSemUsar}"/>
+                                </p:column>
+
+                                <p:column headerText="Utilizar o QuizApp pode auxiliar o ensino em sala de aula?:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.quizPodeAjudarEnsino}"/>
+                                </p:column>
+
+                                <p:column headerText="Tipo de Dispositivo:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.dispositivo}"/>
+                                </p:column>
+
+                                <p:column headerText="Sistema Operacional:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.sistemaOperacional}"/>
+                                </p:column>
+
+                                <p:column headerText="Versão do Sistema Operacional:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.sistemaOperacionalVersao}"/>
+                                </p:column>
+
+                                <p:column headerText="Navegador:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.navegadorNome}"/>
+                                </p:column>
+
+                                <p:column headerText="Versão do Navegador:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.navegadorVersao}"/>
+                                </p:column>
+
+                                <p:column headerText="Fabricante:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.fabricante}"/>
+                                </p:column>
+
+                                <p:column headerText="Opções" exportable="false">
+
+                                </p:column>
+                            </p:dataTable>
+                        </p:column>
+                    </p:row>
+                    <p:row>
+                        <p:column>
+                            <h:commandLink>
+                                <p:graphicImage library="img" name="xls.png" width="36"/>
+                                <p:dataExporter target="table-questionarios" type="xlsx" fileName="Questionários"/>
+                            </h:commandLink>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </h:form>
+        </div>
+
+    </ui:define>
+</ui:composition>
+</html>

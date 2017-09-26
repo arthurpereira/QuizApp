@@ -10,4 +10,6 @@ public interface JogadorService extends Repository<Jogador> {
 
     public Jogador findByFacebookId(Long id);
 
+    public Jogador findByMatricula(Long matricula);
+
 }

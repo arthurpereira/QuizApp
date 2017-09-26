@@ -9,7 +9,7 @@ function statusChangeCallback(response) {
     if (response.status === 'connected') {
         // Logged into your app and Facebook.
         testAPI();
-        window.location.replace("http://"+window.location.host+"/quiz-app/");
+        window.location.replace("http://"+window.location.host+"/quiz-app/jogo");
     } else if (response.status === 'not_authorized') {
         // The person is logged into Facebook, but not your app.
     } else {

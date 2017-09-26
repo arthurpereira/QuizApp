@@ -35,6 +35,11 @@ public class AbstractBean implements Serializable {
         context.addMessage("sucesso", new FacesMessage(FacesMessage.SEVERITY_INFO, "Sucesso!", mensagem));
     }
 
+    public void mensagemSucesso(String titulo, String mensagem) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, titulo, mensagem));
+    }
+
     /**
      * Método para exibição de mensagem de atenção caso tenha acontecido algum
      * erro no cadastro/edição/busca.
@@ -46,15 +51,25 @@ public class AbstractBean implements Serializable {
         context.addMessage("atencao", new FacesMessage(FacesMessage.SEVERITY_WARN, "Atenção!", mensagem));
     }
 
+    public void mensagemAtencao(String titulo, String mensagem) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_WARN, titulo, mensagem));
+    }
+
     /**
      * Método para exibição de mensagem indicando que a lista no formulário de
      * busca está vazia, ou seja, não houveram resultados.
      *
      * @param mensagem
      */
-    public void mensagemVazia(String mensagem) {
+    public void mensagemInfo(String mensagem) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage("vazia", new FacesMessage(FacesMessage.SEVERITY_INFO, "Lista Vazia!", mensagem));
+    }
+
+    public void mensagemInfo(String titulo, String mensagem) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, titulo, mensagem));
     }
 
     /**
@@ -66,6 +81,11 @@ public class AbstractBean implements Serializable {
     public void mensagemErro(String mensagem) {
         FacesContext context = FacesContext.getCurrentInstance();
         context.addMessage("erro", new FacesMessage(FacesMessage.SEVERITY_ERROR, "Erro!", mensagem));
+    }
+
+    public void mensagemErro(String titulo, String mensagem) {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, titulo, mensagem));
     }
 
     protected void closeDialog() {

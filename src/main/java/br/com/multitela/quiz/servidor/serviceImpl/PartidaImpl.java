@@ -3,9 +3,6 @@ package br.com.multitela.quiz.servidor.serviceImpl;
 import br.com.multitela.quiz.servidor.entity.Partida;
 import br.com.multitela.quiz.servidor.repository.RepositoryImpl;
 import br.com.multitela.quiz.servidor.service.PartidaService;
-import org.hibernate.Criteria;
-import org.hibernate.Session;
-import org.hibernate.criterion.Restrictions;
 
 import javax.ejb.Stateless;
 import javax.persistence.TypedQuery;
@@ -20,8 +17,7 @@ import java.util.List;
 public class PartidaImpl extends RepositoryImpl<Partida> implements PartidaService {
 
     /**
-     * Busca partida do banco de dados retornando uma lista para as tabelas de
-     * busca.
+     * Realiza a busca de partidas por um intervalo de datas.
      *
      * @param data1
      * @param data2
@@ -29,27 +25,28 @@ public class PartidaImpl extends RepositoryImpl<Partida> implements PartidaServi
      */
     @Override
     public List<Partida> consultaPorData(Date data1, Date data2) {
-        Session session = getEntityManager().unwrap(Session.class);
+        if (data1 != null && data2 != null) {
+            TypedQuery query = getEntityManager().createQuery("SELECT q FROM " + Partida.class.getSimpleName()
+                    + " q WHERE DATE(q.data) BETWEEN DATE(:data1) AND DATE(:data2)", Partida.class);
 
-        Criteria criteria = session.createCriteria(Partida.class);
+            query.setParameter("data1", data1);
+            query.setParameter("data2", data2);
 
-        if (data1 == null && data2 == null) {
-            return new ArrayList<>();
-        } else if (data1 != null && data2 != null) {
-            if (data1.before(data2)) {
-                criteria.add(Restrictions.ge("data", data1));
-                criteria.add(Restrictions.le("data", data2));
-            } else {
-                criteria.add(Restrictions.ge("data", data2));
-                criteria.add(Restrictions.le("data", data1));
-            }
-        } else {
+            return query.getResultList();
+
+        } else if (data1 != null || data2 != null) {
+            TypedQuery query = getEntityManager().createQuery("SELECT q FROM " + Partida.class.getSimpleName()
+                    + " q WHERE DATE(q.data) = DATE(:data)", Partida.class);
+
             if (data1 != null)
-                criteria.add(Restrictions.eq("data", data1));
-            if (data2 != null)
-                criteria.add(Restrictions.eq("data", data2));
+                query.setParameter("data", data1);
+            else
+                query.setParameter("data", data2);
+
+            return query.getResultList();
         }
-        return criteria.list();
+
+        return new ArrayList<>();
     }
 
     @Override

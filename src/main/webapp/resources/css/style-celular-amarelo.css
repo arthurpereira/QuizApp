@@ -1,0 +1,651 @@
+/*
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+*/
+/* 
+    Created on : Aug 21, 2015, 5:53:18 PM
+    Author     : arthurpereira
+*/
+
+html, body.ui-mobile-viewport.ui-overlay-a {
+    background-color: white !important;
+}
+
+*.ui-listview *.ui-btn:visited, *.ui-listview *.ui-btn:hover, *.ui-listview *.ui-btn:active {
+    background: none !important;
+    text-shadow: none !important;
+}
+
+.ui-mobile .ui-page-active, .ui-mobile.ui-loading .ui-page-active {
+    display: block;
+    overflow: visible;
+}
+
+.ui-mobile [data-role=page], .ui-page {
+    background: white;
+    top: auto !important;
+    height: 100%;
+}
+
+* {
+    font-family: Helvetica, Arial, sans-serif;
+    text-shadow: none !important;
+}
+
+.alinha-direita {
+    text-align: right;
+}
+
+.alinha-esquerda {
+    text-align: left;
+}
+
+.alinha-meio {
+    text-align: center;
+}
+
+.sem-margem {
+    margin: 0;
+}
+
+p.info {
+    font-size: 20px;
+}
+
+div#div-fundo {
+    position: absolute;
+    top: 65px;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+}
+
+/*
+    ---- NAVEGAÇÃO ----
+*/
+
+header {
+    position: fixed;
+    right: 0;
+    left: 0;
+    top: 0;
+    height: 63px;
+    width: 100%;
+    background-color: #C49F08;
+    box-shadow: 0 3px 8px 10px white;
+    z-index: 1030;
+}
+
+footer {
+    position: fixed;
+    left: 0;
+    bottom: 0px;
+    height: 57px;
+    width: 100%;
+    background-color: #C49F08;
+    box-shadow: 0 -3px 8px 10px white;
+    z-index: 1031;
+}
+
+#span-jogo {
+    position: absolute;
+    top: 8px;
+    left: 3%;
+    height: 49px;
+    width: 45%;
+    font-size: 43px;
+    text-align: center;
+    cursor: pointer;
+    padding-top: 6px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+#span-placar {
+    position: absolute;
+    top: 8px;
+    right: 3%;
+    height: 45px;
+    width: 45%;
+    font-size: 37px;
+    text-align: center;
+    cursor: pointer;
+    padding-top: 10px;
+    border-top-right-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+span.span-tab-nome {
+    vertical-align: middle;
+    text-transform: uppercase;
+    font-size: 18px;
+    font-weight: bold;
+}
+
+.nav-ativo {
+    color: #C49F08;
+    background-color: white;
+}
+
+.nav-inativo {
+    color: white;
+    background-color: #C49F08;
+}
+
+.display-none{
+    display: none;
+}
+
+div#div-aguardando-jogo {
+    position: fixed;
+    top: 30%;
+    text-align: center;
+    width: 100%;
+}
+
+span#span-aguardando-jogo {
+    color: #C49F08;
+    font-size: 90px;
+}
+
+h2#h2-aguardando-jogo {
+    line-height: 0 !important;
+    padding-top: 15px;
+    margin-bottom: 2px;
+    font-size: 22px
+}
+
+p#p-aguardando-jogo {
+    font-size: 18px;
+}
+
+div#div-pergunta {
+    position: relative;
+    width: 100%;
+    padding-bottom: 63px;
+}
+
+p#p-pergunta, p.img-descricao {
+    color: #000;
+    font-weight: bold;
+    font-size: 18px;
+    margin: 10px 10px;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+
+img.img-pergunta {
+    max-width: calc(100% - 20px);
+    margin: 0 10px;
+}
+
+p.p-alternativa {
+    color: #fff;
+    margin-top: 10px;
+    margin-left: 40px;
+    margin-right: 3px;
+    font-size: 16px !important;
+    font-weight: bold !important;
+    /*line-height: 45px;*/
+    min-height: 25px;
+    padding: 10px 4px 10px 0;
+    text-align: justify;
+    hyphens: auto;
+    -webkit-hyphens: auto;
+}
+
+div.div-indice-alternaviva {
+    float: left;
+    margin-top: 7px;
+    margin-left:5px; 
+    text-align: center;
+    color: #FFF;
+    background-color: rgba(0, 0, 0, 0.6);
+    opacity: 0.75;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+div.div-alternativa {
+    margin: 0px 10px -5px 10px;
+    border-radius: 5px;
+    min-height: 45px;
+}
+
+div.div-alternativa.nao-escolhida {
+    background-color: #C49F08;
+}
+
+div.div-alternativa.escolhida {
+    background-color: #16aceb;
+}
+
+div.div-alternativa.certa {
+    background-color: #2eb22e;
+}
+
+div.div-alternativa.errada {
+    background-color: #d50f0f;
+}
+
+div.div-alternativa.desabilitada {
+    background-color: #969696;
+}
+
+.textoDialog {
+    text-align: center;
+    font-size: 14pt;
+}
+
+.ui-page-theme-a .ui-bar-inherit {
+    background-color: #C49F08 !important;
+    color: #FFF !important;
+    text-shadow: none !important;
+    border: none !important;
+}
+
+.ui-popup.ui-body-inherit, .ui-popup.ui-body-inherit .ui-page-theme-a .ui-bar-inherit {
+    border: none !important;
+}
+
+.ui-header .ui-title {
+    margin: 0px 20px !important;
+}
+
+button.ui-shadow {
+    box-shadow: none !important;
+}
+
+.ui-popup .ui-content {
+    text-align: center !important;
+    overflow: auto;
+    padding-bottom: 0px !important;
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+}
+
+.btn-popup {
+    width: calc(50% - 4px);
+}
+
+.btn-confirma-sim {
+    background-color: #C49F08 !important;
+    color: #FFF !important;
+    text-shadow: none !important;
+    border: none !important;
+}
+
+.btn-confirma-nao {
+    background-color: #dcdcdc !important;
+    color: #333 !important;
+    text-shadow: none !important;
+    border: none !important;
+}
+
+.img-foto-jogador {
+    position: fixed;
+    bottom: 6px;
+    left: 14px;
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background-image: url("#{resource['img/perfil-amarelo.jpg']}");
+    background-size: contain;
+}
+
+span#span-nome-jogador {
+    position: fixed;
+    bottom: 27px;
+    left: 75px;
+    font-weight: bold;
+    font-size: 18px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+#div-pontuacao-jogador {
+    position: fixed;
+    bottom: 6px;
+    left: 75px;
+    font-size: 18px;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+#div-pontuacao-jogador span.fa-check {
+    color: #07ea07;
+}
+
+#div-pontuacao-jogador span.fa-times {
+    color: #ff1717;
+}
+
+div#div-placar {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+span.span-placar-colocacao {
+    text-align: center;
+    font-size:30px;
+    font-weight: bold;
+}
+
+p.p-placar-jogador {
+    top: 0px;
+    left: 60px;
+    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
+    /*margin-bottom: -20px;*/
+    width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+p.p-placar-pontuacao {
+    left: 60px;
+    top: 20px;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.p-placar-pontuacao .fa-check {
+    color: #00a000;
+}
+
+.p-placar-pontuacao .fa-times {
+    color: #d50f0f;
+}
+
+.img-placar-foto-jogador {
+    display: block;
+    width: 46px;
+    height: 46px;
+    border-radius: 50% !important;
+    margin: auto;
+    background-image: url("#{resource['img/perfil-amarelo.jpg']}");
+    background-size: contain;
+}
+
+p.p-placar-vazio {
+    padding-top: 10px;
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+#div-fim-do-jogo {
+    margin-top: 8px;
+    display: flex;
+    flex-direction: column;
+}
+
+@media (min-height: 474px) {
+    #div-fim-do-jogo {
+        height: calc(100vh - 73px);
+        content: 'viewport-units-buggyfill;' 'height: calc(100vh - 73px);';
+    }
+}
+
+.logo-topo, .logo-lades {
+    display: none;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    line-height: normal !important;
+}
+
+.logo-topo.fim-do-jogo, .logo-lades.fim-do-jogo {
+    display: table;
+}
+
+.logo-topo > div, .logo-lades > div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.logo-topo > div > img {
+    width: 160px;
+}
+
+.logo-lades > div > img {
+    width: 156px;
+}
+
+.logo-topo > div > img, .logo-lades > div > img {
+    margin-bottom: -2px;
+}
+
+.head-perfil {
+    text-align: center;
+    flex: 0 1 auto;
+}
+
+.head-perfil {
+    display: table;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.head-perfil > div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.img-hero-jogador, .img-hero-jogador-facebook {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    background-size: contain;
+}
+
+.img-hero-jogador-facebook {
+    background-image: url("#{resource['img/perfil-amarelo.jpg']}");
+}
+
+.head-perfil > div > p {
+    margin-top: 0;
+    margin-bottom: 0;
+    font-weight: bold;
+    text-transform: capitalize;
+    font-size: 1.6em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+@media (max-width: 480px) {
+    .logo-topo > div > img {
+        width: calc(17vw + 80px);
+    }
+    .logo-lades > div > img {
+        width: calc(17vw + 76px);
+    }
+    .img-hero-jogador, .img-hero-jogador-facebook {
+        width: calc(30vw + 30px);
+        height: calc(30vw + 30px);
+    }
+}
+
+.pontuacao {
+    position: relative;
+    padding: 0 8px !important;
+    margin-bottom: 10px;
+    flex: 0 1 auto;
+    width: 100%;
+}
+
+@media (max-width: 520px) {
+    .pontuacao {
+        width: calc(100vw - 16px) !important;
+    }
+}
+
+@media (min-width: 521px) {
+    .pontuacao {
+        max-width: 470px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+    }
+}
+
+.card-colocacao {
+    background: #C49F08;
+    width: calc(33.3333333% - 6px) !important;
+    float: left;
+    margin-right: 9px;
+    border-radius: 4px;
+}
+
+.card-acertos {
+    background: #00a000;
+    width: calc(33.3333333% - 6px) !important;
+    float: left;
+    margin-right: 9px;
+    border-radius: 4px;
+}
+
+.card-erros {
+    background: #d50f0f;
+    width: calc(33.3333333% - 6px) !important;
+    float: left;
+    border-radius: 4px;
+}
+
+.card-colocacao, .card-acertos, .card-erros {
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.card-colocacao > p:first-child, .card-acertos > p:first-child, .card-erros > p:first-child {
+    font-size: 2.5em;
+    margin-bottom: -7px;
+    margin-top: -1px;
+}
+
+.card-colocacao > p:last-child, .card-acertos > p:last-child, .card-erros > p:last-child {
+    font-size: 1em;
+    margin: 0 6px 4px 6px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.agradecimento {
+    flex: 1 1 auto;
+}
+
+.agradecimento > div {
+    display: table;
+    height: 100%;
+    width: 100%;
+}
+
+.agradecimento > div > div {
+    display: table-cell;
+    vertical-align: middle;
+}
+
+.footer-margin {
+    flex: 0 1 66px;
+}
+
+div#div-questionario > div {
+    padding-bottom: 66px;
+}
+
+#form-questionario > .ui-field-contain {
+    overflow: auto !important;
+}
+
+#form-questionario > .ui-field-contain > span:last-child {
+    float: left;
+    margin-left: 5px;
+    margin-top: 3px;
+    line-height: normal !important;
+}
+
+@media (min-width: 28em) {
+    .ui-field-contain>label ~ [class*="ui-"], .ui-field-contain .ui-controlgroup-controls {
+        width: auto !important;
+    }
+}
+
+.direita {
+    float: right;
+}
+
+.esquerda {
+    float: left;
+}
+
+.sem-margem {
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+.sem-padding {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.wrapper {
+    min-height: 100%;
+    position: relative;
+}
+
+#interface {
+    margin: 0 auto;
+    width: 100%;
+    padding-bottom: 60px; /* Height of the footer element */
+}
+
+#interface .conteudo {
+    padding-top: 8px;
+    width: calc(100vw - 16px);
+    margin-left: 8px;
+}
+
+#rodape {
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    background: white;
+    color: #859298;
+    padding: 10px 0 5px 0;
+    font-size: 0.85em;
+    line-height: 1.3em;
+    text-align: center;
+}
+
+#rodape p:first-child {
+    font-weight: bold;
+    margin-bottom: 2px;
+}
+
+.logo > h1 {
+    margin-top: 5px;
+}
+
+p.obrigado {
+    text-align: center;
+    font-size: 20px;
+    width: 100%;
+}
+
+.logo-lades-rodape > img {
+    width: 164px;
+    height: 44px;
+}

@@ -6,15 +6,21 @@
 package br.com.multitela.quiz.servidor.bean;
 
 import br.com.multitela.quiz.servidor.entity.Alternativa;
+import br.com.multitela.quiz.servidor.entity.Imagem;
 import br.com.multitela.quiz.servidor.entity.Pergunta;
+import br.com.multitela.quiz.servidor.exception.DiretorioNaoEncontradoException;
+import br.com.multitela.quiz.servidor.exception.FormatoDeArquivoInvalidoException;
 import br.com.multitela.quiz.servidor.service.PerguntaService;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.context.FacesContext;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import javax.servlet.http.Part;
 
 /**
  *
@@ -28,16 +34,20 @@ public class PerguntaBean extends AbstractBean {
     private PerguntaService perguntaService;
 
     private Pergunta pergunta;
-    private Alternativa alt1, alt2, alt3, alt4;
+    private Alternativa alt1, alt2, alt3, alt4, alt5;
     private String busca;
     private List<Pergunta> perguntasBuscadas;
+
+    private Imagem imagem;
+    private Part arquivo;
     
     public PerguntaBean() {
         pergunta = new Pergunta();
-        alt1 = new Alternativa();
-        alt2 = new Alternativa();
-        alt3 = new Alternativa();
-        alt4 = new Alternativa();
+        alt1 = new Alternativa(pergunta);
+        alt2 = new Alternativa(pergunta);
+        alt3 = new Alternativa(pergunta);
+        alt4 = new Alternativa(pergunta);
+        alt5 = new Alternativa(pergunta);
     }
     
     /**
@@ -48,23 +58,53 @@ public class PerguntaBean extends AbstractBean {
     public String cadastrar() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
-            pergunta.setAlternativa(new ArrayList<>());
-            pergunta.getAlternativa().add(alt1);
-            pergunta.getAlternativa().add(alt2);
-            pergunta.getAlternativa().add(alt3);
-            pergunta.getAlternativa().add(alt4);
+            pergunta.setAlternativas(new ArrayList<>());
+            pergunta.getAlternativas().add(alt1);
+            pergunta.getAlternativas().add(alt2);
+            pergunta.getAlternativas().add(alt3);
+            pergunta.getAlternativas().add(alt4);
+            pergunta.getAlternativas().add(alt5);
+
+            if (arquivo != null) {
+                enviarArquivo();
+            }
+
             perguntaService.save(pergunta);
             closeDialog();
             context.getExternalContext().getFlash().setKeepMessages(true);
             mensagemSucesso("A pergunta foi cadastrada.");
             limpaPergunta();
             return "/admin/index.xhtml?faces-redirect=true";
+        } catch (IOException ex) {
+            keepDialogOpen();
+            mensagemAtencao("A pergunta não foi cadastrada. Tente novamente mais tarde.");
+            ex.printStackTrace();
+            return null;
+        } catch (DiretorioNaoEncontradoException ex) {
+            keepDialogOpen();
+            mensagemAtencao("A pergunta não foi cadastrada. Tente novamente mais tarde.");
+            ex.printStackTrace();
+            return null;
+        } catch (FormatoDeArquivoInvalidoException e) {
+            keepDialogOpen();
+            mensagemAtencao("O fomato de imagem enviado é inválido ou não permitido.");
+            e.printStackTrace();
+            return null;
         } catch (Exception e) {
             keepDialogOpen();
             mensagemAtencao("A pergunta não foi cadastrada. Tente novamente mais tarde.");
             e.printStackTrace();
             return null;
         }
+    }
+
+    private void enviarArquivo() throws IOException, DiretorioNaoEncontradoException, FormatoDeArquivoInvalidoException {
+        InputStream inputStream = arquivo.getInputStream();
+        String tipo = arquivo.getContentType();
+
+        pergunta.salvarImagem(inputStream, tipo);
+
+        inputStream.close();
     }
     
     /**
@@ -75,6 +115,12 @@ public class PerguntaBean extends AbstractBean {
     public String atualizar() {
         FacesContext context = FacesContext.getCurrentInstance();
         try {
+            if (arquivo != null) {
+                if (pergunta.getImagem() != null) {
+                    pergunta.removeImagem();
+                }
+                enviarArquivo();
+            }
             perguntaService.update(pergunta);
             closeDialog();
             context.getExternalContext().getFlash().setKeepMessages(true);
@@ -96,7 +142,7 @@ public class PerguntaBean extends AbstractBean {
         try {
             perguntasBuscadas = perguntaService.buscar(busca);
             if (perguntasBuscadas.isEmpty()) {
-                mensagemVazia("Nenhuma Pergunta foi encontrada.");
+                mensagemInfo("Nenhuma Pergunta foi encontrada.");
             }
         } catch (Exception e) {
             keepDialogOpen();
@@ -110,10 +156,13 @@ public class PerguntaBean extends AbstractBean {
      */
     public void limpaPergunta() {
         pergunta = new Pergunta();
-        alt1 = new Alternativa();
-        alt2 = new Alternativa();
-        alt3 = new Alternativa();
-        alt4 = new Alternativa();
+        alt1 = new Alternativa(pergunta);
+        alt2 = new Alternativa(pergunta);
+        alt3 = new Alternativa(pergunta);
+        alt4 = new Alternativa(pergunta);
+        alt5 = new Alternativa(pergunta);
+        imagem = null;
+        arquivo = null;
     }
     
     //GETTERS AND SETTERS
@@ -158,6 +207,14 @@ public class PerguntaBean extends AbstractBean {
         this.alt4 = alt4;
     }
 
+    public Alternativa getAlt5() {
+        return alt5;
+    }
+
+    public void setAlt5(Alternativa alt5) {
+        this.alt5 = alt5;
+    }
+
     public String getBusca() {
         return busca;
     }
@@ -169,5 +226,20 @@ public class PerguntaBean extends AbstractBean {
     public List<Pergunta> getPerguntasBuscadas() {
         return perguntasBuscadas;
     }
-    
+
+    public Imagem getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(Imagem imagem) {
+        this.imagem = imagem;
+    }
+
+    public Part getArquivo() {
+        return arquivo;
+    }
+
+    public void setArquivo(Part arquivo) {
+        this.arquivo = arquivo;
+    }
 }

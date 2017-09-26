@@ -1,6 +1,7 @@
 package br.com.multitela.quiz.servidor.service;
 
 import br.com.multitela.quiz.servidor.entity.JogadorPartidaAssociativa;
+import br.com.multitela.quiz.servidor.entity.Partida;
 import br.com.multitela.quiz.servidor.repository.Repository;
 
 import java.util.List;
@@ -10,8 +11,10 @@ import java.util.List;
  */
 public interface JogadorPartidaAssociativaService extends Repository<JogadorPartidaAssociativa> {
 
-    public List<JogadorPartidaAssociativa> consultaJogadoresPorPartida(Long partida_id);
+    public List<JogadorPartidaAssociativa> consultaTop10JogadoresPorPartida(Partida partida);
 
-    public List<Integer> consultaPontuacoesPorPartida(Long partida_id);
+    public List<JogadorPartidaAssociativa> consultaTodosJogadoresPorPartida(Partida partida);
+
+    public List<Integer> consultaPontuacoesPorPartida(Partida partida);
 
 }

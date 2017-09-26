@@ -35,4 +35,18 @@ public class JogadorImpl extends RepositoryImpl<Jogador> implements JogadorServi
         }
     }
 
+    @Override
+    public Jogador findByMatricula(Long matricula) {
+        try {
+            TypedQuery<Jogador> query = getEntityManager().createQuery(
+            "SELECT jogador FROM " + Jogador.class.getName()
+                    + " jogador WHERE jogador.matricula = :matricula", Jogador.class);
+            query.setParameter("matricula", matricula);
+
+            return query.getSingleResult();
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+
 }

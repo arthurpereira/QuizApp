@@ -1,5 +1,5 @@
 /target/
-.idea/*
+/.idea/
 out
 quiz-app.iml
 .nbactions.xml

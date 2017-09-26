@@ -38,17 +38,47 @@
     <url-pattern>/primepush/*</url-pattern>
   </servlet-mapping>
 
+  <!--&lt;!&ndash; Configuração do Spring Security &ndash;&gt;-->
+  <!--<listener>-->
+    <!--<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>-->
+  <!--</listener>-->
+  <!--<filter>-->
+    <!--<filter-name>springSecurityFilterChain</filter-name>-->
+    <!--<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>-->
+  <!--</filter>-->
+  <!--<filter-mapping>-->
+    <!--<filter-name>springSecurityFilterChain</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+  <!--</filter-mapping>-->
+  <!--<filter-mapping>-->
+    <!--<filter-name>springSecurityFilterChain</filter-name>-->
+    <!--<url-pattern>/j_spring_security_logout</url-pattern>-->
+  <!--</filter-mapping>-->
+
   <filter>
-    <filter-name>LoginFilter</filter-name>
-    <filter-class>br.com.multitela.quiz.servidor.filter.LoginFilter</filter-class>
+    <filter-name>LoginAdminFilter</filter-name>
+    <filter-class>br.com.multitela.quiz.servidor.filter.LoginAdminFilter</filter-class>
     <init-param>
       <param-name>loginActionURI</param-name>
       <param-value>/quiz-app/admin/login.xhtml</param-value>
     </init-param>
   </filter>
   <filter-mapping>
-    <filter-name>LoginFilter</filter-name>
+    <filter-name>LoginAdminFilter</filter-name>
     <url-pattern>/admin/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>LoginJogadorFilter</filter-name>
+    <filter-class>br.com.multitela.quiz.servidor.filter.LoginJogadorFilter</filter-class>
+    <init-param>
+      <param-name>loginActionURI</param-name>
+      <param-value>/quiz-app/login/index.xhtml</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>LoginJogadorFilter</filter-name>
+    <url-pattern>/index.xhtml</url-pattern>
   </filter-mapping>
 
   <filter>
@@ -58,5 +88,14 @@
   <filter-mapping>
     <filter-name>AdminFilter</filter-name>
     <url-pattern>/admin/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>JogadorFilter</filter-name>
+    <filter-class>br.com.multitela.quiz.servidor.filter.JogadorFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>JogadorFilter</filter-name>
+    <url-pattern>/jogo/*</url-pattern>
   </filter-mapping>
 </web-app>
