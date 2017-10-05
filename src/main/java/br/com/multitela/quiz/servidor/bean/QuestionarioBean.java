@@ -8,6 +8,7 @@ import br.com.multitela.quiz.servidor.enums.QuestionarioExperienciaEnum;
 import br.com.multitela.quiz.servidor.enums.QuestionarioLikertEnum;
 import br.com.multitela.quiz.servidor.enums.QuestionarioSatisfacaoEnum;
 import br.com.multitela.quiz.servidor.service.QuestionarioService;
+import br.com.multitela.quiz.servidor.util.ExcelUtil;
 import eu.bitwalker.useragentutils.UserAgent;
 import org.primefaces.context.RequestContext;
 import org.primefaces.event.RateEvent;
@@ -120,6 +121,10 @@ public class QuestionarioBean extends AbstractBean {
         questionario.setQuizAjudouEnsino(
                 new ArrayList<>(Arrays.asList(QuestionarioLikertEnum.values()))
                         .get(((Integer) rateEvent.getRating()) - 1).getTexto());
+    }
+
+    public void postProcessorXLSX(Object obj) {
+        ExcelUtil.formatExcel(obj);
     }
 
     // GETTERS AND SETTES

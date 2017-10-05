@@ -35,6 +35,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.persistence.NoResultException;
 
+import br.com.multitela.quiz.servidor.util.AlternativaUtil;
 import org.primefaces.context.RequestContext;
 import org.primefaces.push.EventBus;
 import org.primefaces.push.EventBusFactory;
@@ -264,7 +265,7 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     }
 
     public String retornaLetraAlternativa(int indice) {
-        return String.valueOf( (char) ( indice + 65 ) );
+        return AlternativaUtil.retornaLetraAlternativa(indice);
     }
 
     public int retornaColocacao(int pontuacao) {

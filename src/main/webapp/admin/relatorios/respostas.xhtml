@@ -7,7 +7,7 @@
 
 <ui:composition template="/template/template.xhtml">
 
-    <ui:define name="titulo">Relatório de Partidas</ui:define>
+    <ui:define name="titulo">Relatório de Respostas por Partida</ui:define>
 
     <ui:define name="conteudo">
         <p:dialog widgetVar="statusDialog" modal="true" draggable="false"
@@ -35,7 +35,7 @@
                         <p:outputLabel for="data1" value="Data Inicial:"/>
                     </p:column>
                     <p:column>
-                        <p:calendar id="data1" value="#{relatorioPartidaBean.data1}"
+                        <p:calendar id="data1" value="#{relatorioRespostasBean.data1}"
                                     pattern="dd/MM/yyyy" locale="pt"/>
                     </p:column>
                 </p:row>
@@ -44,7 +44,7 @@
                         <p:outputLabel for="data2" value="Data Final:"/>
                     </p:column>
                     <p:column>
-                        <p:calendar id="data2" value="#{relatorioPartidaBean.data2}"
+                        <p:calendar id="data2" value="#{relatorioRespostasBean.data2}"
                                     pattern="dd/MM/yyyy" locale="pt"/>
                     </p:column>
                 </p:row>
@@ -52,7 +52,7 @@
                     <p:row>
                         <p:column colspan="2" styleClass="alinha-meio">
                             <p:commandButton value="Buscar"
-                                             action="#{relatorioPartidaBean.buscar}" ajax="true"
+                                             action="#{relatorioRespostasBean.buscar}" ajax="true"
                                              update="form-resultado"/>
                         </p:column>
                     </p:row>
@@ -62,11 +62,11 @@
 
         <div>
             <h:form id="form-resultado">
-                <p:panelGrid rendered="#{relatorioPartidaBean.partidasBuscadas.size() > 0}">
+                <p:panelGrid rendered="#{relatorioRespostasBean.partidasBuscadas.size() > 0}">
                     <p:row>
                         <p:column headerText="Resultados da Busca">
                             <p:dataTable id="table-partidas" var="partida"
-                                         value="#{relatorioPartidaBean.partidasBuscadas}"
+                                         value="#{relatorioRespostasBean.partidasBuscadas}"
                                          paginator="true" rows="10" rowsPerPageTemplate="5,10,15" paginatorAlwaysVisible="false"
                                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
                                          currentPageReportTemplate="{currentPage} de {totalPages}">
@@ -93,10 +93,11 @@
 
                                 <p:column headerText="Opções" exportable="false">
                                     <p:commandLink title="Visualizar" immediate="true"
-                                                   oncomplete="PF('dialogVisualizarPartida').show();"
-                                                   update=":formVisualizarPartida">
+                                                   oncomplete="PF('dialogVisualizarRespostasPartida').show();"
+                                                   update=":formVisualizarRespostasPartida"
+                                                   actionListener="#{relatorioRespostasBean.consultaRespostasPorJogadorPorPartida(partida)}">
                                         <i class="fa fa-eye"></i>
-                                        <f:setPropertyActionListener target="#{relatorioPartidaBean.partida}"
+                                        <f:setPropertyActionListener target="#{relatorioRespostasBean.partida}"
                                                                      value="#{partida}"/>
                                     </p:commandLink>
                                 </p:column>
@@ -108,17 +109,17 @@
             </h:form>
         </div>
 
-        <h:form id="formVisualizarPartida">
-            <p:dialog header="Visualizar Partida" widgetVar="dialogVisualizarPartida"
-                      modal="true" id="dialogVisualizar" resizable="false" draggable="false"
+        <h:form id="formVisualizarRespostasPartida">
+            <p:dialog header="Visualizar Respostas da Partida" widgetVar="dialogVisualizarRespostasPartida"
+                      modal="true" id="dialogVisualizarRespostas" resizable="false" draggable="false"
                       responsive="true" fitViewport="true" onShow="handleResizeDialog(this);">
-                <p:panelGrid id="panelVisualizar" style="max-width: 1000px; width: 100%;">
+                <p:panelGrid id="panelVisualizar" style="width: 100%;">
                     <p:row>
                         <p:column styleClass="alinha-direita">
                             <p:outputLabel value="Data da Partida:"/>
                         </p:column>
                         <p:column styleClass="alinha-esquerda">
-                            <h:outputText value="#{relatorioPartidaBean.partida.data}">
+                            <h:outputText value="#{relatorioRespostasBean.partida.data}">
                                 <f:convertDateTime pattern="dd/MM/yyyy HH:mm:ss" timeZone="America/Belem"/>
                             </h:outputText>
                         </p:column>
@@ -128,30 +129,25 @@
                             <p:outputLabel value="Número de Jogadores"/>
                         </p:column>
                         <p:column>
-                            <h:outputText value="#{relatorioPartidaBean.partida.jogadores.size()}"/>
+                            <h:outputText value="#{relatorioRespostasBean.partida.jogadores.size()}"/>
                         </p:column>
                     </p:row>
                     <p:row>
                         <p:column colspan="2" headerText="Resultado da Partida">
 
-                            <p:dataTable id="tabela-jogadores" value="#{relatorioPartidaBean.partida.jogadores}"
-                                         var="jogadorPorPartida" emptyMessage="Nenhum Jogador." style="padding: 23px 0;">
-                                <p:column headerText="Colocação"
-                                          sortBy="#{jogadorPorPartida.colocacao}">
-                                    <h:outputText value="#{jogadorPorPartida.colocacao}º"/>
+                            <p:dataTable id="tabela-respostas" var="jogador"
+                                         value="#{relatorioRespostasBean.listaRespostasPorJogador}"
+                                         emptyMessage="Nenhum Jogador." style="padding: 23px 0;"
+                                         scrollable="true" scrollWidth="800" scrollHeight="360" frozenColumns="1">
+                                <p:column headerText="Nome:" width="60">
+                                    <h:outputText value="#{jogador.jogador.nomeCompleto}"/>
                                 </p:column>
-                                <p:column headerText="Nome Completo"
-                                          sortBy="#{jogadorPorPartida.jogador.nomeCompleto}">
-                                    <h:outputText value="#{jogadorPorPartida.jogador.nomeCompleto}"/>
-                                </p:column>
-                                <p:column headerText="Nº de Acertos"
-                                          sortBy="#{jogadorPorPartida.acertos}">
-                                    <h:outputText value="#{jogadorPorPartida.acertos}"/>
-                                </p:column>
-                                <p:column headerText="Nº de Erros"
-                                          sortBy="#{jogadorPorPartida.erros}">
-                                    <h:outputText value="#{jogadorPorPartida.erros}"/>
-                                </p:column>
+                                <p:columns var="resposta" value="#{relatorioRespostasBean.listaPerguntasPorPartida}"
+                                           headerText="#{resposta.pergunta}" width="250">
+                                    <h:outputText value="#{jogador.listaRespostas[resposta.indice]}"/>
+
+                                </p:columns>
+
                             </p:dataTable>
 
                         </p:column>
@@ -160,9 +156,9 @@
                 <f:facet name="footer">
                     <h:commandLink>
                         <p:graphicImage library="img" name="xls.png" width="36"/>
-                        <p:dataExporter target="tabela-jogadores" type="xlsx"
-                                        fileName="Resultado da Partida #{relatorioPartidaBean.partida.data}"
-                                        postProcessor="#{relatorioPartidaBean.postProcessorXLSX}"/>
+                        <p:dataExporter target="tabela-respostas" type="xlsx"
+                                        fileName="Respostas da Partida #{relatorioRespostasBean.partida.data}"
+                                        postProcessor="#{relatorioRespostasBean.postProcessorXLSX}"/>
                     </h:commandLink>
                 </f:facet>
             </p:dialog>

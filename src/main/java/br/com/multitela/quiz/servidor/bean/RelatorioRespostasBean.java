@@ -1,22 +1,28 @@
 package br.com.multitela.quiz.servidor.bean;
 
+import br.com.multitela.quiz.servidor.dto.PerguntasPorPartidaDTO;
+import br.com.multitela.quiz.servidor.dto.RespostasPorJogadorDTO;
 import br.com.multitela.quiz.servidor.entity.Partida;
 import br.com.multitela.quiz.servidor.service.JogadorPartidaAssociativaService;
 import br.com.multitela.quiz.servidor.service.PartidaService;
+import br.com.multitela.quiz.servidor.service.PerguntaService;
+import br.com.multitela.quiz.servidor.service.RespostaService;
+import br.com.multitela.quiz.servidor.util.AlternativaUtil;
 import br.com.multitela.quiz.servidor.util.ExcelUtil;
 
 import javax.ejb.EJB;
 import javax.faces.view.ViewScoped;
 import javax.inject.Named;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 /**
- * Created by arthurpereira on 2/13/17.
+ * Created by arthurpereira on 03/10/17.
  */
 @Named
 @ViewScoped
-public class RelatorioPartidaBean extends AbstractBean {
+public class RelatorioRespostasBean extends AbstractBean {
 
     @EJB
     private PartidaService partidaService;
@@ -24,11 +30,20 @@ public class RelatorioPartidaBean extends AbstractBean {
     @EJB
     private JogadorPartidaAssociativaService jogadorPartidaService;
 
+    @EJB
+    private RespostaService respostaService;
+
+    @EJB
+    private PerguntaService perguntaService;
+
     private Partida partida;
     private Date data1, data2;
     private List<Partida> partidasBuscadas;
 
-    public RelatorioPartidaBean() {}
+    private List<RespostasPorJogadorDTO> listaRespostasPorJogador;
+    private List<PerguntasPorPartidaDTO> listaPerguntasPorPartida;
+
+    public RelatorioRespostasBean() {}
 
     /**
      * Realiza a busca de resultados das partidas no sistema.
@@ -48,6 +63,11 @@ public class RelatorioPartidaBean extends AbstractBean {
             mensagemAtencao("Não foi possível realizar a busca. Tente novamente mais tarde.");
             ex.printStackTrace();
         }
+    }
+
+    public void consultaRespostasPorJogadorPorPartida(Partida partida) {
+        listaRespostasPorJogador = respostaService.consultaRespostasPorJogadorPorPartida(partida);
+        listaPerguntasPorPartida = perguntaService.consultaPerguntasPorPartida(partida);
     }
 
     public void postProcessorXLSX(Object obj) {
@@ -82,5 +102,13 @@ public class RelatorioPartidaBean extends AbstractBean {
 
     public List<Partida> getPartidasBuscadas() {
         return partidasBuscadas;
+    }
+
+    public List<RespostasPorJogadorDTO> getListaRespostasPorJogador() {
+        return listaRespostasPorJogador;
+    }
+
+    public List<PerguntasPorPartidaDTO> getListaPerguntasPorPartida() {
+        return listaPerguntasPorPartida;
     }
 }

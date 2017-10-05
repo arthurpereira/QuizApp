@@ -35,6 +35,7 @@ import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
+import br.com.multitela.quiz.servidor.util.AlternativaUtil;
 import org.primefaces.context.RequestContext;
 
 /**
@@ -246,9 +247,9 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
         else
             return "";
     }
-    
+
     public String retornaLetraAlternativa(int indice) {
-        return String.valueOf( (char) ( indice + 65 ) );
+        return AlternativaUtil.retornaLetraAlternativa(indice);
     }
     
     public void habilitarAlternativas() {

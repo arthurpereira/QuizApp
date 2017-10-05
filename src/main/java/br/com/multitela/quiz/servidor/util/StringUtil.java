@@ -29,4 +29,23 @@ public class StringUtil {
         return new BigInteger(length * 5, new SecureRandom()).toString(32);
     }
 
+    public static String trimString(String string, int length, boolean soft) {
+        if(string == null || string.trim().isEmpty()){
+            return string;
+        }
+
+        StringBuffer sb = new StringBuffer(string);
+        int actualLength = length - 3;
+
+        if(sb.length() > actualLength){
+            if(!soft)
+                return sb.insert(actualLength, "...").substring(0, actualLength+3);
+            else {
+                int endIndex = sb.indexOf(" ",actualLength);
+                return sb.insert(endIndex,"...").substring(0, endIndex+3);
+            }
+        }
+        return string;
+    }
+
 }

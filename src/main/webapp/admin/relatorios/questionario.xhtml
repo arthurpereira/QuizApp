@@ -10,6 +10,10 @@
     <ui:define name="titulo">Relatório de Questionários</ui:define>
 
     <ui:define name="conteudo">
+        <p:dialog widgetVar="statusDialog" modal="true" draggable="false"
+                  closable="false" resizable="false" showHeader="false">
+            <h:graphicImage library="img" name="ajax-loader.gif" />
+        </p:dialog>
 
         <h1>Buscar Questionários</h1>
         <h2>
@@ -20,6 +24,8 @@
             <p:growl for="sucesso" id="sucesso" life="4000" showDetail="true" autoUpdate="true" />
             <p:growl for="atencao" id="atencao" life="4000" showDetail="true" autoUpdate="true" />
             <p:growl for="vazia" id="vazia" life="4000" showDetail="true" autoUpdate="true" />
+
+            <p:ajaxStatus onstart="PF('statusDialog').show()" onsuccess="PF('statusDialog').hide()" />
         </h:form>
 
         <h:form id="formBuscaQuestionario" style="padding-bottom:10px">
@@ -59,7 +65,7 @@
                 <p:panelGrid rendered="#{questionarioBean.questionariosBuscados.size() > 0}">
                     <p:row>
                         <p:column headerText="Resultados da Busca">
-                            <p:dataTable id="table-questionarios" var="questionario"
+                            <p:dataTable id="tabela-questionarios" var="questionario"
                                          value="#{questionarioBean.questionariosBuscados}"
                                          paginator="true" rows="10" rowsPerPageTemplate="5,10,15" paginatorAlwaysVisible="false"
                                          paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}"
@@ -111,10 +117,6 @@
                                     <h:outputText value="#{questionario.sexo}"/>
                                 </p:column>
 
-                                <p:column headerText="Estado Civil:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.estadoCivil}"/>
-                                </p:column>
-
                                 <p:column headerText="Escolaridade:" styleClass="display-none">
                                     <h:outputText value="#{questionario.escolaridade}"/>
                                 </p:column>
@@ -123,64 +125,32 @@
                                     <h:outputText value="#{questionario.moraAtualmente}"/>
                                 </p:column>
 
-                                <p:column headerText="Renda Mensal Familiar:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.rendaMensal}"/>
-                                </p:column>
-
-                                <p:column headerText="Mora com quantas pessoas:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.quantasPessoas}"/>
-                                </p:column>
-
                                 <p:column headerText="Situação que melhor lhe descreve:" styleClass="display-none">
                                     <h:outputText value="#{questionario.situacaoDescreve}"/>
-                                </p:column>
-
-                                <p:column headerText="Meio de ingresso à Graduação:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.ingressoGraduacao}"/>
-                                </p:column>
-
-                                <p:column headerText="Escolaridade do Pai:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.escolaridadePai}"/>
-                                </p:column>
-
-                                <p:column headerText="Escolaridade da Mãe:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.escolaridadeMae}"/>
-                                </p:column>
-
-                                <p:column headerText="Tipo de escola que concluiu o Ensino Médio:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.tipoEscola}"/>
-                                </p:column>
-
-                                <p:column headerText="Frequenta a biblioteca com que frequencia:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.frequenciaBiblioteca}"/>
                                 </p:column>
 
                                 <p:column headerText="Principal fonte de pesquisas:" styleClass="display-none">
                                     <h:outputText value="#{questionario.fontePesquisa}"/>
                                 </p:column>
 
-                                <p:column headerText="Exerce que tipo de atividade acadêmica:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.atividadeAcademica}"/>
+                                <p:column headerText="Utiliza o celular para estudar:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.utilizaCelular}"/>
                                 </p:column>
 
-                                <p:column headerText="Utilizar o QuizApp foi uma experiência fácil?:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.quizExperienciaFacil}"/>
+                                <p:column headerText="Nível de satisfação:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.quizSatisfacao}"/>
                                 </p:column>
 
-                                <p:column headerText="Os elementos da tela são percebidos claramente?:" styleClass="display-none">
+                                <p:column headerText="Utilizar o QuizApp foi uma experiência?:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.quizExperiencia}"/>
+                                </p:column>
+
+                                <p:column headerText="Como avalia as telas da aplicação?:" styleClass="display-none">
                                     <h:outputText value="#{questionario.quizInterface}"/>
                                 </p:column>
 
-                                <p:column headerText="A memorização é fácil?:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.quizMemorizacao}"/>
-                                </p:column>
-
-                                <p:column headerText="Se ficar um tempo sem usar e depois voltar, vai ser fácil?:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.quizSemUsar}"/>
-                                </p:column>
-
-                                <p:column headerText="Utilizar o QuizApp pode auxiliar o ensino em sala de aula?:" styleClass="display-none">
-                                    <h:outputText value="#{questionario.quizPodeAjudarEnsino}"/>
+                                <p:column headerText="Utilizar o QuizApp ajudou a compreender o conteúdo da aula?:" styleClass="display-none">
+                                    <h:outputText value="#{questionario.quizAjudouEnsino}"/>
                                 </p:column>
 
                                 <p:column headerText="Tipo de Dispositivo:" styleClass="display-none">
@@ -217,7 +187,8 @@
                         <p:column>
                             <h:commandLink>
                                 <p:graphicImage library="img" name="xls.png" width="36"/>
-                                <p:dataExporter target="table-questionarios" type="xlsx" fileName="Questionários"/>
+                                <p:dataExporter target="tabela-questionarios" type="xlsx" fileName="Questionários"
+                                                postProcessor="#{questionarioBean.postProcessorXLSX}"/>
                             </h:commandLink>
                         </p:column>
                     </p:row>
