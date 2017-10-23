@@ -132,6 +132,11 @@
                                         <span class="span-placar-colocacao">#{controladorPartidaBean.retornaColocacao(jogador.acertos)}º</span>
                                     </td>
                                     <td style="width:65px;text-align: center;">
+                                        <h:panelGroup rendered="#{controladorPartidaBean.perguntaRespondida}">
+                                            <div class="div-indice-alternativa-escolhida #{controladorPartidaBean.listaRespostasPorPergunta[rowIndex].status.cssClass}">
+                                                #{controladorPartidaBean.listaRespostasPorPergunta[rowIndex].alternativa}
+                                            </div>
+                                        </h:panelGroup>
                                         <h:panelGroup rendered="#{jogador.jogador.loginTipoFacebook}">
                                             <img class="img-placar-foto-jogador"
                                                  src="http://graph.facebook.com/#{jogador.jogador.facebook_id}/picture" alt="" />

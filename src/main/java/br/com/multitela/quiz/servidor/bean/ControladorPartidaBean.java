@@ -10,6 +10,7 @@ import br.com.multitela.quiz.servidor.bean.model.JogadorPartidaDataModel;
 import br.com.multitela.quiz.servidor.bean.observer.PartidaObservada;
 import br.com.multitela.quiz.servidor.bean.observer.PartidaObservador;
 import br.com.multitela.quiz.servidor.dto.RespostasPorAlternativaDTO;
+import br.com.multitela.quiz.servidor.dto.RespostasPorPerguntaDTO;
 import br.com.multitela.quiz.servidor.entity.JogadorPartidaAssociativa;
 import br.com.multitela.quiz.servidor.entity.Partida;
 import br.com.multitela.quiz.servidor.entity.Pergunta;
@@ -76,6 +77,8 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     List<Integer> listaPontuacoesPlacar;
     //Salva as quantidades de respostas por alternativas de uma pergunta
     List<RespostasPorAlternativaDTO> listaRespostasPorAlternativa;
+    //Salva as respostas dos jogadores para a pergunta atual
+    List<RespostasPorPerguntaDTO> listaRespostasPorPergunta;
     
     //Variável que simula um ponteiro para indicar a posição da pergunta atual na lista de perguntas.
     private int posicaoPergunta;
@@ -197,6 +200,11 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     
     @Override
     public void atualizarPlacar() {
+        try {
+            listaRespostasPorPergunta = respostaService.consultaTop10RespostasPorPerguntaPartida(perguntaAtual, partida);
+        } catch (NoResultException ex) {
+            listaRespostasPorPergunta = new ArrayList<>();
+        }
         try {
             listaPontuacoesPlacar = partidaAssociativaService.consultaPontuacoesPorPartida(partida);
         } catch (NoResultException ex) {
@@ -330,4 +338,7 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
         return listaRespostasPorAlternativa;
     }
 
+    public List<RespostasPorPerguntaDTO> getListaRespostasPorPergunta() {
+        return listaRespostasPorPergunta;
+    }
 }

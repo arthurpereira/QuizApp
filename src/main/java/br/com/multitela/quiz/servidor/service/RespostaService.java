@@ -2,6 +2,7 @@ package br.com.multitela.quiz.servidor.service;
 
 import br.com.multitela.quiz.servidor.dto.RespostasPorAlternativaDTO;
 import br.com.multitela.quiz.servidor.dto.RespostasPorJogadorDTO;
+import br.com.multitela.quiz.servidor.dto.RespostasPorPerguntaDTO;
 import br.com.multitela.quiz.servidor.entity.JogadorPartidaAssociativa;
 import br.com.multitela.quiz.servidor.entity.Partida;
 import br.com.multitela.quiz.servidor.entity.Pergunta;
@@ -20,5 +21,7 @@ public interface RespostaService extends Repository<Resposta> {
     List<String> consultaRespostasPorJogadorPartida(JogadorPartidaAssociativa jogadorPartida, Partida partida);
 
     List<RespostasPorJogadorDTO> consultaRespostasPorJogadorPorPartida(Partida partida);
+
+    List<RespostasPorPerguntaDTO> consultaTop10RespostasPorPerguntaPartida(Pergunta pergunta, Partida partida);
 
 }

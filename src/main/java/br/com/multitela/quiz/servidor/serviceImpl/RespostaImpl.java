@@ -2,10 +2,12 @@ package br.com.multitela.quiz.servidor.serviceImpl;
 
 import br.com.multitela.quiz.servidor.dto.RespostasPorAlternativaDTO;
 import br.com.multitela.quiz.servidor.dto.RespostasPorJogadorDTO;
+import br.com.multitela.quiz.servidor.dto.RespostasPorPerguntaDTO;
 import br.com.multitela.quiz.servidor.entity.JogadorPartidaAssociativa;
 import br.com.multitela.quiz.servidor.entity.Partida;
 import br.com.multitela.quiz.servidor.entity.Pergunta;
 import br.com.multitela.quiz.servidor.entity.Resposta;
+import br.com.multitela.quiz.servidor.enums.AlternativaStatus;
 import br.com.multitela.quiz.servidor.repository.RepositoryImpl;
 import br.com.multitela.quiz.servidor.service.JogadorPartidaAssociativaService;
 import br.com.multitela.quiz.servidor.service.RespostaService;
@@ -126,6 +128,47 @@ public class RespostaImpl extends RepositoryImpl<Resposta> implements RespostaSe
         }
 
         return listaRespostasPorJogador;
+    }
+
+    @Override
+    public List<RespostasPorPerguntaDTO> consultaTop10RespostasPorPerguntaPartida(Pergunta pergunta, Partida partida) {
+        List<RespostasPorPerguntaDTO> listaRespostasPorPergunta = new ArrayList<>();
+
+        try {
+            Query query = getEntityManager().createNativeQuery(
+                    "SELECT r.alternativa_indice, jp.id, jp.acertos FROM resposta r" +
+                    " RIGHT JOIN" +
+                    " (SELECT jp.id, jp.acertos FROM jogador_partida jp" +
+                    " WHERE jp.partida_id = :partida ORDER BY jp.acertos DESC LIMIT 10) jp" +
+                    " ON r.jogador_partida_id = jp.id AND r.pergunta_id = :pergunta" +
+                    " ORDER BY jp.acertos DESC");
+            query.setParameter("partida", partida);
+            query.setParameter("pergunta", pergunta);
+
+            List<Object[]> resultados = query.getResultList();
+
+            for (Object[] resultado : resultados) {
+                RespostasPorPerguntaDTO rppDTO = new RespostasPorPerguntaDTO();;
+
+                if (resultado[0] != null) {
+                    rppDTO.setAlternativa(AlternativaUtil.retornaLetraAlternativa(
+                            ((Integer) resultado[0]).intValue()).charAt(0));
+
+                    if (((Integer) resultado[0]).intValue() == pergunta.getAlternativa_certa())
+                        rppDTO.setStatus(AlternativaStatus.CERTA);
+                    else
+                        rppDTO.setStatus(AlternativaStatus.ERRADA);
+                } else {
+                    rppDTO.setAlternativa('-');
+                    rppDTO.setStatus(AlternativaStatus.ERRADA);
+                }
+                listaRespostasPorPergunta.add(rppDTO);
+            }
+            return listaRespostasPorPergunta;
+
+        } catch (NoResultException ex) {
+            return null;
+        }
     }
 
 }

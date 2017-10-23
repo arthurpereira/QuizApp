@@ -317,6 +317,28 @@ div.div-indice-alternaviva {
     border-radius: 50%;
 }
 
+div.div-indice-alternativa-escolhida {
+    position: absolute;
+    margin-top: 23px;
+    margin-left: 23px;
+    text-align: center;
+    color: #FFF;
+    font-weight: bold;
+    font-size: 20px;
+    line-height: 30px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+}
+
+div.div-indice-alternativa-escolhida.certa {
+    background-color: #2eb22e;
+}
+
+div.div-indice-alternativa-escolhida.errada {
+    background-color: #d50f0f;
+}
+
 div.div-alternativa {
     margin: 0 10px -5px 10px;
     border-radius: 5px;
