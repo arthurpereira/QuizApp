@@ -79,9 +79,13 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     List<RespostasPorAlternativaDTO> listaRespostasPorAlternativa;
     //Salva as respostas dos jogadores para a pergunta atual
     List<RespostasPorPerguntaDTO> listaRespostasPorPergunta;
+    //Salva se os jogadores já responderam a pergunta atual
+    List<Boolean> listaJogadoresJaResponderam;
     
     //Variável que simula um ponteiro para indicar a posição da pergunta atual na lista de perguntas.
     private int posicaoPergunta;
+    //Variável que armazena a quantidade de jogadores que responderam a pergunta atual.
+    private int quantJogadoresJaResponderam;
     
     //Objeto auxiliar que será usado apenas para referenciar a pergunta atual na view do usuário.
     private Pergunta perguntaAtual;
@@ -154,6 +158,7 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
             partidaStatus = PartidaStatus.ENCERRADA;
         }
         limpaStatusPorAlternativa();
+        quantJogadoresJaResponderam = 0;
     }
     
     /**
@@ -182,6 +187,7 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
                 listaStatusPorAlternativa.set(perguntaAtual.getAlternativa_certa(), AlternativaStatus.CERTA);
                 atualizarPlacar();
                 mostrarQuantidadeRespostasPorAlternativa();
+                listaJogadoresJaResponderam = new ArrayList<>();
             } else {
                 mensagemAtencao("A pergunta atual já foi respondida.");
             }
@@ -192,16 +198,25 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
 
     public void mostrarQuantidadeRespostasPorAlternativa() {
         try {
-            listaRespostasPorAlternativa = respostaService.countRespostasPorPergunta(partida, perguntaAtual);
+            listaRespostasPorAlternativa = respostaService.countRespostasPorAlternativasDaPerguntaNaPartida(perguntaAtual, partida);
         } catch (NoResultException ex) {
             listaRespostasPorAlternativa = new ArrayList<>();
         }
+    }
+
+    public void atualizarListaJogadoresJaResponderam() {
+        try {
+            listaJogadoresJaResponderam = respostaService.consultaTop10ExistemRespostasPorPerguntaNaPartida(perguntaAtual, partida);
+        } catch (NoResultException ex) {
+            listaJogadoresJaResponderam = new ArrayList<>();
+        }
+        quantJogadoresJaResponderam = respostaService.countExistemRespostasPorPerguntaNaPartida(perguntaAtual, partida);
     }
     
     @Override
     public void atualizarPlacar() {
         try {
-            listaRespostasPorPergunta = respostaService.consultaTop10RespostasPorPerguntaPartida(perguntaAtual, partida);
+            listaRespostasPorPergunta = respostaService.consultaTop10RespostasPorPerguntaNaPartida(perguntaAtual, partida);
         } catch (NoResultException ex) {
             listaRespostasPorPergunta = new ArrayList<>();
         }
@@ -279,6 +294,10 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     public int retornaColocacao(int pontuacao) {
         return listaPontuacoesPlacar.indexOf(pontuacao) + 1;
     }
+
+    public int retornaQuantidadeJogadoresNaoResponderam() {
+        return jogadoresPorPartida.size() - quantJogadoresJaResponderam;
+    }
     
     //GETTERS AND SETTERS
 
@@ -326,6 +345,10 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
         return perguntaStatus == PerguntaStatus.RESPOSTA_HABILITADA;
     }
 
+    public boolean isAlternativasDesabilitadas() {
+        return perguntaStatus == PerguntaStatus.RESPOSTA_DESABILITADA;
+    }
+
     public boolean isPerguntaRespondida() {
         return perguntaStatus == PerguntaStatus.RESPONDIDA;
     }
@@ -340,5 +363,9 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
 
     public List<RespostasPorPerguntaDTO> getListaRespostasPorPergunta() {
         return listaRespostasPorPergunta;
+    }
+
+    public List<Boolean> getListaJogadoresJaResponderam() {
+        return listaJogadoresJaResponderam;
     }
 }

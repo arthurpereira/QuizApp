@@ -16,12 +16,16 @@ import java.util.List;
  */
 public interface RespostaService extends Repository<Resposta> {
 
-    List<RespostasPorAlternativaDTO> countRespostasPorPergunta(Partida partida, Pergunta pergunta);
+    List<RespostasPorAlternativaDTO> countRespostasPorAlternativasDaPerguntaNaPartida(Pergunta pergunta, Partida partida);
 
     List<String> consultaRespostasPorJogadorPartida(JogadorPartidaAssociativa jogadorPartida, Partida partida);
 
     List<RespostasPorJogadorDTO> consultaRespostasPorJogadorPorPartida(Partida partida);
 
-    List<RespostasPorPerguntaDTO> consultaTop10RespostasPorPerguntaPartida(Pergunta pergunta, Partida partida);
+    List<RespostasPorPerguntaDTO> consultaTop10RespostasPorPerguntaNaPartida(Pergunta pergunta, Partida partida);
+
+    List<Boolean> consultaTop10ExistemRespostasPorPerguntaNaPartida(Pergunta pergunta, Partida partida);
+
+    Integer countExistemRespostasPorPerguntaNaPartida(Pergunta pergunta, Partida partida);
 
 }

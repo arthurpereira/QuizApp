@@ -31,12 +31,15 @@ import java.util.List;
 import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.enterprise.context.SessionScoped;
+import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.inject.Named;
 import javax.servlet.http.HttpServletRequest;
 
 import br.com.multitela.quiz.servidor.util.AlternativaUtil;
 import org.primefaces.context.RequestContext;
+import org.primefaces.push.EventBus;
+import org.primefaces.push.EventBusFactory;
 
 /**
  *
@@ -146,6 +149,8 @@ public class PartidaBean extends AbstractBean implements PartidaObservador {
             perguntaStatus = PerguntaStatus.RESPONDIDA;
             listaStatusPorAlternativa.set(posicaoAlternativaEscolhida, AlternativaStatus.ESCOLHIDA);
             salvarResposta();
+            EventBus eventBus = EventBusFactory.getDefault().eventBus();
+            eventBus.publish("/placar", new FacesMessage("atualizar placar"));
         }
     }
     

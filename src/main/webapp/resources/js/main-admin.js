@@ -38,6 +38,10 @@ function mudarPerguntaJS() {
     $("#conteudo").animate({scrollTop: 0}, 500);
 }
 
+function atualizarPlacarJS() {
+    atualizarPlacar();
+}
+
 function jogo() {
     $("#div-placar").addClass("display-none");
     $("#sidebar").removeClass("sidebar-open");

@@ -31,7 +31,7 @@ public class RespostaImpl extends RepositoryImpl<Resposta> implements RespostaSe
     private JogadorPartidaAssociativaService partidaAssociativaService;
 
     @Override
-    public List<RespostasPorAlternativaDTO> countRespostasPorPergunta(Partida partida, Pergunta pergunta) {
+    public List<RespostasPorAlternativaDTO> countRespostasPorAlternativasDaPerguntaNaPartida(Pergunta pergunta, Partida partida) {
         List<RespostasPorAlternativaDTO> listaRespostasPorAlternativa = new ArrayList<>();
 
         List<JogadorPartidaAssociativa> listaJogadoresPorPartida;
@@ -41,7 +41,7 @@ public class RespostaImpl extends RepositoryImpl<Resposta> implements RespostaSe
             Query query = getEntityManager().createNativeQuery(
                     "SELECT a.id, c.count FROM alternativa a" +
                     " LEFT JOIN" +
-                    " (SELECT r.alternativa_id, count(r)" +
+                    " (SELECT r.alternativa_id, COUNT(r)" +
                     " FROM resposta r" +
                     " WHERE r.pergunta_id = :pergunta_id AND r.jogador_partida_id IN :listaJogadoresPorPartida" +
                     " GROUP BY alternativa_id) c" +
@@ -131,7 +131,7 @@ public class RespostaImpl extends RepositoryImpl<Resposta> implements RespostaSe
     }
 
     @Override
-    public List<RespostasPorPerguntaDTO> consultaTop10RespostasPorPerguntaPartida(Pergunta pergunta, Partida partida) {
+    public List<RespostasPorPerguntaDTO> consultaTop10RespostasPorPerguntaNaPartida(Pergunta pergunta, Partida partida) {
         List<RespostasPorPerguntaDTO> listaRespostasPorPergunta = new ArrayList<>();
 
         try {
@@ -168,6 +168,53 @@ public class RespostaImpl extends RepositoryImpl<Resposta> implements RespostaSe
 
         } catch (NoResultException ex) {
             return null;
+        }
+    }
+
+    @Override
+    public List<Boolean> consultaTop10ExistemRespostasPorPerguntaNaPartida(Pergunta pergunta, Partida partida) {
+        List<Boolean> listaJogadoresJaResponderam = new ArrayList<>();
+
+        try {
+            Query query = getEntityManager().createNativeQuery(
+                    "SELECT CASE WHEN r IS NULL THEN FALSE ELSE TRUE END AS resposta_exists," +
+                            " jp.id, jp.colocacao FROM resposta r" +
+                    " RIGHT JOIN" +
+                    " (SELECT jp.id, jp.colocacao FROM jogador_partida jp" +
+                    " WHERE jp.partida_id = :partida ORDER BY jp.colocacao LIMIT 10) jp" +
+                    " ON r.jogador_partida_id = jp.id AND r.pergunta_id = :pergunta" +
+                    " ORDER BY jp.colocacao, jp.id");
+            query.setParameter("partida", partida);
+            query.setParameter("pergunta", pergunta);
+
+            List<Object[]> resultados = query.getResultList();
+
+            for (Object[] resultado : resultados) {
+                listaJogadoresJaResponderam.add((Boolean) resultado[0]);
+            }
+
+            return listaJogadoresJaResponderam;
+
+        } catch (NoResultException ex) {
+            return null;
+        }
+    }
+
+    @Override
+    public Integer countExistemRespostasPorPerguntaNaPartida(Pergunta pergunta, Partida partida) {
+        try {
+            Query query = getEntityManager().createNativeQuery(
+                    "SELECT COUNT(r) FROM resposta r" +
+                    " RIGHT JOIN" +
+                    " (SELECT jp.id FROM jogador_partida jp WHERE jp.partida_id = :partida) jp" +
+                    " ON r.jogador_partida_id = jp.id AND r.pergunta_id = :pergunta");
+            query.setParameter("partida", partida);
+            query.setParameter("pergunta", pergunta);
+
+            return ((BigInteger) query.getSingleResult()).intValue();
+
+        } catch (NoResultException ex) {
+            return 0;
         }
     }
 

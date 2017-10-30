@@ -21,7 +21,7 @@ public class JogadorPartidaAssociativaImpl extends RepositoryImpl<JogadorPartida
         TypedQuery query = getEntityManager().createQuery(
                 "SELECT jogador_partida FROM " + JogadorPartidaAssociativa.class.getName()
                 + " AS jogador_partida WHERE jogador_partida.partida.id = :partida_id"
-                + " ORDER BY jogador_partida.acertos DESC", JogadorPartidaAssociativa.class);
+                + " ORDER BY jogador_partida.acertos DESC, jogador_partida.id", JogadorPartidaAssociativa.class);
         query.setParameter("partida_id", partida.getId());
         query.setMaxResults(10);
 
@@ -32,8 +32,8 @@ public class JogadorPartidaAssociativaImpl extends RepositoryImpl<JogadorPartida
     public List<JogadorPartidaAssociativa> consultaTodosJogadoresPorPartida(Partida partida) {
         TypedQuery query = getEntityManager().createQuery(
                 "SELECT jogador_partida FROM " + JogadorPartidaAssociativa.class.getName()
-                        + " AS jogador_partida WHERE jogador_partida.partida.id = :partida_id"
-                        + " ORDER BY jogador_partida.acertos DESC", JogadorPartidaAssociativa.class);
+                + " AS jogador_partida WHERE jogador_partida.partida.id = :partida_id"
+                + " ORDER BY jogador_partida.acertos DESC", JogadorPartidaAssociativa.class);
         query.setParameter("partida_id", partida.getId());
 
         return query.getResultList();

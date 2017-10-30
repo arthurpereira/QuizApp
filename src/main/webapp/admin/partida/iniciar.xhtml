@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core">
 <f:view contentType="text/html" renderKitId="PRIMEFACES_MOBILE">
 <h:head>
-    <title>QuizApp - Iniciar Partida</title>
+    <title>QuizApp - Partida</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <h:outputStylesheet library="css" name="style-adm-partida.css"/>
     <h:outputStylesheet library="css" name="bootstrap-grid.min.css"/>
@@ -15,6 +15,16 @@
 </h:head>
 
 <h:body class="notIE modern custom">
+
+    <!-- PUSH -->
+    <p:socket channel="/placar" onMessage="atualizarPlacarJS"></p:socket>
+
+    <!-- COMPONENTES EXTERNOS A PÁGINA -->
+    <h:form>
+        <p:remoteCommand name="atualizarPlacar"
+                         actionListener="#{controladorPartidaBean.atualizarListaJogadoresJaResponderam()}"
+                         process="@this" update="panel-placar panel-rodape"/>
+    </h:form>
 
     <!-- NOTIFICAÇÃO -->
     <h:form id="form-notificacao">
@@ -132,9 +142,16 @@
                                         <span class="span-placar-colocacao">#{controladorPartidaBean.retornaColocacao(jogador.acertos)}º</span>
                                     </td>
                                     <td style="width:65px;text-align: center;">
-                                        <h:panelGroup rendered="#{controladorPartidaBean.perguntaRespondida}">
+                                        <h:panelGroup rendered="#{controladorPartidaBean.perguntaRespondida
+                                                                and controladorPartidaBean.partidaIniciada}">
                                             <div class="div-indice-alternativa-escolhida #{controladorPartidaBean.listaRespostasPorPergunta[rowIndex].status.cssClass}">
                                                 #{controladorPartidaBean.listaRespostasPorPergunta[rowIndex].alternativa}
+                                            </div>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{controladorPartidaBean.listaJogadoresJaResponderam[rowIndex]
+                                                                and controladorPartidaBean.liberaResponderPergunta}">
+                                            <div class="div-badge-jogador-ja-respondeu">
+                                                <span class="fa fa-check"></span>
                                             </div>
                                         </h:panelGroup>
                                         <h:panelGroup rendered="#{jogador.jogador.loginTipoFacebook}">
@@ -169,6 +186,18 @@
 
         <footer>
             <h:panelGroup id="panel-rodape" layout="block">
+                <h:panelGroup id="panel-quant-jogadores-responderam" layout="block"
+                              rendered="#{controladorPartidaBean.partidaIniciada and !controladorPartidaBean.alternativasDesabilitadas}">
+                    <h:panelGroup rendered="#{controladorPartidaBean.retornaQuantidadeJogadoresNaoResponderam() > 1}">
+                        <span class="span-quant-jogadores-responderam #{controladorPartidaBean.liberaResponderPergunta ? 'ainda-' : ''}nao">#{controladorPartidaBean.retornaQuantidadeJogadoresNaoResponderam()} #{controladorPartidaBean.liberaResponderPergunta ? 'ainda ' : ''}não responderam.</span>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{controladorPartidaBean.retornaQuantidadeJogadoresNaoResponderam() == 1}">
+                        <span class="span-quant-jogadores-responderam #{controladorPartidaBean.liberaResponderPergunta ? 'ainda-' : ''}nao">1 #{controladorPartidaBean.liberaResponderPergunta ? 'ainda ' : ''}não respondeu.</span>
+                    </h:panelGroup>
+                    <h:panelGroup rendered="#{controladorPartidaBean.retornaQuantidadeJogadoresNaoResponderam() == 0}">
+                        <span class="span-quant-jogadores-responderam todos">Todos #{controladorPartidaBean.liberaResponderPergunta ? 'já ' : ''}responderam.</span>
+                    </h:panelGroup>
+                </h:panelGroup>
                 <h:panelGroup id="panel-botoes-controle" layout="block"
                               rendered="#{controladorPartidaBean.partidaIniciada}">
                     <div class="div-btn-controle-1">
