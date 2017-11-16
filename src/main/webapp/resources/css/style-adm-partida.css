@@ -123,7 +123,7 @@ header {
     height: 63px;
     width: 100%;
     background-color: #3360c7;
-    box-shadow: 0 3px 8px 10px white;
+    box-shadow: 0 3px 8px 8px white;
     z-index: 1030;
 }
 
@@ -134,7 +134,7 @@ footer {
     height: 57px;
     width: 100%;
     background-color: #3360c7;
-    box-shadow: 0 -3px 8px 10px white;
+    box-shadow: 0 -3px 8px 8px white;
     z-index: 1031;
 }
 
@@ -271,6 +271,26 @@ div#div-pergunta {
     margin-bottom: 6px;
 }
 
+form#form-pergunta {
+    margin-top: 12px;
+}
+
+span.span-pergunta-numero {
+    color: #FFF;
+    background-color: #3360c7;
+    font-size: 15px;
+    font-weight: bold;
+    margin: 0 10px;
+    padding: 3px 5px;
+    border-radius: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+p#p-pergunta {
+    margin-top: 7px;
+}
+
 p#p-pergunta, p.img-descricao {
     color: #000;
     font-weight: bold;
@@ -394,8 +414,8 @@ div#panel-quant-jogadores-responderam {
 
 span.span-quant-jogadores-responderam {
     color: #FFF;
-    padding: 2px 5px;
-    border-radius: 4px;
+    padding: 4px 10px;
+    border-radius: 14px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
 }
 

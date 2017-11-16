@@ -78,6 +78,7 @@
                 <h:panelGroup rendered="#{controladorPartidaBean.partidaIniciada}" layout="block">
                     <div id="div-pergunta">
                         <h:form id="form-pergunta">
+                            <span class="span-pergunta-numero">Questão #{controladorPartidaBean.posicaoPergunta + 1}</span>
                             <p id="p-pergunta">
                                 <h:outputText value="#{controladorPartidaBean.perguntaAtual.textoHTML}" escape="false"/>
                             </p>
@@ -189,13 +190,14 @@
                 <h:panelGroup id="panel-quant-jogadores-responderam" layout="block"
                               rendered="#{controladorPartidaBean.partidaIniciada and !controladorPartidaBean.alternativasDesabilitadas}">
                     <h:panelGroup rendered="#{controladorPartidaBean.retornaQuantidadeJogadoresNaoResponderam() > 1}">
-                        <span class="span-quant-jogadores-responderam #{controladorPartidaBean.liberaResponderPergunta ? 'ainda-' : ''}nao">#{controladorPartidaBean.retornaQuantidadeJogadoresNaoResponderam()} #{controladorPartidaBean.liberaResponderPergunta ? 'ainda ' : ''}não responderam.</span>
+                        <span class="span-quant-jogadores-responderam #{controladorPartidaBean.liberaResponderPergunta ?'ainda-' : ''}nao">#{controladorPartidaBean.retornaQuantidadeJogadoresNaoResponderam()} #{controladorPartidaBean.liberaResponderPergunta ? 'ainda ' : ''}não responderam.</span>
                     </h:panelGroup>
                     <h:panelGroup rendered="#{controladorPartidaBean.retornaQuantidadeJogadoresNaoResponderam() == 1}">
                         <span class="span-quant-jogadores-responderam #{controladorPartidaBean.liberaResponderPergunta ? 'ainda-' : ''}nao">1 #{controladorPartidaBean.liberaResponderPergunta ? 'ainda ' : ''}não respondeu.</span>
                     </h:panelGroup>
-                    <h:panelGroup rendered="#{controladorPartidaBean.retornaQuantidadeJogadoresNaoResponderam() == 0}">
-                        <span class="span-quant-jogadores-responderam todos">Todos #{controladorPartidaBean.liberaResponderPergunta ? 'já ' : ''}responderam.</span>
+                    <h:panelGroup rendered="#{controladorPartidaBean.retornaQuantidadeJogadoresNaoResponderam() == 0
+                                            and controladorPartidaBean.liberaResponderPergunta}">
+                        <span class="span-quant-jogadores-responderam todos">Todos já responderam.</span>
                     </h:panelGroup>
                 </h:panelGroup>
                 <h:panelGroup id="panel-botoes-controle" layout="block"

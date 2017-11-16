@@ -21,6 +21,7 @@ import javax.persistence.Table;
 
 import br.com.multitela.quiz.servidor.exception.DiretorioNaoEncontradoException;
 import br.com.multitela.quiz.servidor.exception.FormatoDeArquivoInvalidoException;
+import br.com.multitela.quiz.servidor.util.AlternativaUtil;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -133,6 +134,10 @@ public class Pergunta implements Serializable {
 
     public void setAlternativa_certa(int alternativa_certa) {
         this.alternativa_certa = alternativa_certa;
+    }
+
+    public void setAlternativa_certaLetra(char letra) {
+        this.alternativa_certa = AlternativaUtil.retornaIndiceAlternativa(letra);
     }
 
     public List<Resposta> getRespostas() {

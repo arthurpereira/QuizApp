@@ -123,6 +123,7 @@
             <h:panelGroup rendered="#{partidaBean.partidaIniciada}">
                 <div id="div-pergunta" lang="pt-BR">
                     <h:form id="form-pergunta">
+                        <span class="span-pergunta-numero">Questão #{partidaBean.posicaoPergunta + 1}</span>
                         <p id="p-pergunta">
                             <h:outputText value="#{partidaBean.perguntaAtual.textoHTML}" escape="false"/>
                         </p>

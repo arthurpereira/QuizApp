@@ -9,4 +9,8 @@ public class AlternativaUtil {
         return String.valueOf( (char) ( indice + 65 ) );
     }
 
+    public static int retornaIndiceAlternativa(char letra) {
+        return  ((int) letra) - 65;
+    }
+
 }
