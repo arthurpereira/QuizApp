@@ -84,6 +84,8 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     
     //Variável que simula um ponteiro para indicar a posição da pergunta atual na lista de perguntas.
     private int posicaoPergunta;
+    //Variável que armazena a quantidade total de jogadores na partida.
+    private int quantJogadoresTotal;
     //Variável que armazena a quantidade de jogadores que responderam a pergunta atual.
     private int quantJogadoresJaResponderam;
     
@@ -116,6 +118,7 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
                 Thread.sleep(500);
                 atualizarPlacar();
             } catch (Exception e) {}
+            quantJogadoresTotal = partidaAssociativaService.countTodosJogadoresPorPartida(partida);
         } catch (Exception e) {
             keepDialogOpen();
             mensagemAtencao("Não foi possível iniciar a partida");
@@ -296,7 +299,7 @@ public class ControladorPartidaBean extends AbstractBean implements PartidaObser
     }
 
     public int retornaQuantidadeJogadoresNaoResponderam() {
-        return jogadoresPorPartida.size() - quantJogadoresJaResponderam;
+        return quantJogadoresTotal - quantJogadoresJaResponderam;
     }
     
     //GETTERS AND SETTERS

@@ -17,4 +17,6 @@ public interface JogadorPartidaAssociativaService extends Repository<JogadorPart
 
     public List<Integer> consultaPontuacoesPorPartida(Partida partida);
 
+    public Integer countTodosJogadoresPorPartida(Partida partida);
+
 }

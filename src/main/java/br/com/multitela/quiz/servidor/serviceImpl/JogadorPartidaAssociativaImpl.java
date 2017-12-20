@@ -49,4 +49,14 @@ public class JogadorPartidaAssociativaImpl extends RepositoryImpl<JogadorPartida
 
         return query.getResultList();
     }
+
+    @Override
+    public Integer countTodosJogadoresPorPartida(Partida partida) {
+        Query query = getEntityManager().createQuery(
+                "SELECT COUNT(jp) FROM " + JogadorPartidaAssociativa.class.getName()
+                + " AS jp WHERE jp.partida.id = :partida_id");
+        query.setParameter("partida_id", partida.getId());
+
+        return ((Long) query.getSingleResult()).intValue();
+    }
 }
