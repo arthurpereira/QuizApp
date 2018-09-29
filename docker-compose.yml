@@ -1,0 +1,39 @@
+version: '3'
+services:
+    postgres: # Serviço do banco de dados
+        image: postgres:9.6 # Usando versão 9.6 da imagem do PostgreSQL
+        container_name: postgres-quizapp # Nome do container
+        ports:
+          - "5432:5432" # Mapeia porta 5432 da máquina virtual para porta 5432 da máquina hospedeira
+        environment:
+            - LC_ALL=C.UTF-8 # Codificação UTF-8
+            - POSTGRES_DB=quizapp_fds # Nome do banco
+            - POSTGRES_USER=fabricadesoftware # Usuário
+            - POSTGRES_PASSWORD=fabricadesoftware # Senha
+            - POSTGRES_PORT=5432 # Porta na qual o banco vai rodar
+        volumes:
+            - $PWD/saida/postgres_data:/var/lib/postgresql/data # Mapeia pasta de saída de logs e dados da aplicação para uma pasta na máquina hospedeira
+
+    wildfly: # Serviço do servidor da aplicação
+        image: wildfly-quizapp # Criando imagem customizada para o QuizApp, vide Dockerfile
+        container_name: wildfly-quizapp # Nome do container
+        build: . # Gera imagem a partir do Dockerfile especificado
+        ports:
+            - "8080:8080" # Mapeia porta 8080 da máquina virtual para porta 8080 da máquina hospedeira
+            - "9990:9990" # Mapeia porta 9990 da máquina virtual para porta 9990 da máquina hospedeira
+        environment:
+            - DB_HOST=postgres # Diz que o banco de dados é PostgreSQL
+            - DB_PORT=5432 # Diz que o PostgreSQL está rodando na porta 5432
+            - DB_NAME=quizapp_fds # Diz o nome da db a ser utilizada pela aplicação
+            - DB_USER=fabricadesoftware # Diz usuário da db
+            - DB_PASS=fabricadesoftware # Diz senha da db
+            - DS_NAME=QuizAppFDS # Diz o nome do DataSource a ser utilizado
+            - JNDI_NAME=java:/multitela_quiz # Diz que o JNDI Name do  DataSource é java:multitela_quiz
+        depends_on:
+            - postgres # Para rodar, precisa do serviço postgres
+        volumes:
+            - $PWD/saida/logs:/opt/jboss/wildfly/standalone/log # Mapeia pasta de logs da aplicação para uma pasta na máquina hospedeira
+            - $PWD/saida/quizappdata:/opt/jboss/wildfly/quizappdata # Mapeia pasta de dados da aplicação para uma pasta na máquina hospedeira
+            - jboss-conf:/opt/jboss/wildfly/standalone/configuration # Cria volume virtual para arquivos de configuração gerados pelo JBoss/WildFly
+volumes:
+    jboss-conf: {}
