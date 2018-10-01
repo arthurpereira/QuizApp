@@ -28,6 +28,52 @@ public class Initializer {
         cadastraAdmin();
     }
 
+    /**
+     * @author Matheus Siqueira <matheussiqueira.ec@gmail.com>
+     * @param texto_pergunta texto da pergunta a ser cadastrada
+     * @param alternativas array de alternativas da pergunta a ser cadastrada
+     * @param alternativa_certa índice do array que identifica a alternativa certa
+     */
+
+    private void montaPerguntas(String texto_pergunta, String[] alternativas, int alternativa_certa) {
+        // Instancia nova pergunta
+        Pergunta pergunta = new Pergunta();
+
+        // Instancia alternativas
+        Alternativa alt1 = new Alternativa(pergunta);
+        Alternativa alt2 = new Alternativa(pergunta);
+        Alternativa alt3 = new Alternativa(pergunta);
+        Alternativa alt4 = new Alternativa(pergunta);
+        Alternativa alt5 = new Alternativa(pergunta);
+
+        // Seta texto da instância de pergunta
+        pergunta.setTexto(texto_pergunta);
+
+        // Seta texto das instâncias de alternativas
+        alt1.setTexto(alternativas[0]);
+        alt2.setTexto(alternativas[1]);
+        alt3.setTexto(alternativas[2]);
+        alt4.setTexto(alternativas[3]);
+        alt5.setTexto(alternativas[4]);
+
+        // Seta alternativas da instância de perguntas
+        pergunta.setAlternativas(new ArrayList<>());
+        pergunta.getAlternativas().add(alt1);
+        pergunta.getAlternativas().add(alt2);
+        pergunta.getAlternativas().add(alt3);
+        pergunta.getAlternativas().add(alt4);
+        pergunta.getAlternativas().add(alt5);
+
+        // Seta alternativa certa
+        pergunta.setAlternativa_certa(alternativa_certa);
+
+        // Salva pergunta no banco
+        em.persist(pergunta);
+
+        // Destrói instância
+        em.flush();
+    }
+
     private void cadastraAdmin() {
         Query query = em.createQuery("SELECT COUNT(u) FROM Usuario u");
         Long usuarios = (Long) query.getSingleResult();
@@ -42,251 +88,25 @@ public class Initializer {
             em.persist(usuario);
             em.flush();
         }
-        
-        query = em.createQuery("SELECT COUNT(p) FROM Pergunta p");
+
+        cadastraPerguntas();
+    }
+
+    private void cadastraPerguntas() {
+        Query query = em.createQuery("SELECT COUNT(p) FROM Pergunta p");;
         Long perguntas = (Long) query.getSingleResult();
         
         if (perguntas == 0) {
-            Pergunta pergunta = new Pergunta();
-            Alternativa alt1 = new Alternativa(pergunta);
-            Alternativa alt2 = new Alternativa(pergunta);
-            Alternativa alt3 = new Alternativa(pergunta);
-            Alternativa alt4 = new Alternativa(pergunta);
-//            Alternativa alt5 = new Alternativa(pergunta);
-
-            pergunta.setTexto("O ângulo raso possui:");
-            alt1.setTexto("45°");
-            alt2.setTexto("90°");
-            alt3.setTexto("180°");
-            alt4.setTexto("360°");
-//            alt5.setTexto("A descrição de qualquer movimento ou repouso depende de um referencial.");
-            pergunta.setAlternativas(new ArrayList<>());
-            pergunta.getAlternativas().add(alt1);
-            pergunta.getAlternativas().add(alt2);
-            pergunta.getAlternativas().add(alt3);
-            pergunta.getAlternativas().add(alt4);
-//            pergunta.getAlternativas().add(alt5);
-            pergunta.setAlternativa_certa(2);
-
-            em.persist(pergunta);
-            em.flush();
-
-            pergunta = new Pergunta();
-            alt1 = new Alternativa(pergunta);
-            alt2 = new Alternativa(pergunta);
-            alt3 = new Alternativa(pergunta);
-            alt4 = new Alternativa(pergunta);
-//            alt5 = new Alternativa(pergunta);
-
-            pergunta.setTexto("As retas concorrentes que formam 4 ângulos retos são as:");
-            alt1.setTexto("Paralelas");
-            alt2.setTexto("Perpendiculares");
-            alt3.setTexto("Coincidentes");
-            alt4.setTexto("Reversas");
-//            alt5.setTexto("A descrição de qualquer movimento ou repouso depende de um referencial.");
-            pergunta.setAlternativas(new ArrayList<>());
-            pergunta.getAlternativas().add(alt1);
-            pergunta.getAlternativas().add(alt2);
-            pergunta.getAlternativas().add(alt3);
-            pergunta.getAlternativas().add(alt4);
-//            pergunta.getAlternativas().add(alt5);
-            pergunta.setAlternativa_certa(1);
-
-            em.persist(pergunta);
-            em.flush();
-
-            pergunta = new Pergunta();
-            alt1 = new Alternativa(pergunta);
-            alt2 = new Alternativa(pergunta);
-            alt3 = new Alternativa(pergunta);
-            alt4 = new Alternativa(pergunta);
-//            alt5 = new Alternativa(pergunta);
-
-            pergunta.setTexto("O ângulo cujo valor está entre 0° e 90° se denomina:");
-            alt1.setTexto("Agudo");
-            alt2.setTexto("Obtuso");
-            alt3.setTexto("Reto");
-            alt4.setTexto("Pleno");
-//            alt5.setTexto("A descrição de qualquer movimento ou repouso depende de um referencial.");
-            pergunta.setAlternativas(new ArrayList<>());
-            pergunta.getAlternativas().add(alt1);
-            pergunta.getAlternativas().add(alt2);
-            pergunta.getAlternativas().add(alt3);
-            pergunta.getAlternativas().add(alt4);
-//            pergunta.getAlternativas().add(alt5);
-            pergunta.setAlternativa_certa(0);
-
-            em.persist(pergunta);
-            em.flush();
-
-            pergunta = new Pergunta();
-            alt1 = new Alternativa(pergunta);
-            alt2 = new Alternativa(pergunta);
-            alt3 = new Alternativa(pergunta);
-            alt4 = new Alternativa(pergunta);
-//            alt5 = new Alternativa(pergunta);
-
-            pergunta.setTexto("Uma fração equivalente de <sup>2</sup>&frasl;<sub>5</sub> é:");
-            alt1.setTexto("<sup>4</sup>&frasl;<sub>5</sub>");
-            alt2.setTexto("<sup>6</sup>&frasl;<sub>15</sub>");
-            alt3.setTexto("<sup>1</sup>&frasl;<sub>2</sub>");
-            alt4.setTexto("<sup>8</sup>&frasl;<sub>10</sub>");
-//            alt5.setTexto("A descrição de qualquer movimento ou repouso depende de um referencial.");
-            pergunta.setAlternativas(new ArrayList<>());
-            pergunta.getAlternativas().add(alt1);
-            pergunta.getAlternativas().add(alt2);
-            pergunta.getAlternativas().add(alt3);
-            pergunta.getAlternativas().add(alt4);
-//            pergunta.getAlternativas().add(alt5);
-            pergunta.setAlternativa_certa(1);
-
-            em.persist(pergunta);
-            em.flush();
-
-            pergunta = new Pergunta();
-            alt1 = new Alternativa(pergunta);
-            alt2 = new Alternativa(pergunta);
-            alt3 = new Alternativa(pergunta);
-            alt4 = new Alternativa(pergunta);
-//            alt5 = new Alternativa(pergunta);
-
-            pergunta.setTexto("Como se lê a fração <sup>3</sup>&frasl;<sub>21</sub>?");
-            alt1.setTexto("Três vinte e um");
-            alt2.setTexto("Três vigésimo primeiro");
-            alt3.setTexto("Terceiro vinte e um");
-            alt4.setTexto("Três vinte e um avos");
-//            alt5.setTexto("A descrição de qualquer movimento ou repouso depende de um referencial.");
-            pergunta.setAlternativas(new ArrayList<>());
-            pergunta.getAlternativas().add(alt1);
-            pergunta.getAlternativas().add(alt2);
-            pergunta.getAlternativas().add(alt3);
-            pergunta.getAlternativas().add(alt4);
-//            pergunta.getAlternativas().add(alt5);
-            pergunta.setAlternativa_certa(3);
-
-            em.persist(pergunta);
-            em.flush();
-
-            pergunta = new Pergunta();
-            alt1 = new Alternativa(pergunta);
-            alt2 = new Alternativa(pergunta);
-            alt3 = new Alternativa(pergunta);
-            alt4 = new Alternativa(pergunta);
-//            alt5 = new Alternativa(pergunta);
-
-            pergunta.setTexto("A fração <sup>12</sup>&frasl;<sub>3</sub> é classificada como:");
-            alt1.setTexto("Aparente");
-            alt2.setTexto("Própria");
-            alt3.setTexto("Mista");
-            alt4.setTexto("Equivalente");
-//            alt5.setTexto("A descrição de qualquer movimento ou repouso depende de um referencial.");
-            pergunta.setAlternativas(new ArrayList<>());
-            pergunta.getAlternativas().add(alt1);
-            pergunta.getAlternativas().add(alt2);
-            pergunta.getAlternativas().add(alt3);
-            pergunta.getAlternativas().add(alt4);
-//            pergunta.getAlternativas().add(alt5);
-            pergunta.setAlternativa_certa(0);
-
-            em.persist(pergunta);
-            em.flush();
-
-            pergunta = new Pergunta();
-            alt1 = new Alternativa(pergunta);
-            alt2 = new Alternativa(pergunta);
-            alt3 = new Alternativa(pergunta);
-            alt4 = new Alternativa(pergunta);
-//            alt5 = new Alternativa(pergunta);
-
-            pergunta.setTexto("O número misto 2<sup>1</sup>&frasl;<sub>5</sub> é a fração imprópria :");
-            alt1.setTexto("<sup>1</sup>&frasl;<sub>5</sub>");
-            alt2.setTexto("<sup>7</sup>&frasl;<sub>5</sub>");
-            alt3.setTexto("<sup>11</sup>&frasl;<sub>5</sub>");
-            alt4.setTexto("<sup>15</sup>&frasl;<sub>5</sub>");
-//            alt5.setTexto("A descrição de qualquer movimento ou repouso depende de um referencial.");
-            pergunta.setAlternativas(new ArrayList<>());
-            pergunta.getAlternativas().add(alt1);
-            pergunta.getAlternativas().add(alt2);
-            pergunta.getAlternativas().add(alt3);
-            pergunta.getAlternativas().add(alt4);
-//            pergunta.getAlternativas().add(alt5);
-            pergunta.setAlternativa_certa(2);
-
-            em.persist(pergunta);
-            em.flush();
-
-            pergunta = new Pergunta();
-            alt1 = new Alternativa(pergunta);
-            alt2 = new Alternativa(pergunta);
-            alt3 = new Alternativa(pergunta);
-            alt4 = new Alternativa(pergunta);
-//            alt5 = new Alternativa(pergunta);
-
-            pergunta.setTexto("A expressão <sup>3</sup>&frasl;<sub>9</sub> + <sup>5</sup>&frasl;<sub>9</sub> - <sup>4</sup>&frasl;<sub>9</sub> resulta em:");
-            alt1.setTexto("<sup>1</sup>&frasl;<sub>9</sub>");
-            alt2.setTexto("<sup>4</sup>&frasl;<sub>9</sub>");
-            alt3.setTexto("<sup>5</sup>&frasl;<sub>9</sub>");
-            alt4.setTexto("<sup>7</sup>&frasl;<sub>9</sub>");
-//            alt5.setTexto("A descrição de qualquer movimento ou repouso depende de um referencial.");
-            pergunta.setAlternativas(new ArrayList<>());
-            pergunta.getAlternativas().add(alt1);
-            pergunta.getAlternativas().add(alt2);
-            pergunta.getAlternativas().add(alt3);
-            pergunta.getAlternativas().add(alt4);
-//            pergunta.getAlternativas().add(alt5);
-            pergunta.setAlternativa_certa(1);
-
-            em.persist(pergunta);
-            em.flush();
-
-            pergunta = new Pergunta();
-            alt1 = new Alternativa(pergunta);
-            alt2 = new Alternativa(pergunta);
-            alt3 = new Alternativa(pergunta);
-            alt4 = new Alternativa(pergunta);
-//            alt5 = new Alternativa(pergunta);
-
-            pergunta.setTexto("A adição <sup>2</sup>&frasl;<sub>3</sub> + <sup>1</sup>&frasl;<sub>4</sub> resulta em:");
-            alt1.setTexto("<sup>11</sup>&frasl;<sub>12</sub>");
-            alt2.setTexto("<sup>3</sup>&frasl;<sub>12</sub>");
-            alt3.setTexto("<sup>3</sup>&frasl;<sub>7</sub>");
-            alt4.setTexto("<sup>3</sup>&frasl;<sub>4</sub>");
-//            alt5.setTexto("A descrição de qualquer movimento ou repouso depende de um referencial.");
-            pergunta.setAlternativas(new ArrayList<>());
-            pergunta.getAlternativas().add(alt1);
-            pergunta.getAlternativas().add(alt2);
-            pergunta.getAlternativas().add(alt3);
-            pergunta.getAlternativas().add(alt4);
-//            pergunta.getAlternativas().add(alt5);
-            pergunta.setAlternativa_certa(0);
-
-            em.persist(pergunta);
-            em.flush();
-
-            pergunta = new Pergunta();
-            alt1 = new Alternativa(pergunta);
-            alt2 = new Alternativa(pergunta);
-            alt3 = new Alternativa(pergunta);
-            alt4 = new Alternativa(pergunta);
-//            alt5 = new Alternativa(pergunta);
-
-            pergunta.setTexto("Jorge recebeu 50 reais de mesada e deu <sup>2</sup>&frasl;<sub>5</sub> para sua irmã. Quanto Jorge ficou?");
-            alt1.setTexto("5 reais");
-            alt2.setTexto("10 reais");
-            alt3.setTexto("20 reais");
-            alt4.setTexto("30 reais");
-//            alt5.setTexto("A descrição de qualquer movimento ou repouso depende de um referencial.");
-            pergunta.setAlternativas(new ArrayList<>());
-            pergunta.getAlternativas().add(alt1);
-            pergunta.getAlternativas().add(alt2);
-            pergunta.getAlternativas().add(alt3);
-            pergunta.getAlternativas().add(alt4);
-//            pergunta.getAlternativas().add(alt5);
-            pergunta.setAlternativa_certa(3);
-
-            em.persist(pergunta);
-            em.flush();
-//
+            montaPerguntas("O ângulo raso possui:", new String[]{"30°", "45°", "90°", "180°", "360°"}, 3);
+            montaPerguntas("As retas concorrentes que formam 4 ângulos retos são as:", new String[]{"Paralelas", "Perpendiculares", "Coincidentes", "Reversas", "Concisas"}, 1);
+            montaPerguntas("O ângulo cujo valor está entre 0° e 90° se denomina:", new String[]{"Agudo", "Obtuso", "Reto", "Pleno", "Plano"}, 0);
+            montaPerguntas("Uma fração equivalente de <sup>2</sup>&frasl;<sub>5</sub> é:", new String[]{"<sup>4</sup>&frasl;<sub>5</sub>", "<sup>6</sup>&frasl;<sub>15</sub>", "<sup>1</sup>&frasl;<sub>2</sub>", "<sup>8</sup>&frasl;<sub>10</sub>", "<sup>3</sup>&frasl;<sub>9</sub>"}, 1);
+            montaPerguntas("Como se lê a fração <sup>3</sup>&frasl;<sub>21</sub>?", new String[]{"Três vinte e um", "Três vigésimo primeiro", "Terceiro vinte e um", "Três vinte e um avos", "Três sobre vinte e um"}, 3);
+            montaPerguntas("A fração <sup>12</sup>&frasl;<sub>3</sub> é classificada como:", new String[]{"Aparente", "Própria", "Mista", "Equivalente", "Equidistante"}, 0);
+            montaPerguntas("O número misto 2<sup>1</sup>&frasl;<sub>5</sub> é a fração imprópria:", new String[]{"<sup>1</sup>&frasl;<sub>5</sub>", "<sup>7</sup>&frasl;<sub>5</sub>", "<sup>11</sup>&frasl;<sub>5</sub>", "<sup>15</sup>&frasl;<sub>5</sub>", "<sup>13</sup>&frasl;<sub>5</sub>"}, 2);
+            montaPerguntas("A expressão <sup>3</sup>&frasl;<sub>9</sub> + <sup>5</sup>&frasl;<sub>9</sub> - <sup>4</sup>&frasl;<sub>9</sub> resulta em:", new String[]{"<sup>1</sup>&frasl;<sub>9</sub>", "<sup>4</sup>&frasl;<sub>9</sub>", "<sup>5</sup>&frasl;<sub>9</sub>", "<sup>7</sup>&frasl;<sub>9</sub>", "<sup>8</sup>&frasl;<sub>9</sub>"}, 1);
+            montaPerguntas("A adição <sup>2</sup>&frasl;<sub>3</sub> + <sup>1</sup>&frasl;<sub>4</sub> resulta em:", new String[]{"<sup>11</sup>&frasl;<sub>12</sub>", "<sup>3</sup>&frasl;<sub>12</sub>", "<sup>3</sup>&frasl;<sub>7</sub>", "<sup>3</sup>&frasl;<sub>4</sub>", "<sup>4</sup>&frasl;<sub>7</sub>"}, 0);
+            montaPerguntas("Jorge recebeu 50 reais de mesada e deu <sup>2</sup>&frasl;<sub>5</sub> para sua irmã. Quanto Jorge ficou?", new String[]{"5 reais", "10 reais", "20 reais", "25 reais", "35 reais"}, 3);
         }
     }
 }

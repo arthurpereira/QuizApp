@@ -1,0 +1,34 @@
+# Usando versão atualizada do Apache Maven
+FROM maven
+
+# Créditos ao criador da imagem
+LABEL br.com.multitela.quiz.fabricadesoftware.version="0.0.1-snapshot"
+LABEL author="Matheus de S. Siqueira"
+LABEL email="matheussiqueira.ec@gmail.com"
+LABEL vendor1="Fabrica de Sotware - UFPA"
+LABEL br.com.multitela.quiz.fabricadesoftware.realease-date="2018-09-29"
+
+# Definindo USER_HOME_DIR
+ARG USER_HOME_DIR="/root"
+
+# Definindo variáveis de ambiente
+ENV MAVEN_HOME /usr/share/maven
+ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
+
+# Copia scripts de inicialização do container
+COPY maven.entrypointscript.sh /usr/local/bin/mvn-entrypoint.sh
+COPY settings-maven.xml /usr/share/maven/ref/
+
+# Dá permissões de execução ao script de inicialização
+RUN chmod +x /usr/local/bin/mvn-entrypoint.sh
+
+# Copia projeto da máquina hospedeira para o container
+COPY . /usr/src/quiz-app
+
+# Define o diretório de trabalho
+WORKDIR /usr/src/quiz-app
+
+# Executa script de inicialização
+# Responsável pela compilação do código e geração do arquivo .war para deploy
+# bem como sua cópia para o container do WildFly
+ENTRYPOINT ["/usr/local/bin/mvn-entrypoint.sh"]

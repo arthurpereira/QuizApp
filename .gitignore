@@ -16,3 +16,5 @@ quiz-app.iml
 .DS_Store?
 ._*
 *.faces-config.xml
+/saida/
+.m2/

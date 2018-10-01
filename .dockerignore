@@ -1,0 +1,8 @@
+/src/
+.project
+.gitgnore
+.classpath
+.settings
+LICENSE
+pom.xml
+README.md
