@@ -30,17 +30,20 @@ ADD https://jdbc.postgresql.org/download/postgresql-42.2.4.jar /tmp/postgresql-4
 WORKDIR /tmp
 
 # Copia arquivos de configuração projeto para a máquina virtual
-COPY config_files/wildfly-command.sh ./
-COPY config_files/module-install.cli ./
+COPY wildfly.command.sh ./
+COPY module-install.cli ./
 
 # Roda comandos de instalção e configuração
-RUN sed -i -e 's/\r$//' ./wildfly-command.sh
-RUN chmod +x ./wildfly-command.sh
-RUN ./wildfly-command.sh \
+RUN sed -i -e 's/\r$//' ./wildfly.command.sh
+RUN chmod +x ./wildfly.command.sh
+RUN ./wildfly.command.sh \
     &&  rm -rf $JBOSS_HOME/standalone/configuration/standalone_xml_history/
  
 # Move a aplicação compilada para o diretório de deployments do JBoss/WildFly
-COPY compilado/quiz-app.war $JBOSS_HOME/standalone/deployments
+# COPY compilado/quiz-app.war $JBOSS_HOME/standalone/deployments
+
+# Cria e expõe volume com o diretório de deployments do JBoss/WildFly
+VOLUME $JBOSS_HOME/standalone/deployments
  
 # Cria usuário admin do WildFly
 RUN $JBOSS_HOME/bin/add-user.sh fabricadesoftware fabricadesoftware --silent

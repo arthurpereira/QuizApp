@@ -11,16 +11,16 @@ function wait_for_wildfly() {
   done
 }
 
-echo "==> Starting WildFly..."
+echo "==> Iniciando WildFly..."
 $JBOSS_HOME/bin/$JBOSS_MODE.sh -c $JBOSS_CONFIG &
 
-echo "==> Waiting..."
+echo "==> Aguardando..."
 wait_for_wildfly
 
-echo "==> Setup Datasource..."
+echo "==> Configurando DataSource..."
 $JBOSS_CLI -c --file=`dirname "$0"`/module-install.cli
 
-echo "==> Shutting down WildFly..."
+echo "==> Finalizando WildFly..."
 if [ "$JBOSS_MODE" = "standalone" ]; then
   $JBOSS_CLI -c ":shutdown"
 else

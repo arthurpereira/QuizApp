@@ -1,4 +1,4 @@
-version: '3'
+version: '2'
 services:
     postgres: # Serviço do banco de dados
         image: postgres:9.6 # Usando versão 9.6 da imagem do PostgreSQL
@@ -12,12 +12,33 @@ services:
             - POSTGRES_PASSWORD=fabricadesoftware # Senha
             - POSTGRES_PORT=5432 # Porta na qual o banco vai rodar
         volumes:
-            - $PWD/saida/postgres_data:/var/lib/postgresql/data # Mapeia pasta de saída de logs e dados da aplicação para uma pasta na máquina hospedeira
+            - $PWD/saida/postgres_data:/var/lib/postgresql/data # Mapeia pasta da máquina virtual para uma pasta na máquina hospedeira, com fins de persistência de dados, comentar caso esteja no windows
+            # - data:/var/lib/postgresql/data # Definindo persistência no Windows, comentar caso esteja no linux
+    
+    adminer: # Serviço do gerenciador de banco de dados
+        image: adminer # Usando imagem Adminer
+        container_name: adminer-quizapp # Nome do container
+        depends_on:
+            - postgres # Para rodar, precisa do serviço postgres
+        ports:
+            - 8081:8080 # Mapeia porta 8080 da máquina virtual para a porta 8081 da máquina hospedeira
+
+    maven: # Serviço de compilação da aplicação
+        build: # Gera imagem a partir do Dockerfile especificado
+            context: docker
+            dockerfile: Dockerfile-maven
+        volumes:
+            - $PWD/.m2:/root/.m2
+            - $PWD:/usr/src/quiz-app
+        volumes_from: # Usa volume exposto pelo container do wildfly
+            - wildfly
 
     wildfly: # Serviço do servidor da aplicação
         image: wildfly-quizapp # Criando imagem customizada para o QuizApp, vide Dockerfile
         container_name: wildfly-quizapp # Nome do container
-        build: . # Gera imagem a partir do Dockerfile especificado
+        build:  # Gera imagem a partir do Dockerfile especificado
+            context: docker
+            dockerfile: Dockerfile-wildfly
         ports:
             - "8080:8080" # Mapeia porta 8080 da máquina virtual para porta 8080 da máquina hospedeira
             - "9990:9990" # Mapeia porta 9990 da máquina virtual para porta 9990 da máquina hospedeira
@@ -37,3 +58,5 @@ services:
             - jboss-conf:/opt/jboss/wildfly/standalone/configuration # Cria volume virtual para arquivos de configuração gerados pelo JBoss/WildFly
 volumes:
     jboss-conf: {}
+    # data: # Necessário para persistência no Windows, comentar caso esteja no linux
+        # external: true
