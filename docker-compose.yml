@@ -24,6 +24,7 @@ services:
             - 8081:8080 # Mapeia porta 8080 da máquina virtual para a porta 8081 da máquina hospedeira
 
     maven: # Serviço de compilação da aplicação
+        container_name: maven-quizapp # Nome do container
         build: # Gera imagem a partir do Dockerfile especificado
             context: docker
             dockerfile: Dockerfile-maven
@@ -34,7 +35,6 @@ services:
             - wildfly
 
     wildfly: # Serviço do servidor da aplicação
-        image: wildfly-quizapp # Criando imagem customizada para o QuizApp, vide Dockerfile
         container_name: wildfly-quizapp # Nome do container
         build:  # Gera imagem a partir do Dockerfile especificado
             context: docker

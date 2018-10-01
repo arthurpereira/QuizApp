@@ -33,14 +33,11 @@ WORKDIR /tmp
 COPY wildfly.command.sh ./
 COPY module-install.cli ./
 
-# Roda comandos de instalção e configuração
+# Roda comandos de instalação e configuração
 RUN sed -i -e 's/\r$//' ./wildfly.command.sh
 RUN chmod +x ./wildfly.command.sh
 RUN ./wildfly.command.sh \
     &&  rm -rf $JBOSS_HOME/standalone/configuration/standalone_xml_history/
- 
-# Move a aplicação compilada para o diretório de deployments do JBoss/WildFly
-# COPY compilado/quiz-app.war $JBOSS_HOME/standalone/deployments
 
 # Cria e expõe volume com o diretório de deployments do JBoss/WildFly
 VOLUME $JBOSS_HOME/standalone/deployments

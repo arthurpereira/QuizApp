@@ -17,3 +17,4 @@ quiz-app.iml
 ._*
 *.faces-config.xml
 /saida/
+.m2/
