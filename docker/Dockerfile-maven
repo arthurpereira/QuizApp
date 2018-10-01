@@ -1,0 +1,24 @@
+# Usando versão 10.1.0.Final do jboss/wildfly
+FROM maven
+
+# Créditos ao criador da imagem
+LABEL br.com.multitela.quiz.fabricadesoftware.version="0.0.1-snapshot"
+LABEL author="Matheus de S. Siqueira"
+LABEL email="matheussiqueira.ec@gmail.com"
+LABEL vendor1="Fabrica de Sotware - UFPA"
+LABEL br.com.multitela.quiz.fabricadesoftware.realease-date="2018-09-29"
+
+ARG USER_HOME_DIR="/root"
+
+ENV MAVEN_HOME /usr/share/maven
+ENV MAVEN_CONFIG "$USER_HOME_DIR/.m2"
+
+COPY maven.entrypointscript.sh /usr/local/bin/mvn-entrypoint.sh
+COPY settings-maven.xml /usr/share/maven/ref/
+
+VOLUME "$USER_HOME_DIR/.m2"
+
+COPY . /usr/src/quiz-app
+WORKDIR /usr/src/quiz-app
+
+ENTRYPOINT ["/usr/local/bin/mvn-entrypoint.sh"]
